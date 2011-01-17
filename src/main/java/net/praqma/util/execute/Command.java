@@ -1,10 +1,10 @@
-package net.praqma.util;
+package net.praqma.util.execute;
 
 
 import java.io.File;
 import java.io.IOException;
 
-import net.praqma.util.Debug;
+import net.praqma.util.debug.Logger;
 
 /**
  * CLI class
@@ -13,7 +13,7 @@ import net.praqma.util.Debug;
  */
 public abstract class Command
 {
-	protected static Debug logger = Debug.GetLogger();
+	protected static Logger logger = Logger.getLogger();
 	protected static final String linesep = System.getProperty( "line.separator" );
 	
 	public static CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException
@@ -25,17 +25,6 @@ public abstract class Command
 	{
 		return run( cmd, dir, false );
 	}
-	
-//	public static CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException
-//	{
-//		String[] cmds = new String[3];
-//		cmds[0] = "cmd.exe";
-//		cmds[1] = "/C";
-//		cmds[2] = cmd;
-//		
-//		//String[] cmds = {cmd};
-//		return run( cmds, dir );
-//	}
 	
 	public static CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException
 	{

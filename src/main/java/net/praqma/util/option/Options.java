@@ -1,13 +1,7 @@
 package net.praqma.util.option;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.praqma.util.Tuple;
 
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed with double dashes, "--" and followed by an optional equal sign, "=".<br>

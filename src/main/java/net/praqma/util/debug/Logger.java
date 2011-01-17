@@ -1,6 +1,5 @@
-package net.praqma.util;
+package net.praqma.util.debug;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,9 +17,9 @@ import java.util.Map;
  * @author wolfgang
  *
  */
-public class Debug
+public class Logger
 {
-	private static Debug logger               = null;
+	private static Logger logger              = null;
 	private static FileWriter fw              = null;
 	private static BufferedWriter out         = null;
 	private static String path                = "./";
@@ -49,44 +47,38 @@ public class Debug
 	private static Map<String, String> exclude = new HashMap<String, String>();
 	
 	
-	private Debug( boolean append )
+	private Logger( boolean append )
 	{
-		Debug.append = append;
+		Logger.append = append;
 		
 		nowDate   = Calendar.getInstance();
 		
 		format    = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 		logformat = new SimpleDateFormat( "yyyyMMdd" );
-		//logformat = new SimpleDateFormat( "yyyyMMdd_HHmmss" );
 		
 		trace = new ArrayList<String>();
 		
-		NewDate( nowDate );
+		newDate( nowDate );
 	}
 	
-	public static Debug GetLogger( boolean append )
+	public static Logger getLogger( boolean append )
 	{
 		if( logger == null )
 		{
-			logger = new Debug( append );
+			logger = new Logger( append );
 		}
-		
-		//StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-		//System.out.println( "USING LOGGER: " + logger.toString() + " @ " + file.getAbsolutePath() );
-		//System.out.println( "CLASS=" + stack[3] );
-		//net.praqma.utils.Printer.ArrayPrinter( stack, 4 );
 		
 		
 		return logger;
 	}
 	
-	public static Debug GetLogger( )
+	public static Logger getLogger( )
 	{
-		return GetLogger( true );
+		return getLogger( true );
 	}
 	
 	
-	public void ExcludeClass( String eclass )
+	public void excludeClass( String eclass )
 	{
 		exclude.put( eclass, "" );
 	}
@@ -103,17 +95,17 @@ public class Debug
 	
 	public void setPath( String path )
 	{
-		this.path = path;
-		NewDate( nowDate );
+		Logger.path = path;
+		newDate( nowDate );
 	}
 	
 	public void setPathHomeLogs()
 	{
-		this.path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
-		NewDate( nowDate );
+		Logger.path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
+		newDate( nowDate );
 	}
 	
-	private static Calendar GetDate( Calendar c )
+	private static Calendar getDate( Calendar c )
 	{
 		Calendar c2 = Calendar.getInstance(  );
 		c2.clear();
@@ -125,7 +117,7 @@ public class Debug
 		return c2;
 	}
 	
-	private static void NewDate( Calendar n )
+	private static void newDate( Calendar n )
 	{
 		nowDate = n;
 		
@@ -270,7 +262,7 @@ public class Debug
 		if( type != null )
 		{
 			
-			if( type.length() > this.typemaxlength )
+			if( type.length() > Logger.typemaxlength )
 			{
 				type = type.substring( 0, 8 );
 			}
@@ -278,22 +270,19 @@ public class Debug
 			/* Check if the date is changed */
 			Calendar now = Calendar.getInstance();
 	
-			if( GetDate( now ).after( GetDate( nowDate ) ) )
+			if( getDate( now ).after( getDate( nowDate ) ) )
 			{
-				NewDate( now );
+				newDate( now );
 			}
-			
-			//StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 	
 			String stackMsg = stack[3].getClassName() + "::" + stack[3].getMethodName() + "," + stack[3].getLineNumber();
-			String msg_ = format.format( now.getTime() ) + " [" + type + "] " + new String(new char[this.typemaxlength - type.length()]).replace("\0", " ") + stackMsg;
+			String msg_ = format.format( now.getTime() ) + " [" + type + "] " + new String(new char[Logger.typemaxlength - type.length()]).replace("\0", " ") + stackMsg;
 			
 			try
 			{
-				//out.write( format.format( now.getTime() ) + " [" + type + "] " + new String(new char[this.typemaxlength - type.length()]).replace("\0", " ") + stack[3].getClassName() + "::" + stack[3].getMethodName() + "," + stack[3].getLineNumber() + ": " + new String(new char[this.methodmaxlength - type.length()]).replace("\0", " ") + msg + linesep );
 				if( indent )
 				{
-					out.write( msg_ + ": " + new String(new char[this.methodmaxlength - stackMsg.length()]).replace("\0", " ") + msg + linesep );
+					out.write( msg_ + ": " + new String(new char[Logger.methodmaxlength - stackMsg.length()]).replace("\0", " ") + msg + linesep );
 				}
 				else
 				{

@@ -1,4 +1,4 @@
-package net.praqma.util;
+package net.praqma.util.io;
 
 import java.io.BufferedReader;
 import java.io.File;

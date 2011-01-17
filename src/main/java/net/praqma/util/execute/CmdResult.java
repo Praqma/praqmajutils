@@ -1,6 +1,5 @@
-package net.praqma.util;
+package net.praqma.util.execute;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CmdResult

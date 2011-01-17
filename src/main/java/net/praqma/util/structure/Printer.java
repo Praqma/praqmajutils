@@ -1,6 +1,5 @@
-package net.praqma.util;
+package net.praqma.util.structure;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +8,12 @@ import java.util.Map.Entry;
 public class Printer
 {
 
-	public static <T1> void ArrayPrinter ( T1[] array )
+	public static <T1> void arrayPrinter ( T1[] array )
 	{
-		ArrayPrinter( array, null );
+		arrayPrinter( array, null );
 	}
 	
-	public static <T1> void ArrayPrinter ( T1[] array, Integer max )
+	public static <T1> void arrayPrinter ( T1[] array, Integer max )
 	{
 		Integer c = 1;
 	    for( T1 t : array )
@@ -25,7 +24,7 @@ public class Printer
 	    }
 	}
 	
-	public static <T1, T2> void MapPrinter ( Map<T1, T2> hm )
+	public static <T1, T2> void mapPrinter ( Map<T1, T2> hm )
 	{
 		Iterator<Entry<T1, T2>> it = hm.entrySet().iterator();
 	    while( it.hasNext() )
@@ -38,7 +37,7 @@ public class Printer
 	    System.out.println( "" );
 	}
 	
-	public static <T> void ListPrinter ( List<T> list )
+	public static <T> void listPrinter ( List<T> list )
 	{
 	    for( T t : list )
 	    {
