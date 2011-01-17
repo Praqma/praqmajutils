@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.praqma</groupId>
-  <artifactId>COOL</artifactId>
+  <artifactId>praqmajutils</artifactId>
   <packaging>jar</packaging>
-  <version>0.1.5</version>
-  <name>ClearCase Oriented Open Library</name>
+  <version>0.0.1</version>
+  <name>Praqma Java Utils</name>
   <url>http://maven.apache.org</url>
   
   <build>
@@ -64,31 +64,6 @@
 
   
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    
-		<dependency>
-		  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		  <version>1.2.16</version>
-		</dependency>
-
-    
-    <!--
-	  <dependency>
-		  <groupId>org.apache.commons</groupId>
-		  <artifactId>commons-exec</artifactId>
-		  <version>1.1</version>
-		  <type>jar</type>
-		  <scope>compile</scope>
-	  </dependency>
-	  -->
-
-    
   </dependencies>
   
 </project>
