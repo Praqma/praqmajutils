@@ -1,69 +1,69 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.praqma</groupId>
-  <artifactId>praqmajutils</artifactId>
-  <packaging>jar</packaging>
-  <version>0.0.1</version>
-  <name>Praqma Java Utils</name>
-  <url>http://maven.apache.org</url>
-  
-  <build>
-	  <directory>${project.basedir}/build</directory>
-	  <outputDirectory>${project.build.directory}/classes</outputDirectory>
-	  <finalName>${project.artifactId}-${project.version}</finalName>
-	  
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.praqma</groupId>
+	<artifactId>praqmajutils</artifactId>
+	<packaging>jar</packaging>
+	<version>0.1.0</version>
+	<name>Praqma Java Utils</name>
+	<url>http://maven.apache.org</url>
 
-	    <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-javadoc-plugin</artifactId>
-	      <version>2.7</version>
-	      <configuration>
-	      </configuration>
-	    </plugin>
-	    
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id> <!-- this is used for inheritance merges -->
-            <phase>package</phase> <!-- append to the packaging phase. -->
-            <goals>
-              <goal>single</goal> <!-- goals == mojos -->
-            </goals>
-          </execution>
-        </executions>
-       </plugin>
-      
-    </plugins>
-    
+	<build>
+		<directory>${project.basedir}/build</directory>
+		<outputDirectory>${project.build.directory}/classes</outputDirectory>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- append to the packaging phase. -->
+						<goals>
+							<goal>single</goal> <!-- goals == mojos -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
 	</build>
-	
-	
-  <reporting>
-    <plugins>
-    </plugins>
-  </reporting>
 
 
-  
-  <dependencies>
-  </dependencies>
-  
+	<reporting>
+		<plugins>
+		</plugins>
+	</reporting>
+
+
+
+	<dependencies>
+	</dependencies>
+
 </project>

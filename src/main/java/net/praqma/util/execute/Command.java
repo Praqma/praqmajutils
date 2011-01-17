@@ -52,6 +52,7 @@ public abstract class Command
 			
 			CmdResult result = new CmdResult();
 			
+			logger.debug( "Starting process" );
 			Process p = pb.start();
 
 			/* Starting Gobbler threads */
@@ -74,12 +75,14 @@ public abstract class Command
             finally
             {
                 Thread.interrupted();
-            } 
+            }
+            
+            logger.debug( "Ending process" );
 			
 			/* Abnormal process termination, with error out as message */
 			if ( exitValue != 0 )
 			{
-				logger.debug( "Abnormal process termination: " + errors.sres.toString() );
+				logger.debug( "Abnormal process termination(" + exitValue + "): " + errors.sres.toString() );
 				throw new AbnormalProcessTerminationException( errors.sres.toString() );
 			}
 			
