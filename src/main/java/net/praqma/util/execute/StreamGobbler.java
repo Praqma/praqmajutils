@@ -35,6 +35,7 @@ public class StreamGobbler extends Thread
 			
 			while( ( line = br.readLine() ) != null )
 			{
+				//logger.debug( line );
 				lres.add( line );
 			}
 			

@@ -18,15 +18,30 @@ public abstract class Command
 	
 	public static CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException
 	{
-		return run( cmd, null, false );
+		return run( cmd, null, false, false );
 	}
 	
 	public static CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException
 	{
-		return run( cmd, dir, false );
+		return run( cmd, dir, false, false );
 	}
 	
 	public static CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException
+	{
+		return run( cmd, dir, merge, false );
+	}
+	
+	/**
+	 * Execute a command line operation.
+	 * @param cmd The command itself
+	 * @param dir The working directory
+	 * @param merge Merge stderror with stdout
+	 * @param ignore Ignore any abnormal process terminations. This will allow the output to be returned without exceptions to be thrown.
+	 * @return
+	 * @throws CommandLineException
+	 * @throws AbnormalProcessTerminationException
+	 */
+	public static CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException
 	{
 		logger.trace_function();
 		
@@ -83,7 +98,12 @@ public abstract class Command
 			if ( exitValue != 0 )
 			{
 				logger.debug( "Abnormal process termination(" + exitValue + "): " + errors.sres.toString() );
-				throw new AbnormalProcessTerminationException( errors.sres.toString() );
+				
+				/* Only throw the exception if it is not ignored, this is default */
+				if( !ignore )
+				{
+					throw new AbnormalProcessTerminationException( errors.sres.toString() );
+				}
 			}
 			
 			try
