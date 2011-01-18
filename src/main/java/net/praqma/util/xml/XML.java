@@ -42,6 +42,8 @@ public class XML
 	private Document doc;
 	private Element root;
 	
+	protected Logger logger = Logger.getLogger();
+	
 	public XML( String roottag )
 	{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -268,11 +270,13 @@ public class XML
 		try
 		{
 			xsltSource = new StreamSource( getClass().getResourceAsStream( xsl ) );
+			logger.log( "Using " + xsl + " as XSLT" );
 		}
 		catch( Exception e )
 		{
+			logger.log( "Could not find the XSLT file, using SECRET XSLT" );
 			/*  Debugging only */
-			xsltSource  = new StreamSource( "C:\\projects\\VANS\\trunk\\src\\main\\resources\\junit.xsl" );
+			xsltSource  = new StreamSource( "C:\\projects\\PRAQMA\\VANS\\trunk\\src\\main\\resources\\junit.xsl" );
 		}
 		
 		return transform( new DOMSource( doc ), xsltSource, output );
