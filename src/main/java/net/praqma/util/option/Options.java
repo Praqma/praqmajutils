@@ -3,6 +3,8 @@ package net.praqma.util.option;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.praqma.util.debug.Logger;
+
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed with double dashes, "--" and followed by an optional equal sign, "=".<br>
  * The shortName is prefixed with a single dash, "-".<br>
@@ -21,6 +23,8 @@ public class Options
 {
 	public List<Option> options = new ArrayList<Option>();
 	public String syntax = "";
+	
+	private Logger logger = Logger.getLogger();
 	
 	public Options( )
 	{
@@ -43,6 +47,7 @@ public class Options
 		
 		for( int i = 0 ; i < args.length ; i++ )
 		{
+			
 			/* New option */
 			if( args[i].startsWith( "-" ) )
 			{
@@ -53,7 +58,7 @@ public class Options
 					
 					currentStr = args[i].substring( 2 );
 					current = null;
-					String[] val = currentStr.split( "=", 1 );
+					String[] val = currentStr.split( "=", 2 );
 
 					if( val.length == 2 )
 					{
@@ -103,17 +108,25 @@ public class Options
 	
 	public void checkOptions() throws Exception
 	{
+		//List<String> errors = new ArrayList<String>();
+		String errors = "";
+		
 		for( Option o : options )
 		{
 			if( o.required && !o.used )
 			{
-				throw new Exception( o.longName + " is not used and is not optional." );
+				errors += o.longName + " is not used and is not optional.\n";
 			}
 			
 			if( o.arguments != o.values.size() && o.used )
 			{
-				throw new Exception( "Incorrect arguments for option " + o.longName + ". " + o.arguments + " required." );
+				errors += "Incorrect arguments for option " + o.longName + ". " + o.arguments + " required.\n";
 			}
+		}
+		
+		if( errors.length() > 0 )
+		{
+			throw new Exception( errors );
 		}
 	}
 	
