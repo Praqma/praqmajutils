@@ -12,7 +12,7 @@ import net.praqma.util.debug.Logger;
 public class StreamGobbler extends Thread
 {
 	protected static Logger logger = Logger.getLogger();
-	private static String linesep = System.getProperty( "line.separator" );
+	public static String linesep = System.getProperty( "line.separator" );
 	
     InputStream is;
     public StringBuffer sres;
@@ -23,6 +23,16 @@ public class StreamGobbler extends Thread
         this.is = is;
         lres = new ArrayList<String>();
         sres = new StringBuffer();
+    }
+    
+    public StringBuffer getResultBuffer()
+    {
+    	return sres;
+    }
+    
+    public List<String> getResultList()
+    {
+    	return lres;
     }
     
     public void run( )
