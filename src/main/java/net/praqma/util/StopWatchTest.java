@@ -1,10 +1,11 @@
 package net.praqma.util;
 
 import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.junit.Test;
 
-public class StopWatchTest
+public class StopWatchTest extends TestCase
 {
 	
 	@Test

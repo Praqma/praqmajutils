@@ -4,9 +4,11 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 
+import junit.framework.TestSuite;
+
 import org.junit.Test;
 
-public class StreamGobblerTest
+public class StreamGobblerTest extends TestSuite
 {
 
 	@Test

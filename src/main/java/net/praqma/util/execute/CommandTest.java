@@ -4,9 +4,11 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import junit.framework.TestSuite;
+
 import org.junit.Test;
 
-public class CommandTest
+public class CommandTest extends TestSuite
 {
 
 	@Test

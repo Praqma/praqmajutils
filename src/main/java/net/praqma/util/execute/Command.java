@@ -92,8 +92,6 @@ public abstract class Command
                 Thread.interrupted();
             }
             
-            System.out.println( "EXIT VALUE=" + exitValue );
-            
             logger.debug( "Ending process" );
 			
 			/* Abnormal process termination, with error out as message */
