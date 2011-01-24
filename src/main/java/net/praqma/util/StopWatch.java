@@ -38,18 +38,28 @@ public class StopWatch
 		this.startTime = System.nanoTime();
 	}
 	
+	long getStartTime()
+	{
+		return this.startTime;
+	}
+	
+	long getEndTime()
+	{
+		return this.endTime;
+	}
+	
 	public void stop()
 	{
 		this.endTime = System.nanoTime();
 		
-		this.time = this.endTime - this.startTime;
+		this.time += this.endTime - this.startTime;
 	}
 	
 	public long getTime()
 	{
 		this.endTime = System.nanoTime();
 		
-		return this.endTime - this.startTime;
+		return ( this.endTime - this.startTime ) + this.time;
 	}
 	
 	public void reset()
