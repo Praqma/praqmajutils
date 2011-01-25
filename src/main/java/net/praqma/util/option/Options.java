@@ -3,8 +3,6 @@ package net.praqma.util.option;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.praqma.util.debug.Logger;
-
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed with double dashes, "--" and followed by an optional equal sign, "=".<br>
  * The shortName is prefixed with a single dash, "-".<br>
@@ -21,18 +19,53 @@ import net.praqma.util.debug.Logger;
  */
 public class Options
 {
-	public List<Option> options = new ArrayList<Option>();
-	public String syntax = "";
+	private List<Option> options = new ArrayList<Option>();
+	private String syntax        = "";
+	private String description   = "";
 	
-	private Logger logger = Logger.getLogger();
+	private String version       = "";
+	
+	private Option ohelp         = null;
+	private Option oversion      = null;
+	private Option overbose      = null;
+	
+	private boolean verbose      = false;
+	
+	public static final String linesep = System.getProperty( "line.separator" );
+	
+	/* CONSTRUCTORS */
 	
 	public Options( )
 	{
+		
 	}
 	
-	public Options( String syntax )
+	public Options( String version )
+	{
+		this.version = version;
+	}
+		
+	public void setDefaultOptions()
+	{
+		ohelp    = new Option( "help", "h", false, 0, "Display help" );
+		oversion = new Option( "version", "v", false, 0, "Print the version" );
+		overbose = new Option( "verbose", "V", false, 0, "Verbose" );
+		
+		this.setOption( ohelp );
+		this.setOption( oversion );
+		this.setOption( overbose );
+	}
+	
+
+	
+	public void setSyntax( String syntax )
 	{
 		this.syntax = syntax;
+	}
+	
+	public void setDescription( String desc )
+	{
+		this.description = desc;
 	}
 	
 	public void setOption( Option option )
@@ -87,7 +120,7 @@ public class Options
 					current = null;
 					for( Option o : options )
 					{
-						if( currentStr.equalsIgnoreCase( o.shortName ) )
+						if( currentStr.equals( o.shortName ) )
 						{
 							current = o;
 							o.setUsed();
@@ -106,21 +139,50 @@ public class Options
 		}
 	}
 	
+	private void helpUsed()
+	{
+		if( ohelp != null && ohelp.used )
+		{
+			this.display();
+			System.exit( 0 );
+		}
+	}
+	
+	private void versionUsed()
+	{
+		if( oversion != null && oversion.used )
+		{
+			System.out.println( this.version );
+			System.exit( 0 );
+		}
+	}
+	
+	private void verboseUsed()
+	{
+		if( overbose != null && overbose.used )
+		{
+			this.verbose = true;
+		}
+	}
+	
 	public void checkOptions() throws Exception
 	{
-		//List<String> errors = new ArrayList<String>();
+		this.helpUsed();
+		this.versionUsed();
+		this.verboseUsed();
+		
 		String errors = "";
 		
 		for( Option o : options )
 		{
 			if( o.required && !o.used )
 			{
-				errors += o.longName + " is not used and is not optional.\n";
+				errors += o.longName + " is not used and is not optional." + linesep;
 			}
 			
 			if( o.arguments != o.values.size() && o.used )
 			{
-				errors += "Incorrect arguments for option " + o.longName + ". " + o.arguments + " required.\n";
+				errors += "Incorrect arguments for option " + o.longName + ". " + o.arguments + " required." + linesep;
 			}
 		}
 		
@@ -128,6 +190,11 @@ public class Options
 		{
 			throw new Exception( errors );
 		}
+	}
+	
+	public boolean verbose()
+	{
+		return this.verbose;
 	}
 	
 	public void print()
@@ -156,7 +223,7 @@ public class Options
 	
 	public void display()
 	{
-		System.out.println( "Usage: " + this.syntax + "\n" );
+		System.out.println( "Usage: " + this.syntax + linesep + linesep + this.description + linesep );
 		
 		for( Option o : options )
 		{
@@ -171,6 +238,11 @@ public class Options
 			
 			System.out.println( "\t" + o.description );
 		}
+	}
+	
+	public String toString()
+	{
+		return "";
 	}
 	
 	
