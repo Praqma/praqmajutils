@@ -3,7 +3,6 @@ package net.praqma.util.execute;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import junit.framework.TestSuite;
 
