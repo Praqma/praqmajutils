@@ -50,6 +50,7 @@ public abstract class Command
 		{
 			ProcessBuilder pb = new ProcessBuilder( cmd );
 			pb.redirectErrorStream( merge );
+
 			
 			if( dir != null )
 			{
@@ -61,7 +62,6 @@ public abstract class Command
 			
 			logger.debug( "Starting process" );
 			Process p = pb.start();
-
 			/* Starting Gobbler threads */
 			StreamGobbler output = new StreamGobbler( p.getInputStream() );
 			StreamGobbler errors = new StreamGobbler( p.getErrorStream() );
