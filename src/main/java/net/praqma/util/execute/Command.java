@@ -46,9 +46,14 @@ public abstract class Command
 		logger.trace_function();		
 		logger.debug( "$ " + cmd );
 		
+		String[] cmds = new String[3];
+		cmds[0] = "cmd.exe";
+		cmds[1] = "/C";
+		cmds[2] = cmd;
+		
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder( cmd );
+			ProcessBuilder pb = new ProcessBuilder( cmds );
 			pb.redirectErrorStream( merge );
 			
 			if( dir != null )
