@@ -14,7 +14,7 @@
 
 	<profiles>
 		<profile>
-			<id>hudson</id>
+			<id>coverage</id>
 			<activation>
 				<property>
 					<name>BUILD_NUMBER</name>
@@ -28,7 +28,7 @@
 						<version>2.4</version>
 						<configuration>
 							<formats>
-								<format>html</format>
+								<format>html</format><!-- May not be necccesesary??? -->
 								<format>xml</format>
 							</formats>
 						</configuration>
