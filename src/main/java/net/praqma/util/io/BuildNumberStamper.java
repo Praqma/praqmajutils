@@ -16,17 +16,21 @@ public class BuildNumberStamper
 	private File src = null;
 	private File dst = null;
 	
-	private final Pattern rx_major_pattern    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.major.*$)" );
-	private final Pattern rx_minor_pattern    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.minor.*$)" );
-	private final Pattern rx_patch_pattern    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
-	private final Pattern rx_sequence_pattern = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
+	private final Pattern rx_major_pattern    = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.major.*$)" );
+	private final Pattern rx_minor_pattern    = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.minor.*$)" );
+	private final Pattern rx_patch_pattern    = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
+	private final Pattern rx_sequence_pattern = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
+	
+	//private final Pattern rx_sequence_4lvl    = Pattern.compile( "(=\\s*)\"(\\d+_\\d+_\\d+_\\d+)*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.fourlevel.*$)" );
+	private final Pattern rx_sequence_4lvl    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.fourlevel.*$)" );
 	
 	/* Alternate versions */
-	private final Pattern rx_alt_major_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.major.*$)" );
-	private final Pattern rx_alt_minor_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.minor.*$)" );
-	private final Pattern rx_alt_patch_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.patch.*$)" );
-	private final Pattern rx_alt_sequence_pattern = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.sequence.*$)" );
+	private final Pattern rx_alt_major_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.major.*$)" );
+	private final Pattern rx_alt_minor_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.minor.*$)" );
+	private final Pattern rx_alt_patch_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
+	private final Pattern rx_alt_sequence_pattern = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
 	
+
 	private static final String linesep = System.getProperty( "line.separator" );
 	
 	public BuildNumberStamper( File src ) throws IOException
@@ -41,6 +45,12 @@ public class BuildNumberStamper
 		FileWriter writer = new FileWriter( this.dst );
 		
 		String s = "";
+		
+		String flvl = null;
+		if( major != null && minor != null && patch != null && sequence != null )
+		{
+			flvl = major + "_" + minor + "_" + patch + "_" + sequence;
+		}
 		
 		while( ( s = reader.readLine() ) != null )
 		{
@@ -70,6 +80,12 @@ public class BuildNumberStamper
 			{
 				s = rx_sequence_pattern.matcher( s ).replaceAll( "$1\"" + sequence + "\"$2" );
 				s = rx_alt_sequence_pattern.matcher( s ).replaceAll( "$1" + sequence + "$2" );
+			}
+			
+			/* Stamp 4level */
+			if( flvl != null )
+			{
+				s = rx_sequence_4lvl.matcher( s ).replaceAll( "$1\"" + flvl + "\"$2" );
 			}
 			
 			/* Write back */
