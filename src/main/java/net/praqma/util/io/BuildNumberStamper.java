@@ -21,6 +21,12 @@ public class BuildNumberStamper
 	private final Pattern rx_patch_pattern    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
 	private final Pattern rx_sequence_pattern = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
 	
+	/* Alternate versions */
+	private final Pattern rx_alt_major_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.major.*$)" );
+	private final Pattern rx_alt_minor_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.minor.*$)" );
+	private final Pattern rx_alt_patch_pattern    = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.patch.*$)" );
+	private final Pattern rx_alt_sequence_pattern = Pattern.compile( "^(#define\\s+\\S+\\s+)\\d+(\\s+\\/\\/\\s*buildnumber\\.sequence.*$)" );
+	
 	private static final String linesep = System.getProperty( "line.separator" );
 	
 	public BuildNumberStamper( File src ) throws IOException
@@ -42,24 +48,28 @@ public class BuildNumberStamper
 			if( major != null )
 			{
 				s = rx_major_pattern.matcher( s ).replaceAll( "$1\"" + major + "\"$2" );
+				s = rx_alt_major_pattern.matcher( s ).replaceAll( "$1" + major + "$2" );
 			}
 			
 			/* Stamp minor */
 			if( minor != null )
 			{
 				s = rx_minor_pattern.matcher( s ).replaceAll( "$1\"" + minor + "\"$2" );
+				s = rx_alt_minor_pattern.matcher( s ).replaceAll( "$1" + minor + "$2" );
 			}
 			
 			/* Stamp patch */
 			if( patch != null )
 			{
 				s = rx_patch_pattern.matcher( s ).replaceAll( "$1\"" + patch + "\"$2" );
+				s = rx_alt_patch_pattern.matcher( s ).replaceAll( "$1" + patch + "$2" );
 			}
 			
 			/* Stamp sequence */
 			if( sequence != null )
 			{
 				s = rx_sequence_pattern.matcher( s ).replaceAll( "$1\"" + sequence + "\"$2" );
+				s = rx_alt_sequence_pattern.matcher( s ).replaceAll( "$1" + sequence + "$2" );
 			}
 			
 			/* Write back */
