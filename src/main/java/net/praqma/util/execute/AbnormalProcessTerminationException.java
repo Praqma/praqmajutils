@@ -12,7 +12,7 @@ public class AbnormalProcessTerminationException extends RuntimeException
 		super(); 
 	}
 	
-	AbnormalProcessTerminationException( String s )
+	public AbnormalProcessTerminationException( String s )
 	{
 		super( s ); 
 	}

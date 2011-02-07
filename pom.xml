@@ -49,9 +49,7 @@
 			<id>build</id>
 			<build>
 				<directory>${project.basedir}/build</directory>
-				<!--<outputDirectory>${project.build.directory}/classes</outputDirectory> -->
 				<finalName>${project.artifactId}-${project.version}</finalName>
-
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
