@@ -8,7 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import net.praqma.util.debug.Logger;
 
 
 public class BuildNumberStamper
@@ -30,6 +33,7 @@ public class BuildNumberStamper
 	private final Pattern rx_alt_patch_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
 	private final Pattern rx_alt_sequence_pattern = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
 	
+	private static final Logger logger = Logger.getLogger();
 
 	private static final String linesep = System.getProperty( "line.separator" );
 	
@@ -85,7 +89,16 @@ public class BuildNumberStamper
 			/* Stamp 4level */
 			if( flvl != null )
 			{
-				s = rx_sequence_4lvl.matcher( s ).replaceAll( "$1\"" + flvl + "\"$2" );
+				Matcher match = rx_sequence_4lvl.matcher( s );
+				
+				if( match.find() )
+				{
+					logger.debug( "I found something to replace!!! Wubdidoooo...." );
+				}
+				
+				s = match.replaceAll( "$1\"" + flvl + "\"$2" );
+				
+
 			}
 			
 			/* Write back */
