@@ -7,7 +7,7 @@ public class AbnormalProcessTerminationException extends RuntimeException
 	 */
 	private static final long serialVersionUID = -6920102041434852713L;
 
-	AbnormalProcessTerminationException()
+	public AbnormalProcessTerminationException()
 	{
 		super(); 
 	}

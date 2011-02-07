@@ -171,7 +171,7 @@ public class Logger
 			sb.append( stack[i].getClassName() + "::" + stack[i].getMethodName() + "," + stack[i].getLineNumber() + linesep );
 		}
 		
-		_log( sb.toString(), "trace" );
+		_log( sb.toString(), "trace", 3 );
 	}
 	
 	public void trace_function( )
@@ -203,7 +203,7 @@ public class Logger
 		}
 		if( tolog )
 		{
-			_log( sb.toString(), "trace" );
+			_log( sb.toString(), "trace", 3 );
 		}
 	}
 	
@@ -214,39 +214,45 @@ public class Logger
 	
 	public void log( String msg )
 	{
-		_log( msg, "info" );
+		_log( msg, "info", 3 );
 	}
 	
 	public void debug( String msg )
 	{
-		_log( msg, "debug" );
+		_log( msg, "debug", 3 );
 	}
 	
 	public void warning( String msg )
 	{
 		/* Testing! */
-		System.err.println( msg );
-		_log( msg, "warning" );
+		//System.err.println( msg );
+		_log( msg, "warning", 3 );
+	}
+	
+	public void exceptionWarning( String msg )
+	{
+		//System.err.println( msg );
+		_log( msg, "warning", 4 );
 	}
 	
 	public void error( String msg )
 	{
 		/* Testing */
-		System.err.println( msg );
-		_log( msg, "error" );
+		//System.err.println( msg );
+		_log( msg, "error", 3 );
 	}
 	
 	public void log( String msg, String type )
 	{
-		_log( msg, type );
+		_log( msg, type, 3 );
 	}
 	
 	public void empty( String msg )
 	{
-		_log( msg, null );
+		_log( msg, null, 3 );
 	}
 	
-	private void _log( String msg, String type )
+	private void _log( String msg, String type, int size )
 	{
 		if( !enabled )
 		{
@@ -254,7 +260,7 @@ public class Logger
 		}
 		
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-		if( exclude.containsKey( stack[3].getClassName() ) )
+		if( exclude.containsKey( stack[size].getClassName() ) )
 		{
 			return;
 		}
