@@ -46,15 +46,11 @@ public abstract class Command
 		logger.trace_function();		
 		logger.debug( "$ " + cmd );
 		
-		String[] cmds = new String[3];
-		cmds[0] = "cmd.exe";
-		cmds[1] = "/C";
-		cmds[2] = cmd;
-		
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder( cmds );
+			ProcessBuilder pb = new ProcessBuilder( cmd );
 			pb.redirectErrorStream( merge );
+
 			
 			if( dir != null )
 			{
@@ -66,7 +62,6 @@ public abstract class Command
 			
 			logger.debug( "Starting process" );
 			Process p = pb.start();
-
 			/* Starting Gobbler threads */
 			StreamGobbler output = new StreamGobbler( p.getInputStream() );
 			StreamGobbler errors = new StreamGobbler( p.getErrorStream() );

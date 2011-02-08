@@ -3,53 +3,50 @@ package net.praqma.util.execute;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import junit.framework.TestSuite;
 
 import org.junit.Test;
 
-public class CommandTest extends TestSuite
-{
+public class CommandTest extends TestSuite {
 
 	@Test
-	public void testRunCommand()
-	{
-		String cmd = "bzr";
-		
-		CmdResult res = Command.run( cmd );
-		
-		assertNotNull( res );
-	}
-	
-	@Test
-	public void testRunCommandDir()
-	{
-		String cmd = "bzr";
-		
-		CmdResult res = Command.run( cmd, new File( System.getProperty("user.home") ) );
-		
-		assertNotNull( res );
-	}
-	
-	@Test
-	public void testRunCommandDirMerge()
-	{
-		String cmd = "bzr";
-				
-		CmdResult res = Command.run( cmd, new File( System.getProperty("user.home") ), true );
-		
-		assertNotNull( res );
-	}
-	
-//	@Test
-//	public void testRunCommandDirMergeIgnore()
-//	{
-//		String cmd = "bzr ";
-//	
-//		CmdResult res = Command.run( cmd, new File( System.getProperty("user.home")  ), true, true );			
-//		
-//		assertNotNull( res );
-//	}
+	public void testRunCommand() {
 
+		String cmd = "java";
+
+		CmdResult res = Command.run(cmd);
+
+		assertNotNull(res);
+	}
+
+	@Test
+	public void testRunCommandDir() {
+		String cmd = "java";
+
+		CmdResult res = Command.run(cmd,
+				new File(System.getProperty("user.home")));
+
+		assertNotNull(res);
+	}
+
+	@Test
+	public void testRunCommandDirMerge() {
+		String cmd = "java";
+
+		CmdResult res = Command.run(cmd,
+				new File(System.getProperty("user.home")), true);
+
+		assertNotNull(res);
+	}
+
+	@Test
+	public void testRunCommandDirMergeIgnore() {
+		String cmd = "java";
+
+		CmdResult res = Command.run(cmd,
+				new File(System.getProperty("user.home")), true);
+
+		assertNotNull(res);
+	}
 }

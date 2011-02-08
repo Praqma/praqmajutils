@@ -14,13 +14,9 @@
 
 	<profiles>
 		<profile>
-			<id>hudson</id>
+			<id>coverage</id>
 			<activation>
 				<property>
-					<!--
-						Hudson by default defines a property BUILD_NUMBER which is used to
-						enable the profile.
-					-->
 					<name>BUILD_NUMBER</name>
 				</property>
 			</activation>
@@ -32,7 +28,7 @@
 						<version>2.4</version>
 						<configuration>
 							<formats>
-								<format>html</format>
+								<format>html</format><!-- May not be necccesesary??? -->
 								<format>xml</format>
 							</formats>
 						</configuration>
@@ -43,80 +39,72 @@
 								<goals>
 									<goal>cobertura</goal>
 								</goals>
-								<!--
-									<inherited>false</inherited> <configuration> </configuration>
-								-->
 							</execution>
 						</executions>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>build</id>
+			<build>
+				<directory>${project.basedir}/build</directory>
+				<finalName>${project.artifactId}-${project.version}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>2.3.2</version>
+						<configuration>
+							<source>1.6</source>
+							<target>1.6</target>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.7</version>
+						<configuration>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+
+							<finalName>${project.artifactId}-${project.version}-complete</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+
+						</configuration>
+						<executions>
+							<execution>
+								<id>make-assembly</id> <!-- this is used for inheritance merges -->
+								<phase>package</phase> <!-- append to the packaging phase. -->
+								<goals>
+									<goal>single</goal> <!-- goals == mojos -->
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+						<configuration> </configuration> </plugin> -->
+				</plugins>
+
+			</build>
+		</profile>
+
 	</profiles>
-
-	<build>
-		<directory>${project.basedir}/build</directory>
-		<outputDirectory>${project.build.directory}/classes</outputDirectory>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-
-					<finalName>${project.artifactId}-${project.version}-complete</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- append to the packaging phase. -->
-						<goals>
-							<goal>single</goal> <!-- goals == mojos -->
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!--
-				<plugin> <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId> <configuration>
-				</configuration> </plugin>
-			-->
-		</plugins>
-
-	</build>
-
 
 	<reporting>
 		<plugins>
 		</plugins>
 	</reporting>
-
-
 
 	<dependencies>
 		<dependency>
@@ -126,6 +114,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 
 </project>
