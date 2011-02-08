@@ -25,7 +25,7 @@ public class BuildNumberStamper
 	private final Pattern rx_sequence_pattern = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
 	
 	//private final Pattern rx_sequence_4lvl    = Pattern.compile( "(=\\s*)\"(\\d+_\\d+_\\d+_\\d+)*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.fourlevel.*$)" );
-	private final Pattern rx_sequence_4lvl    = Pattern.compile( "(=\\s*)\".*\"(\\s*;\\s*[\\/#]{2,2}\\s*buildnumber\\.fourlevel.*$)" );
+	private final Pattern rx_sequence_4lvl    = Pattern.compile( "(\\s*)\".*\"(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.fourlevel.*$)" );
 	
 	/* Alternate versions */
 	private final Pattern rx_alt_major_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.major.*$)" );
