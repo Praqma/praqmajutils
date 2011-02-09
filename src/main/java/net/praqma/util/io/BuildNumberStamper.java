@@ -43,7 +43,7 @@ public class BuildNumberStamper
 		this.dst = File.createTempFile( "praqma_", ".tmp" );
 	}
 	
-	public void stampIntoCode( String major, String minor, String patch, String sequence ) throws IOException
+	public int stampIntoCode( String major, String minor, String patch, String sequence ) throws IOException
 	{
 		BufferedReader reader = new BufferedReader( new FileReader( src ) );
 		FileWriter writer = new FileWriter( this.dst );
@@ -56,49 +56,99 @@ public class BuildNumberStamper
 			flvl = major + "_" + minor + "_" + patch + "_" + sequence;
 		}
 		
+		int number = 0;
+		
 		while( ( s = reader.readLine() ) != null )
 		{
 			/* Stamp major */
 			if( major != null )
 			{
-				s = rx_major_pattern.matcher( s ).replaceAll( "$1\"" + major + "\"$2" );
-				s = rx_alt_major_pattern.matcher( s ).replaceAll( "$1" + major + "$2" );
+				//s = rx_major_pattern.matcher( s ).replaceAll( "$1\"" + major + "\"$2" );
+				Matcher m = rx_major_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1\"" + major + "\"$2" );
+					number++;					
+				}
+
+				//s = rx_alt_major_pattern.matcher( s ).replaceAll( "$1" + major + "$2" );
+				m = rx_alt_major_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1" + major + "$2" );
+					number++;					
+				}
 			}
 			
 			/* Stamp minor */
 			if( minor != null )
 			{
-				s = rx_minor_pattern.matcher( s ).replaceAll( "$1\"" + minor + "\"$2" );
-				s = rx_alt_minor_pattern.matcher( s ).replaceAll( "$1" + minor + "$2" );
+				//s = rx_minor_pattern.matcher( s ).replaceAll( "$1\"" + minor + "\"$2" );
+				Matcher m = rx_minor_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1\"" + minor + "\"$2" );
+					number++;					
+				}
+				
+				//s = rx_alt_minor_pattern.matcher( s ).replaceAll( "$1" + minor + "$2" );
+				m = rx_alt_minor_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1" + minor + "$2" );
+					number++;					
+				}
 			}
 			
 			/* Stamp patch */
 			if( patch != null )
 			{
-				s = rx_patch_pattern.matcher( s ).replaceAll( "$1\"" + patch + "\"$2" );
-				s = rx_alt_patch_pattern.matcher( s ).replaceAll( "$1" + patch + "$2" );
+				//s = rx_patch_pattern.matcher( s ).replaceAll( "$1\"" + patch + "\"$2" );
+				Matcher m = rx_patch_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1\"" + patch + "\"$2" );
+					number++;					
+				}
+				
+				//s = rx_alt_patch_pattern.matcher( s ).replaceAll( "$1" + patch + "$2" );
+				m = rx_alt_patch_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1" + patch + "$2" );
+					number++;					
+				}
 			}
 			
 			/* Stamp sequence */
 			if( sequence != null )
 			{
-				s = rx_sequence_pattern.matcher( s ).replaceAll( "$1\"" + sequence + "\"$2" );
-				s = rx_alt_sequence_pattern.matcher( s ).replaceAll( "$1" + sequence + "$2" );
+				//s = rx_sequence_pattern.matcher( s ).replaceAll( "$1\"" + sequence + "\"$2" );
+				Matcher m = rx_sequence_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1\"" + sequence + "\"$2" );
+					number++;					
+				}
+				
+				//s = rx_alt_sequence_pattern.matcher( s ).replaceAll( "$1" + sequence + "$2" );
+				m = rx_alt_sequence_pattern.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1" + sequence + "$2" );
+					number++;					
+				}
 			}
 			
 			/* Stamp 4level */
 			if( flvl != null )
 			{
-				Matcher match = rx_sequence_4lvl.matcher( s );
-				
-				if( match.find() )
+				Matcher m = rx_sequence_4lvl.matcher( s );
+				if( m.find() )
 				{
-					logger.debug( "I found something to replace!!! Wubdidoooo...." );
+					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
+					number++;
 				}
-				
-				s = match.replaceAll( "$1\"" + flvl + "\"$2" );
-				
-
 			}
 			
 			/* Write back */
@@ -110,6 +160,8 @@ public class BuildNumberStamper
 		
 		
 		copyFile( this.dst, this.src );
+		
+		return number;
 	}
 	
 	public static void copyFile( File sourceFile, File destFile ) throws IOException
