@@ -43,6 +43,15 @@ public class BuildNumberStamper
 		this.dst = File.createTempFile( "praqma_", ".tmp" );
 	}
 	
+	/**
+	 * Stamps a file
+	 * @param major
+	 * @param minor
+	 * @param patch
+	 * @param sequence
+	 * @return 0 if the files had zero occurrences or 1 if it had any
+	 * @throws IOException
+	 */
 	public int stampIntoCode( String major, String minor, String patch, String sequence ) throws IOException
 	{
 		BufferedReader reader = new BufferedReader( new FileReader( src ) );
@@ -161,7 +170,7 @@ public class BuildNumberStamper
 		
 		copyFile( this.dst, this.src );
 		
-		return number;
+		return ( number == 0 ? 0 : 1 );
 	}
 	
 	public static void copyFile( File sourceFile, File destFile ) throws IOException
