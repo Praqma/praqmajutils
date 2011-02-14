@@ -30,6 +30,7 @@ public class Logger
 	private static File file                  = null;
 	
 	private static boolean enabled            = true;
+	private static boolean traceEnabled       = true;
 	
 	private static final String filesep       = System.getProperty( "file.separator" );
 	private static final String linesep       = System.getProperty( "line.separator" );
@@ -91,6 +92,11 @@ public class Logger
 	public void enable()
 	{
 		enabled = true;
+	}
+	
+	public void enableTrace()
+	{
+		traceEnabled = true;
 	}
 	
 	public void setPath( String path )
@@ -161,6 +167,11 @@ public class Logger
 		out = new BufferedWriter( fw );
 	}
 	
+	public String getPath()
+	{
+		return path;
+	}
+	
 	public void stacktrace()
 	{
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
@@ -176,8 +187,11 @@ public class Logger
 	
 	public void trace_function( )
 	{
-		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-		trace.add( stack[2].getClassName() + "::" + stack[2].getMethodName() );
+		if( traceEnabled )
+		{
+			StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+			trace.add( stack[2].getClassName() + "::" + stack[2].getMethodName() );
+		}
 	}
 	
 	public void print_trace( )
