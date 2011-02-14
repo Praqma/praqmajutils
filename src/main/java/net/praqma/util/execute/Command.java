@@ -60,7 +60,6 @@ public abstract class Command
 			
 			CmdResult result = new CmdResult();
 			
-			logger.debug( "Starting process" );
 			Process p = pb.start();
 			/* Starting Gobbler threads */
 			StreamGobbler output = new StreamGobbler( p.getInputStream() );
@@ -83,8 +82,6 @@ public abstract class Command
             {
                 Thread.interrupted();
             }
-            
-            logger.debug( "Ending process" );
 			
 			/* Abnormal process termination, with error out as message */
 			if ( exitValue != 0 )
