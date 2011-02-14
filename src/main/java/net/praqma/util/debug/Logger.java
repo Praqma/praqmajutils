@@ -190,7 +190,7 @@ public class Logger
 		}
 		catch ( IOException e )
 		{
-			System.err.println( "Cannot use the specified path, \"" + path + "\". Defaulting to current working directory." );
+			//System.err.println( "Cannot use the specified path, \"" + path + "\". Defaulting to current working directory." );
 			//path = "./";
 			try
 			{
