@@ -48,7 +48,7 @@ public class Logger
 	private static Map<String, String> exclude = new HashMap<String, String>();
 	
 	
-	private Logger( boolean append )
+	private Logger( boolean append, boolean homePath )
 	{
 		Logger.append = append;
 		
@@ -59,23 +59,39 @@ public class Logger
 		
 		trace = new ArrayList<String>();
 		
-		newDate( nowDate );
+		if( homePath )
+		{
+			setPathHomeLogs();
+		}
+		else
+		{
+			newDate( nowDate );
+		}
+	}
+	
+	public static Logger getLogger( boolean append, boolean homePath )
+	{
+		if( logger == null )
+		{
+			logger = new Logger( append, homePath );
+		}
+		
+		return logger;
 	}
 	
 	public static Logger getLogger( boolean append )
 	{
 		if( logger == null )
 		{
-			logger = new Logger( append );
-		}
-		
+			logger = new Logger( append, true );
+		}		
 		
 		return logger;
 	}
 	
 	public static Logger getLogger( )
 	{
-		return getLogger( true );
+		return getLogger( true, true );
 	}
 	
 	
@@ -105,10 +121,36 @@ public class Logger
 		newDate( nowDate );
 	}
 	
-	public void setPathHomeLogs()
+	public boolean setPathHomeLogs()
 	{
-		Logger.path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
+		//Logger.path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
+		String path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
+		File file = new File( path );
+		
+		/* Existence + creation */
+		if( !file.exists() )
+		{
+			boolean created = false;
+			try
+			{
+				created = file.createNewFile();
+			}
+			catch ( Exception e )
+			{
+				created = false;
+			}
+			
+			if( !created )
+			{
+				return false;
+			}
+		}
+		
+		Logger.path = path;
+		
 		newDate( nowDate );
+		
+		return true;
 	}
 	
 	private static Calendar getDate( Calendar c )
