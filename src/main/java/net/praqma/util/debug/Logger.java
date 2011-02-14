@@ -169,7 +169,7 @@ public class Logger
 	
 	public String getPath()
 	{
-		return path;
+		return file.getAbsolutePath();
 	}
 	
 	public void stacktrace()
