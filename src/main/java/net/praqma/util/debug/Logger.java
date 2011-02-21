@@ -123,7 +123,6 @@ public class Logger
 	
 	public boolean setPathHomeLogs()
 	{
-		//Logger.path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
 		String path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
 		File file = new File( path );
 		
@@ -133,7 +132,7 @@ public class Logger
 			boolean created = false;
 			try
 			{
-				created = file.createNewFile();
+				created = file.mkdir();
 			}
 			catch ( Exception e )
 			{
