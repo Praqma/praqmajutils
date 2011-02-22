@@ -30,7 +30,7 @@ public class Logger
 	private static File file                  = null;
 	
 	private static boolean enabled            = true;
-	private static boolean traceEnabled       = true;
+	private static boolean traceEnabled       = false;
 	
 	private static final String filesep       = System.getProperty( "file.separator" );
 	private static final String linesep       = System.getProperty( "line.separator" );
