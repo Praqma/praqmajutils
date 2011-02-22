@@ -63,6 +63,11 @@ public class BuildNumberStamper
 		if( major != null && minor != null && patch != null && sequence != null )
 		{
 			flvl = major + "_" + minor + "_" + patch + "_" + sequence;
+			logger.debug( "flvl=" + flvl );
+		}
+		else
+		{
+			logger.debug( "flvl not set" );
 		}
 		
 		int number = 0;
@@ -72,7 +77,6 @@ public class BuildNumberStamper
 			/* Stamp major */
 			if( major != null )
 			{
-				//s = rx_major_pattern.matcher( s ).replaceAll( "$1\"" + major + "\"$2" );
 				Matcher m = rx_major_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -80,7 +84,6 @@ public class BuildNumberStamper
 					number++;					
 				}
 
-				//s = rx_alt_major_pattern.matcher( s ).replaceAll( "$1" + major + "$2" );
 				m = rx_alt_major_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -92,7 +95,6 @@ public class BuildNumberStamper
 			/* Stamp minor */
 			if( minor != null )
 			{
-				//s = rx_minor_pattern.matcher( s ).replaceAll( "$1\"" + minor + "\"$2" );
 				Matcher m = rx_minor_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -100,7 +102,6 @@ public class BuildNumberStamper
 					number++;					
 				}
 				
-				//s = rx_alt_minor_pattern.matcher( s ).replaceAll( "$1" + minor + "$2" );
 				m = rx_alt_minor_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -112,7 +113,6 @@ public class BuildNumberStamper
 			/* Stamp patch */
 			if( patch != null )
 			{
-				//s = rx_patch_pattern.matcher( s ).replaceAll( "$1\"" + patch + "\"$2" );
 				Matcher m = rx_patch_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -120,7 +120,6 @@ public class BuildNumberStamper
 					number++;					
 				}
 				
-				//s = rx_alt_patch_pattern.matcher( s ).replaceAll( "$1" + patch + "$2" );
 				m = rx_alt_patch_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -132,7 +131,6 @@ public class BuildNumberStamper
 			/* Stamp sequence */
 			if( sequence != null )
 			{
-				//s = rx_sequence_pattern.matcher( s ).replaceAll( "$1\"" + sequence + "\"$2" );
 				Matcher m = rx_sequence_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -140,7 +138,6 @@ public class BuildNumberStamper
 					number++;					
 				}
 				
-				//s = rx_alt_sequence_pattern.matcher( s ).replaceAll( "$1" + sequence + "$2" );
 				m = rx_alt_sequence_pattern.matcher( s );
 				if( m.find() )
 				{
@@ -157,6 +154,7 @@ public class BuildNumberStamper
 				{
 					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
 					number++;
+					logger.debug( "flvl used" );
 				}
 			}
 			
@@ -166,7 +164,6 @@ public class BuildNumberStamper
 		
 		writer.close();
 		reader.close();
-		
 		
 		copyFile( this.dst, this.src );
 		
