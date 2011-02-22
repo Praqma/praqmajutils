@@ -18,9 +18,26 @@ public class CommandLine implements CommandLineInterface
 	
 	private static CommandLine instance = new CommandLine();
 	
+	private String os = null;
+	private String[] cmd = null;
+	private int last = 0;
+	
 	private CommandLine()
 	{
-		
+		os = System.getProperty( "os.name" );
+		logger.debug( "Running on " + os );
+		if( os.matches( "^.*(?i)windows.*$" ) )
+		{
+			logger.debug( "Using special windows environment" );
+			cmd = new String[3];
+			cmd[0] = "cmd.exe";
+			cmd[1] = "/C";
+			last = 2;
+		}
+		else
+		{
+			cmd = new String[1];
+		}
 	}
 	
 	public static CommandLine getInstance()
@@ -58,25 +75,29 @@ public class CommandLine implements CommandLineInterface
 		logger.trace_function();		
 		logger.debug( "$ " + cmd );
 		
+		/*
 		String[] cmds = new String[3];
 		cmds[0] = "cmd.exe";
 		cmds[1] = "/C";
 		cmds[2] = cmd;
+		*/
+		
+		//cmd = this.cmd + cmd;
+		this.cmd[last] = cmd;
+		
 		
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder( cmds );
+			ProcessBuilder pb = new ProcessBuilder( this.cmd );
 			pb.redirectErrorStream( merge );
 			
 			if( dir != null )
 			{
-				logger.debug( "Changing current working directory to " + dir );
+				logger.debug( "Executing command in " + dir );
 				pb.directory( dir );
 			}
 			
 			CmdResult result = new CmdResult();
-			
-			logger.debug( "Starting process" );
 			Process p = pb.start();
 
 			/* Starting Gobbler threads */
@@ -100,8 +121,6 @@ public class CommandLine implements CommandLineInterface
             {
                 Thread.interrupted();
             }
-            
-            logger.debug( "Ending process" );
 			
 			/* Abnormal process termination, with error out as message */
 			if ( exitValue != 0 )
