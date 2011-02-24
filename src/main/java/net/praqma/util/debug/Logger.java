@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 /**
  * A simple logger class.
  * @author wolfgang
@@ -47,6 +46,9 @@ public class Logger
 	
 	private static Map<String, String> exclude = new HashMap<String, String>();
 	
+	private static Map<String, String> include = new HashMap<String, String>();
+	private boolean all = false;
+	
 	
 	private Logger( boolean append, boolean homePath )
 	{
@@ -67,6 +69,9 @@ public class Logger
 		{
 			newDate( nowDate );
 		}
+		
+		/* Adds includes */
+		addIncludes();
 	}
 	
 	public static Logger getLogger( boolean append, boolean homePath )
@@ -98,6 +103,31 @@ public class Logger
 	public void excludeClass( String eclass )
 	{
 		exclude.put( eclass, "" );
+	}
+	
+	private void addIncludes()
+	{
+		String includes = System.getenv( "include_classes" );
+		this.debug( "Getting includes" );
+		// For now
+		if( includes == null )
+		{
+			this.all = true;
+		}
+		else
+		{
+			String[] is = includes.split( "," );
+			for( String i : is )
+			{
+				this.debug( "Including " + i );
+				this.include.put( i, "" );
+			}
+		}
+	}
+	
+	public void includeClass( String eclass )
+	{
+		include.put( eclass, "" );
 	}
 	
 	public void disable()
@@ -316,6 +346,11 @@ public class Logger
 		
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 		if( exclude.containsKey( stack[size].getClassName() ) )
+		{
+			return;
+		}
+		
+		if( !include.containsKey( stack[size].getClassName() ) && !all )
 		{
 			return;
 		}
