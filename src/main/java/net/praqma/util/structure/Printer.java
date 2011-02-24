@@ -37,6 +37,22 @@ public class Printer
 	    System.out.println( "" );
 	}
 	
+	public static <T1, T2> String mapPrinterToString ( Map<T1, T2> hm )
+	{
+		StringBuffer sb = new StringBuffer();
+		Iterator<Entry<T1, T2>> it = hm.entrySet().iterator();
+	    while( it.hasNext() )
+	    {
+	    	Map.Entry<T1, T2> entry = (Map.Entry<T1, T2>)it.next();
+	    	sb.append( "(" + entry.getKey().toString() + ", " + entry.getValue().toString() + ")" );
+	    	if( it.hasNext() ) System.out.print( ", " );
+	    }
+	    
+	    sb.append( "" );
+	    
+	    return sb.toString();
+	}
+	
 	public static <T> void listPrinter ( List<T> list )
 	{
 	    for( T t : list )
