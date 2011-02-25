@@ -33,6 +33,9 @@ public class BuildNumberStamper
 	private final Pattern rx_alt_patch_pattern    = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.patch.*$)" );
 	private final Pattern rx_alt_sequence_pattern = Pattern.compile( "(\\s*)\\d+(\\s*;*\\s*[\\/#]{2,2}\\s*buildnumber\\.sequence.*$)" );
 	
+	/* Maven four level */
+	private final Pattern rx_maven_sequence_4lvl  = Pattern.compile( "^(\\s*)<version>.*</version>(\\s*)$" );
+	
 	private static final Logger logger = Logger.getLogger();
 
 	private static final String linesep = System.getProperty( "line.separator" );
@@ -155,6 +158,15 @@ public class BuildNumberStamper
 					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
 					number++;
 					logger.debug( "flvl used" );
+				}
+				
+				/* Maven */
+				Matcher mm = rx_maven_sequence_4lvl.matcher( s );
+				if( mm.find() )
+				{
+					s = mm.replaceFirst( "$1<version>" + flvl + "</version>$2" );
+					number++;
+					logger.debug( "Maven flvl used" );
 				}
 			}
 			
