@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,9 +45,12 @@ public class Logger
 	private static final boolean indent       = false;
 	
 	
-	private static Map<String, String> exclude = new HashMap<String, String>();
+	//private static Map<String, String> exclude = new HashMap<String, String>();
 	
-	private static Map<String, String> include = new HashMap<String, String>();
+	//private static Map<String, String> include = new HashMap<String, String>();
+	
+	private static List<String> exclude = new ArrayList<String>();
+	private static List<String> include = new ArrayList<String>();
 	private boolean all = false;
 	
 	
@@ -102,32 +106,38 @@ public class Logger
 	
 	public void excludeClass( String eclass )
 	{
-		exclude.put( eclass, "" );
+		exclude.add( eclass );
 	}
-	
+		
 	private void addIncludes()
 	{
 		String includes = System.getenv( "include_classes" );
+		System.out.println( "Including..." );
 		this.debug( "Getting includes" );
 		// For now
 		if( includes == null )
 		{
-			this.all = true;
+			//this.all = true;
 		}
 		else
 		{
 			String[] is = includes.split( "," );
 			for( String i : is )
 			{
+				System.out.println( i + ", " );
 				this.debug( "Including " + i );
-				this.include.put( i, "" );
+				this.include.add( i );
 			}
 		}
 	}
 	
 	public void includeClass( String eclass )
 	{
-		include.put( eclass, "" );
+		if( !isIncluded( eclass ) )
+		{
+			System.out.println( "Including " + eclass );
+			include.add( eclass );
+		}
 	}
 	
 	public void disable()
@@ -337,6 +347,32 @@ public class Logger
 		_log( msg, null, 3 );
 	}
 	
+	private boolean isExcluded( String name )
+	{
+		for( String s : exclude )
+		{
+			if( name.startsWith( s ) )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean isIncluded( String name )
+	{
+		for( String s : include )
+		{
+			if( name.startsWith( s ) )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	private void _log( String msg, String type, int size )
 	{
 		if( !enabled )
@@ -345,6 +381,13 @@ public class Logger
 		}
 		
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		String name = stack[size].getClassName();
+		if( !isIncluded( name ) || isExcluded( name ) && !all )
+		{
+			return;
+		}
+		
+		/*
 		if( exclude.containsKey( stack[size].getClassName() ) )
 		{
 			return;
@@ -354,6 +397,7 @@ public class Logger
 		{
 			return;
 		}
+		*/
 		
 		if( type != null )
 		{
