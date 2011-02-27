@@ -317,6 +317,11 @@ public class Logger
 		_log( msg, "debug", 3 );
 	}
 	
+	public void info( String msg )
+	{
+		_log( msg, "info", 3 );
+	}
+	
 	public void warning( String msg )
 	{
 		/* Testing! */
