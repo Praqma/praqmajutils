@@ -62,4 +62,15 @@ public class Printer
 	    
 	    System.out.println( "" );
 	}
+	
+	public static <T> String listPrinterToString ( List<T> list )
+	{
+		StringBuffer sb = new StringBuffer();
+	    for( T t : list )
+	    {
+	    	sb.append( "(" + t.toString() + ") " );
+	    }
+	    
+	    return sb.toString();
+	}
 }
