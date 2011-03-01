@@ -112,7 +112,6 @@ public class Logger
 	private void addIncludes()
 	{
 		String includes = System.getenv( "include_classes" );
-		System.out.println( "Including..." );
 		this.debug( "Getting includes" );
 		// For now
 		if( includes == null )
@@ -124,7 +123,6 @@ public class Logger
 			String[] is = includes.split( "," );
 			for( String i : is )
 			{
-				System.out.println( i + ", " );
 				this.debug( "Including " + i );
 				this.include.add( i );
 			}
