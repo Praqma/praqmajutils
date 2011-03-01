@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 
 public class Printer
 {
@@ -72,5 +73,13 @@ public class Printer
 	    }
 	    
 	    return sb.toString();
+	}
+	
+	public static void matchPrinter( Matcher m )
+	{
+		for( int i = 0 ; i < m.groupCount() ; i++ )
+		{
+			System.out.println( "[" + i + "]" + m.group( i ) + " " );
+		}
 	}
 }

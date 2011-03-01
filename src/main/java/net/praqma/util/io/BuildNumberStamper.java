@@ -47,6 +47,57 @@ public class BuildNumberStamper
 	}
 	
 	/**
+	 * Stamp a four level version number into a version file
+	 * @param flvl A string representing the four level version, "major.minor.patch.sequence" 
+	 * @return The number of occurrences
+	 * @throws IOException
+	 */
+	public int stampIntoCode( String flvl ) throws IOException
+	{
+		BufferedReader reader = new BufferedReader( new FileReader( src ) );
+		FileWriter writer = new FileWriter( this.dst );
+		
+		String s = "";
+		
+		int number = 0;
+		
+		while( ( s = reader.readLine() ) != null )
+		{
+			/* Stamp 4level */
+			if( flvl != null )
+			{
+				Matcher m = rx_sequence_4lvl.matcher( s );
+				if( m.find() )
+				{
+					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
+					number++;
+					logger.debug( "flvl used" );
+				}
+				
+				/* Maven */
+				Matcher mm = rx_maven_sequence_4lvl.matcher( s );
+				if( mm.find() )
+				{
+					s = mm.replaceFirst( "$1<version>" + flvl + "</version>$2" );
+					number++;
+					logger.debug( "Maven flvl used" );
+				}
+			}
+			
+			/* Write back */
+			writer.write( s + linesep );
+		}
+		
+		writer.close();
+		reader.close();
+		
+		copyFile( this.dst, this.src );
+		
+		return ( number == 0 ? 0 : 1 );
+	}
+	
+	
+	/**
 	 * Stamps a file
 	 * @param major
 	 * @param minor
