@@ -21,10 +21,10 @@ import java.util.List;
  */
 public class PraqmaLogger
 {
-	private static PraqmaLogger plogger        = null;
+	private static PraqmaLogger plogger       = null;
 	private static FileWriter fw              = null;
 	//private static BufferedWriter out         = null;
-	private static PrintWriter out            = null;
+	private static BufferedWriter out         = null;
 	private static String path                = "./";
 	private static SimpleDateFormat format    = null;
 	private static SimpleDateFormat logformat = null;
@@ -133,7 +133,7 @@ public class PraqmaLogger
 		transient private PraqmaLogger logger = null;
 		
 		transient FileWriter fw = null;
-		transient PrintWriter out = null;
+		transient BufferedWriter out = null;
 		
 		/* Constructor */
 		Logger( PraqmaLogger logger )
@@ -159,12 +159,12 @@ public class PraqmaLogger
 			}
 			
 			System.out.println( "Local log set to " + log.getAbsoluteFile() );
-			out = new PrintWriter( fw );
+			this.out = new BufferedWriter( fw );
 		}
 		
-		public PrintWriter getLocalLog()
+		public BufferedWriter getLocalLog()
 		{
-			return out;
+			return this.out;
 		}
 		
 		void setLogger( PraqmaLogger pl )
@@ -449,7 +449,7 @@ public class PraqmaLogger
 		
 		//System.out.println( "LOGGER USING " + file.getAbsolutePath() );
 		
-		out = new PrintWriter( fw );
+		out = new BufferedWriter( fw );
 	}
 	
 	public String getPath()
@@ -513,15 +513,30 @@ public class PraqmaLogger
 				myMsg = objectToString( msg ) + linesep;
 			}
 			
-			out.write( myMsg );
-			out.flush();
+			/* Writing */
+			try
+			{
+				out.write( myMsg );
+				out.flush();
+			}
+			catch( Exception e )
+			{
+				System.out.println( "Could not write to log." );
+			}
 			
 			/* Local */
 			if( l.getLocalLog() != null )
 			{
-				System.out.println( "Writing local log" );
-				l.getLocalLog().write( myMsg );
-				l.getLocalLog().flush();
+				try
+				{
+					System.out.println( "Writing to local log..." );
+					l.getLocalLog().write( myMsg );
+					l.getLocalLog().flush();
+				}
+				catch( Exception e )
+				{
+					System.out.println( "Could not write to local log" );
+				}
 			}
 		}
 		
