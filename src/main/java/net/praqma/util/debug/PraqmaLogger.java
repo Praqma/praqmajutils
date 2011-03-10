@@ -158,6 +158,7 @@ public class PraqmaLogger
 				return;
 			}
 			
+			System.out.println( "Local log set to " + log.getAbsoluteFile() );
 			out = new PrintWriter( fw );
 		}
 		
@@ -183,12 +184,10 @@ public class PraqmaLogger
 		
 		private void addSubscriptions()
 		{
-			System.out.println( "HERE101" );
 			String includes = System.getenv( "include_classes" );
 			// For now
 			if( includes == null )
 			{
-				System.out.println( "NULL101" );
 				//this.all = true;
 			}
 			else
@@ -221,7 +220,6 @@ public class PraqmaLogger
 			{
 				if( name.startsWith( s ) )
 				{
-					System.out.println( "YES" );
 					return true;
 				}
 			}
@@ -325,7 +323,6 @@ public class PraqmaLogger
 		{
 			if( name.startsWith( s ) )
 			{
-				System.out.println( "GL:YES" );
 				return true;
 			}
 		}
@@ -335,7 +332,6 @@ public class PraqmaLogger
 	
 	private static void addSubscriptions()
 	{
-		System.out.println( "HERE" );
 		String includes = System.getenv( "include_global_classes" );
 		// For now
 		if( includes == null )
