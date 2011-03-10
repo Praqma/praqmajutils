@@ -148,6 +148,7 @@ public class PraqmaLogger
 		
 		public void setLocalLog( File log )
 		{
+			System.out.println( "Trying to set " + log );
 			try
 			{
 				fw = new FileWriter( log, true );
