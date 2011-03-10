@@ -23,7 +23,6 @@ public class PraqmaLogger
 {
 	private static PraqmaLogger plogger       = null;
 	private static FileWriter fw              = null;
-	//private static BufferedWriter out         = null;
 	private static BufferedWriter out         = null;
 	private static String path                = "./";
 	private static SimpleDateFormat format    = null;
@@ -111,7 +110,7 @@ public class PraqmaLogger
 		}
 		
 		l.setLogger( plogger );
-		l.out = null;
+		l.bwout = null;
 		return l;
 	}
 	
@@ -132,8 +131,8 @@ public class PraqmaLogger
 		
 		transient private PraqmaLogger logger = null;
 		
-		transient FileWriter fw = null;
-		transient BufferedWriter out = null;
+		transient FileWriter fw        = null;
+		transient BufferedWriter bwout = null;
 		
 		/* Constructor */
 		Logger( PraqmaLogger logger )
@@ -159,8 +158,8 @@ public class PraqmaLogger
 			}
 			
 			System.out.println( "Local log set to " + log.getAbsoluteFile() );
-			this.out = new BufferedWriter( fw );
-			if( this.out == null)
+			this.bwout = new BufferedWriter( fw );
+			if( this.bwout == null)
 			{
 				System.out.println( "WHAT? NULL?" );
 			}
@@ -172,7 +171,7 @@ public class PraqmaLogger
 		
 		public BufferedWriter getLocalLog()
 		{
-			if( this.out == null)
+			if( this.bwout == null)
 			{
 				System.out.println( "111" );
 			}
@@ -180,7 +179,7 @@ public class PraqmaLogger
 			{
 				System.out.println( "222" );
 			}
-			return this.out;
+			return this.bwout;
 		}
 		
 		void setLogger( PraqmaLogger pl )
