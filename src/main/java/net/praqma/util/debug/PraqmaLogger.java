@@ -519,6 +519,7 @@ public class PraqmaLogger
 			/* Local */
 			if( l.getLocalLog() != null )
 			{
+				System.out.println( "Writing local log" );
 				l.getLocalLog().write( myMsg );
 				l.getLocalLog().flush();
 			}
