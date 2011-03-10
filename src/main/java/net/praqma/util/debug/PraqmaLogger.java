@@ -153,13 +153,21 @@ public class PraqmaLogger
 			{
 				fw = new FileWriter( log, true );
 			}
-			catch ( IOException e1 )
+			catch ( Exception e1 )
 			{
 				return;
 			}
 			
 			System.out.println( "Local log set to " + log.getAbsoluteFile() );
 			this.out = new BufferedWriter( fw );
+			if( this.out == null)
+			{
+				System.out.println( "WHAT? NULL?" );
+			}
+			else
+			{
+				System.out.println( "YAY NOT NULL!" );
+			}
 		}
 		
 		public BufferedWriter getLocalLog()
