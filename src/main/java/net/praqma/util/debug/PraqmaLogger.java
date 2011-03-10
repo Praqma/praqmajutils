@@ -168,6 +168,15 @@ public class PraqmaLogger
 			{
 				System.out.println( "YAY NOT NULL!" );
 			}
+			
+			if( this.getLocalLog() == null)
+			{
+				System.out.println( "WHAT? NULL?222" );
+			}
+			else
+			{
+				System.out.println( "YAY NOT NULL!111" );
+			}
 		}
 		
 		public BufferedWriter getLocalLog()
