@@ -525,6 +525,15 @@ public class PraqmaLogger
 			}
 			
 			/* Local */
+			System.out.println( "THIS SHOULD ALLWAYS GET WRITTEN!" );
+			if(l.getLocalLog() != null)
+			{
+				System.out.println( "LOCAL LOG IS NOT NULL" );
+			}
+			else
+			{
+				System.out.println( "LOCAL LOG _IS_ NULL" );
+			}
 			if( l.getLocalLog() != null )
 			{
 				try
