@@ -11,7 +11,8 @@ import java.nio.channels.FileChannel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.PraqmaLogger;
+import net.praqma.util.debug.PraqmaLogger.Logger;
 
 
 public class BuildNumberStamper
@@ -36,7 +37,7 @@ public class BuildNumberStamper
 	/* Maven four level */
 	private final Pattern rx_maven_sequence_4lvl  = Pattern.compile( "^(\\s*)<version>.*</version>(\\s*)$" );
 	
-	private static final Logger logger = Logger.getLogger();
+	private static final Logger logger = PraqmaLogger.getLogger();
 
 	private static final String linesep = System.getProperty( "line.separator" );
 	

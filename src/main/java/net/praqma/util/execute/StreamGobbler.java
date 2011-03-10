@@ -7,11 +7,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.PraqmaLogger;
+import net.praqma.util.debug.PraqmaLogger.Logger;
 
 public class StreamGobbler extends Thread
 {
-	protected static Logger logger = Logger.getLogger();
+	protected static Logger logger = PraqmaLogger.getLogger();
 	public static String linesep = System.getProperty( "line.separator" );
 	
     InputStream is;
