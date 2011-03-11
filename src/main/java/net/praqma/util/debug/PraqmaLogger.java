@@ -23,7 +23,7 @@ public class PraqmaLogger
 {
 	private static PraqmaLogger plogger       = null;
 	private static FileWriter fw              = null;
-	private static BufferedWriter out         = null;
+	private static PrintWriter out         = null;
 	private static String path                = "./";
 	private static SimpleDateFormat format    = null;
 	private static SimpleDateFormat logformat = null;
@@ -110,7 +110,7 @@ public class PraqmaLogger
 		}
 		
 		l.setLogger( plogger );
-		l.bwout = null;
+		//l.bwout = null;
 		return l;
 	}
 	
@@ -126,13 +126,13 @@ public class PraqmaLogger
 		
 		public List<String> exclude = new ArrayList<String>();
 		public List<String> include = new ArrayList<String>();
-		public boolean all = false;
+		public boolean all     = false;
 		public boolean enabled = true;
 		
 		transient private PraqmaLogger logger = null;
 		
-		transient FileWriter fw        = null;
-		transient BufferedWriter bwout = null;
+		transient FileWriter fw     = null;
+		transient PrintWriter pwout = null;
 		
 		/* Constructor */
 		Logger( PraqmaLogger logger )
@@ -143,12 +143,11 @@ public class PraqmaLogger
 		
 		public Logger()
 		{
-			System.out.println( "Default constructor" );
+			
 		}
 		
 		public void setLocalLog( File log )
 		{
-			System.out.println( "Trying to set " + log );
 			try
 			{
 				fw = new FileWriter( log, true );
@@ -158,38 +157,12 @@ public class PraqmaLogger
 				return;
 			}
 			
-			System.out.println( "Local log set to " + log.getAbsoluteFile() );
-			this.bwout = new BufferedWriter( fw );
-			if( this.bwout == null)
-			{
-				System.out.println( "WHAT? NULL?" );
-			}
-			else
-			{
-				System.out.println( "YAY NOT NULL!" );
-			}
-			
-			if( this.getLocalLog() == null)
-			{
-				System.out.println( "WHAT? NULL?222" );
-			}
-			else
-			{
-				System.out.println( "YAY NOT NULL!111" );
-			}
+			this.pwout = new PrintWriter( fw );
 		}
 		
-		public BufferedWriter getLocalLog()
+		public PrintWriter getLocalLog()
 		{
-			if( this.bwout == null)
-			{
-				System.out.println( "111" );
-			}
-			else
-			{
-				System.out.println( "222" );
-			}
-			return this.bwout;
+			return this.pwout;
 		}
 		
 		void setLogger( PraqmaLogger pl )
@@ -202,7 +175,6 @@ public class PraqmaLogger
 		{
 			if( !isIncluded( s ) )
 			{
-				System.out.println( "INCLUDING " + s );
 				include.add( s );
 			}
 		}
@@ -474,7 +446,7 @@ public class PraqmaLogger
 		
 		//System.out.println( "LOGGER USING " + file.getAbsolutePath() );
 		
-		out = new BufferedWriter( fw );
+		out = new PrintWriter( fw );
 	}
 	
 	public String getPath()
@@ -539,38 +511,14 @@ public class PraqmaLogger
 			}
 			
 			/* Writing */
-			try
-			{
-				out.write( myMsg );
-				out.flush();
-			}
-			catch( Exception e )
-			{
-				System.out.println( "Could not write to log." );
-			}
+			out.write( myMsg );
+			out.flush();
 			
 			/* Local */
-			System.out.println( "THIS SHOULD ALLWAYS GET WRITTEN!" );
-			if(l.getLocalLog() != null)
-			{
-				System.out.println( "LOCAL LOG IS NOT NULL" );
-			}
-			else
-			{
-				System.out.println( "LOCAL LOG _IS_ NULL" );
-			}
 			if( l.getLocalLog() != null )
 			{
-				try
-				{
-					System.out.println( "Writing to local log..." );
-					l.getLocalLog().write( myMsg );
-					l.getLocalLog().flush();
-				}
-				catch( Exception e )
-				{
-					System.out.println( "Could not write to local log" );
-				}
+				l.getLocalLog().write( myMsg );
+				l.getLocalLog().flush();
 			}
 		}
 		
