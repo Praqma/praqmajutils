@@ -26,7 +26,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.PraqmaLogger;
+import net.praqma.util.debug.PraqmaLogger.Logger;
 
 import org.w3c.dom.DOMError;
 import org.w3c.dom.DOMException;
@@ -40,7 +41,7 @@ public class XML
 	private Document doc;
 	private Element root;
 	
-	protected Logger logger = Logger.getLogger();
+	protected Logger logger = PraqmaLogger.getLogger();
 	
 	public XML( String roottag )
 	{

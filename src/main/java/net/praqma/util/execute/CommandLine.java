@@ -4,7 +4,8 @@ package net.praqma.util.execute;
 import java.io.File;
 import java.io.IOException;
 
-import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.PraqmaLogger;
+import net.praqma.util.debug.PraqmaLogger.Logger;
 
 /**
  * CLI class
@@ -13,7 +14,7 @@ import net.praqma.util.debug.Logger;
  */
 public class CommandLine implements CommandLineInterface
 {
-	protected static Logger logger = Logger.getLogger();
+	protected Logger logger = PraqmaLogger.getLogger();
 	protected static final String linesep = System.getProperty( "line.separator" );
 	
 	private static CommandLine instance = new CommandLine();
@@ -21,6 +22,12 @@ public class CommandLine implements CommandLineInterface
 	private String os = null;
 	private String[] cmd = null;
 	private int last = 0;
+	
+	public void setLogger( Logger logger )
+	{
+		this.logger = PraqmaLogger.getLogger( logger );
+		System.out.println( this.logger.toString() );
+	}
 	
 	private CommandLine()
 	{

@@ -4,7 +4,8 @@ package net.praqma.util.execute;
 import java.io.File;
 import java.io.IOException;
 
-import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.PraqmaLogger;
+import net.praqma.util.debug.PraqmaLogger.Logger;
 
 /**
  * CLI class
@@ -13,7 +14,7 @@ import net.praqma.util.debug.Logger;
  */
 public abstract class Command
 {
-	protected static Logger logger = Logger.getLogger();
+	protected static Logger logger = PraqmaLogger.getLogger();
 	protected static final String linesep = System.getProperty( "line.separator" );
 	
 	public static CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException
