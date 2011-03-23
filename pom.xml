@@ -57,6 +57,9 @@
 		</profile>
 		<profile>
 			<id>build</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<directory>${project.basedir}/build</directory>
 				<finalName>${project.artifactId}-${project.version}</finalName>

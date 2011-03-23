@@ -64,10 +64,27 @@ public class XML
 	
 	public XML( File xmlfile ) throws IOException
 	{
-		/* The search result */
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware( true );
 		InputStream is = new FileInputStream( xmlfile );
+		DocumentBuilder builder;
+		try
+		{
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse( is );
+		}
+		catch ( Exception e )
+		{
+			e.printStackTrace();
+		}
+		
+		root = doc.getDocumentElement();
+	}
+	
+	public XML( InputStream is )
+	{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware( true );
 		DocumentBuilder builder;
 		try
 		{
