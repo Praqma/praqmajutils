@@ -179,6 +179,11 @@ public class PraqmaLogger
 			}
 		}
 		
+		public void subscribeAll( )
+		{
+			this.all = true;
+		}
+		
 		private void addSubscriptions()
 		{
 			String includes = System.getenv( "include_classes" );
