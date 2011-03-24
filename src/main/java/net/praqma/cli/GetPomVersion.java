@@ -10,7 +10,7 @@ import net.praqma.util.option.Options;
 
 /*
  * Usage
- * java -classpath COOL-0.1.5.jar net.praqma.cli.BuildNumber -f stamptest.txt -m 12 -p 1234 -s 22221 --minor 22b
+ * java -classpath COOL-0.1.5.jar net.praqma.cli.GetPomVersion -f <pom-file>
  * 
  * 
  */
