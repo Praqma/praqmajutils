@@ -54,12 +54,12 @@ public class CommandLine implements CommandLineInterface
 	
 	public CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException
 	{
-		return run( cmd, null, false, false );
+		return run( cmd, null, true, false );
 	}
 	
 	public CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException
 	{
-		return run( cmd, dir, false, false );
+		return run( cmd, dir, true, false );
 	}
 	
 	public CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException
@@ -128,19 +128,7 @@ public class CommandLine implements CommandLineInterface
             {
                 Thread.interrupted();
             }
-			
-			/* Abnormal process termination, with error out as message */
-			if ( exitValue != 0 )
-			{
-				logger.debug( "Abnormal process termination(" + exitValue + "): " + errors.sres.toString() );
-				
-				/* Only throw the exception if it is not ignored, this is default */
-				if( !ignore )
-				{
-					throw new AbnormalProcessTerminationException( errors.sres.toString() );
-				}
-			}
-			
+            
 			try
 			{
 				output.join();
@@ -162,6 +150,27 @@ public class CommandLine implements CommandLineInterface
 			/* Closing streams */
 			p.getErrorStream().close();
 			p.getInputStream().close();
+			
+			/* Abnormal process termination, with error out as message */
+			if ( exitValue != 0 )
+			{
+				logger.debug( "Abnormal process termination(" + exitValue + "): " + output.sres.toString() );
+				
+				/* Only throw the exception if it is not ignored, this is default */
+				if( !ignore )
+				{
+					if( merge )
+					{
+						throw new AbnormalProcessTerminationException( output.sres.toString() );
+					}
+					else
+					{
+						throw new AbnormalProcessTerminationException( errors.sres.toString() );
+					}
+				}
+			}
+			
+
 			
 			/* Setting command result */
 			result.stdoutBuffer = output.sres;
