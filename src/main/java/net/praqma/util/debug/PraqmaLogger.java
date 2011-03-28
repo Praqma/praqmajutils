@@ -184,6 +184,12 @@ public class PraqmaLogger
 			this.all = true;
 		}
 		
+		public void unsubscribeAll()
+		{
+			this.all = false;
+			this.include.clear();
+		}
+		
 		private void addSubscriptions()
 		{
 			String includes = System.getenv( "include_classes" );
