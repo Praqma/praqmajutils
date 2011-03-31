@@ -21,6 +21,7 @@ public class Options
 {
 	private List<Option> options = new ArrayList<Option>();
 	private String syntax        = "";
+	private String header        = "";
 	private String description   = "";
 	
 	private String version       = "";
@@ -66,6 +67,11 @@ public class Options
 	public void setDescription( String desc )
 	{
 		this.description = desc;
+	}
+	
+	public void setHeader( String header )
+	{
+		this.header = header;
 	}
 	
 	public void setOption( Option option )
@@ -223,7 +229,12 @@ public class Options
 	
 	public void display()
 	{
-		System.out.println( "Usage: " + this.syntax + linesep + linesep + this.description + linesep );
+		if( this.header.length() > 0 )
+		{
+			System.out.println( this.header + linesep );
+		}
+		
+		System.out.println( "Usage: " + this.syntax + linesep );
 		
 		for( Option o : options )
 		{
@@ -237,6 +248,11 @@ public class Options
 			System.out.print( "\t" + ( o.required ? "Required" : "Optional" ) );
 			
 			System.out.println( "\t" + o.description );
+		}
+		
+		if( this.description.length() > 0 )
+		{
+			System.out.println( linesep + this.description );
 		}
 	}
 	
