@@ -97,7 +97,6 @@ public class BuildNumberStamper
 		return ( number == 0 ? 0 : 1 );
 	}
 	
-	
 	/**
 	 * Stamps a file
 	 * @param major
@@ -109,6 +108,22 @@ public class BuildNumberStamper
 	 */
 	public int stampIntoCode( String major, String minor, String patch, String sequence ) throws IOException
 	{
+		return stampIntoCode(major, minor, patch, sequence, "_");
+		
+	}
+	
+	/**
+	 * Stamps a file
+	 * @param major
+	 * @param minor
+	 * @param patch
+	 * @param sequence
+	 * @param delimiter
+	 * @return 0 if the files had zero occurrences or 1 if it had any
+	 * @throws IOException
+	 */
+	public int stampIntoCode( String major, String minor, String patch, String sequence, String delimiter ) throws IOException
+	{
 		BufferedReader reader = new BufferedReader( new FileReader( src ) );
 		FileWriter writer = new FileWriter( this.dst );
 		
@@ -117,7 +132,7 @@ public class BuildNumberStamper
 		String flvl = null;
 		if( major != null && minor != null && patch != null && sequence != null )
 		{
-			flvl = major + "_" + minor + "_" + patch + "_" + sequence;
+			flvl = major + delimiter + minor + delimiter + patch + delimiter + sequence;
 			logger.debug( "flvl=" + flvl );
 		}
 		else
