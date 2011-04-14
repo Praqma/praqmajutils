@@ -13,6 +13,14 @@ public class CommandLineTest {
 		CommandLine cli = CommandLine.getInstance();
 		assertNotNull(cli);
 	}
+	
+	@Test
+	public final void testSetLogger() {
+		CommandLine cli = CommandLine.getInstance();
+		net.praqma.util.debug.PraqmaLogger.Logger l = new net.praqma.util.debug.PraqmaLogger.Logger();
+		cli.setLogger(l);
+		assertNotNull(cli);
+	}
 
 	@Test
 	public final void testRunString() {

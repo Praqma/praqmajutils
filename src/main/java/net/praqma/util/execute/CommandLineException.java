@@ -6,11 +6,11 @@ public class CommandLineException extends RuntimeException
 	 * 
 	 */
 	private static final long serialVersionUID = -8031565757415076147L;
-
-	CommandLineException()
-	{
-		super(); 
-	}
+//TODO remove this is not used any where in the code..
+//	CommandLineException()
+//	{
+//		super(); 
+//	}
 	
 	CommandLineException( String s )
 	{
