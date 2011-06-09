@@ -20,8 +20,15 @@ public class CommandLine implements CommandLineInterface
 	private static CommandLine instance = new CommandLine();
 	
 	private String os = null;
+	private OperatingSystem thisos = OperatingSystem.WINDOWS;
 	private String[] cmd = null;
 	private int last = 0;
+	
+	public enum OperatingSystem
+	{
+	    WINDOWS,
+	    UNIX
+	}
 	
 	public void setLogger( Logger logger )
 	{
@@ -43,8 +50,14 @@ public class CommandLine implements CommandLineInterface
 		}
 		else
 		{
+		    	thisos = OperatingSystem.UNIX;
 			cmd = new String[1];
 		}
+	}
+	
+	public OperatingSystem getOS()
+	{
+	    return thisos;
 	}
 	
 	public static CommandLine getInstance()
