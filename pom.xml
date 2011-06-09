@@ -138,7 +138,7 @@
 	</dependencies>
 	
     <scm>
-        <connection>scm:git:ssh://github.com/praqmajutils.git</connection>
+        <connection>scm:git:ssh://github.com/Praqma/praqmajutils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
         <url>https://github.com/Praqma/praqmajutils.git</url>
     </scm>
