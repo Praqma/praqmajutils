@@ -3,8 +3,10 @@ package net.praqma.util.debug;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.praqma.util.debug.PraqmaLogger.Logger;
+import net.praqma.util.io.BuildNumberStamperTest;
 
 import org.junit.Test;
 
@@ -47,9 +49,13 @@ public class PraqmaLoggerTest {
 	}
 
 	@Test
-	public void testSetLocalLog() {
+	public void testSetLocalLog() throws IOException {
 		Logger logger = PraqmaLogger.getLogger(true);
-		logger.setLocalLog(new File("c:\\test.log"));
+	    	File file = new File( BuildNumberStamperTest.class.getClassLoader().getResource( "test.log" ).getFile() );
+	    	file.delete();
+		file.createNewFile();
+
+		logger.setLocalLog(file);
 		assertNotNull(logger.getLocalLog());
 
 	}
