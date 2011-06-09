@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import net.praqma.util.execute.CommandLineInterface.OperatingSystem;
+
 import org.junit.Test;
 
 public class CommandLineTest {
@@ -43,6 +45,17 @@ public class CommandLineTest {
 			assertNotNull(e);
 			return;
 		}
+		catch( CommandLineException e )
+		{
+		    if( cli.getOS() == OperatingSystem.WINDOWS )
+		    {
+			fail();
+		    }
+		    else
+		    {
+			return;
+		    }
+		}
 		fail();
 	}
 	
@@ -59,6 +72,17 @@ public class CommandLineTest {
 		} catch (AbnormalProcessTerminationException e) {
 			fail();
 			return;
+		}
+		catch( CommandLineException e )
+		{
+		    if( cli.getOS() == OperatingSystem.WINDOWS )
+		    {
+			fail();
+		    }
+		    else
+		    {
+			return;
+		    }
 		}
 	}
 	

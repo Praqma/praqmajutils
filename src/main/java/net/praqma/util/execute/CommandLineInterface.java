@@ -6,6 +6,14 @@ import net.praqma.util.debug.PraqmaLogger.Logger;
 
 public interface CommandLineInterface
 {	
+	public enum OperatingSystem
+	{
+	    WINDOWS,
+	    UNIX
+	}
+	
+	public OperatingSystem getOS();
+	
 	public void setLogger( Logger logger );
 	
 	public CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException;

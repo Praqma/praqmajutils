@@ -24,11 +24,7 @@ public class CommandLine implements CommandLineInterface
 	private String[] cmd = null;
 	private int last = 0;
 	
-	public enum OperatingSystem
-	{
-	    WINDOWS,
-	    UNIX
-	}
+
 	
 	public void setLogger( Logger logger )
 	{
