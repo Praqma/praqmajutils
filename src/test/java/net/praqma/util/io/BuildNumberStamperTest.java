@@ -25,9 +25,14 @@ import org.junit.Test;
  */
 public class BuildNumberStamperTest {
 
+    File file;
+    File nfile;
+    
 	@Before
 	public void setUp() throws Exception {
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
+	    	file = new File( BuildNumberStamperTest.class.getClassLoader().getResource( "temp.cpp" ).getFile() );
+	    	file.delete();
 		file.createNewFile();
 		FileOutputStream fop = new FileOutputStream(file);
 		
@@ -37,7 +42,9 @@ public class BuildNumberStamperTest {
 		fop.flush();		
 		fop.close();
 		
-		File nfile = new File("c:\\not_valid_temp.cpp");
+		//File nfile = new File("c:\\not_valid_temp.cpp");
+		nfile = new File( BuildNumberStamperTest.class.getClassLoader().getResource( "not_valid_temp.cpp" ).getFile() );
+		nfile.delete();
 		nfile.createNewFile();
 		FileOutputStream nfop = new FileOutputStream(nfile);
 		
@@ -50,11 +57,11 @@ public class BuildNumberStamperTest {
 
 	@After
 	public void tearDown() throws Exception {
-		File file = new File("c:\\temp.cpp");
-		file.delete();
+		//File file = new File("c:\\temp.cpp");
+		//file.delete();
 		
-		File nfile = new File("c:\\not_valid_temp.cpp");
-		nfile.delete();
+		//File nfile = new File("c:\\not_valid_temp.cpp");
+		//nfile.delete();
 	}	
 	
 	/**
@@ -65,7 +72,7 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeStringStringStringString() {
 
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -104,7 +111,7 @@ public class BuildNumberStamperTest {
 	 */
 	@Test
 	public void testStampIntoCodeStringStringStringStringString() {
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -142,7 +149,7 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeNULLStringStringStringString() {
 
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -180,7 +187,7 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeStringNULLStringStringString() {
 
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -218,7 +225,7 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeStringStringStringNULLString() {
 
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -256,7 +263,7 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeStringStringStringStringNULL() {
 
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -294,15 +301,15 @@ public class BuildNumberStamperTest {
 	@Test
 	public void testStampIntoCodeNotValidFile() {
 
-		File file = new File("c:\\not_valid_temp.cpp");
+		//File nfile = new File("c:\\not_valid_temp.cpp");
 
 		try {
 			
 			BuildNumberStamper stamp = new net.praqma.util.io.BuildNumberStamper(
-					file);
+					nfile);
 			stamp.stampIntoCode("0", "1", "0", "25", ".");
 
-			FileInputStream fstream = new FileInputStream(file
+			FileInputStream fstream = new FileInputStream(nfile
 					.getAbsolutePath().toString());
 			DataInputStream in = new DataInputStream(fstream);
 
@@ -329,7 +336,7 @@ public class BuildNumberStamperTest {
 	 */
 	@Test
 	public void stampIntoCodeString (){
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -366,7 +373,7 @@ public class BuildNumberStamperTest {
 	 */
 	@Test
 	public void stampIntoCodeNULL (){
-		File file = new File("c:\\temp.cpp");
+		//File file = new File("c:\\temp.cpp");
 
 		try {
 			
@@ -402,15 +409,15 @@ public class BuildNumberStamperTest {
 	 */
 	@Test
 	public void stampIntoCodeSingleParameterNotValidFile (){
-		File file = new File("c:\\not_valid_temp.cpp");
+		//File nfile = new File("c:\\not_valid_temp.cpp");
 
 		try {
 			
 			BuildNumberStamper stamp = new BuildNumberStamper(
-					file);
+					nfile);
 			stamp.stampIntoCode("0.1.0.25");
 
-			FileInputStream fstream = new FileInputStream(file
+			FileInputStream fstream = new FileInputStream(nfile
 					.getAbsolutePath().toString());
 			DataInputStream in = new DataInputStream(fstream);
 
