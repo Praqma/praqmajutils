@@ -4,13 +4,21 @@
 	<groupId>net.praqma</groupId>
 	<artifactId>praqmajutils</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.7</version>
+	<version>0.1.6-SNAPSHOT</version>
 	<name>Praqma Java Utils</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+    <distributionManagement>
+        <repository>
+            <id>praqma</id>
+            <name>praqma</name>
+            <url>scp://10.10.1.25:/var/www/repo/maven</url>
+        </repository>
+    </distributionManagement>
 
 	<profiles>
 		<profile>

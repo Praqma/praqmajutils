@@ -45,6 +45,8 @@ public class PraqmaLogger
 	private static final int typemaxlength    = 8;
 	private static final int methodmaxlength  = 55;
 	private static final boolean indent       = false;
+	
+	private boolean toStdOut = false;
 
 	
 	
@@ -66,6 +68,11 @@ public class PraqmaLogger
 		else
 		{
 			newDate( nowDate );
+		}
+		
+		if( System.getProperty( "tostdout" ) != null )
+		{
+			toStdOut = true;
 		}
 		
 		PraqmaLogger.addSubscriptions();
@@ -495,7 +502,7 @@ public class PraqmaLogger
 		//System.out.println( "NAME=" + name );
 
 		String myMsg = null;
-		if( l.isIncluded( name ) || PraqmaLogger.isIncluded( name ) || l.all || this.all )
+		if( l.isIncluded( name ) || PraqmaLogger.isIncluded( name ) || l.all || this.all || this.toStdOut )
 		{
 		
 			/* Check if the date is changed */
@@ -521,15 +528,25 @@ public class PraqmaLogger
 				myMsg = objectToString( msg ) + linesep;
 			}
 			
-			/* Writing */
-			out.write( myMsg );
-			out.flush();
-			
-			/* Local */
-			if( l.getLocalLog() != null )
+			/* To sdt out? */
+			if( toStdOut )
 			{
-				l.getLocalLog().write( myMsg );
-				l.getLocalLog().flush();
+				System.out.print( myMsg );
+			}
+			else
+			{
+				/* Writing */
+				out.write( myMsg );
+				out.flush();
+				
+	
+				
+				/* Local */
+				if( l.getLocalLog() != null )
+				{
+					l.getLocalLog().write( myMsg );
+					l.getLocalLog().flush();
+				}
 			}
 		}
 		

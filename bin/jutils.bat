@@ -25,7 +25,7 @@ EXIT /B 1
 
 :JUTILShomeok
 
-set JUTILS_JAR=%JUTILS_HOME%\build\praqmajutils-0.1.5.jar
+set JUTILS_JAR=%JUTILS_HOME%\build\praqmajutils-0.1.6.jar
 
 if exist "%JUTILS_JAR%" goto start
 
