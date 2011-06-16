@@ -97,7 +97,7 @@
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
 
-							<finalName>${project.artifactId}-${project.version}-complete</finalName>
+							<finalName>${project.artifactId}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 
 						</configuration>
