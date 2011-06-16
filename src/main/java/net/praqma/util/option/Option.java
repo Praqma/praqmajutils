@@ -75,6 +75,10 @@ public class Option {
     public void setUsed() {
 	used = true;
     }
+    
+    public boolean isUsed() {
+	return used;
+    }
 
     public void addValue(String value) {
 	values.add(value);
