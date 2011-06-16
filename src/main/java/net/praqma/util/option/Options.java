@@ -165,7 +165,15 @@ public class Options {
 	}
     }
 
+    /**
+     * @deprecated since 0.1.8
+     * @return
+     */
     public boolean verbose() {
+	return this.verbose;
+    }
+    
+    public boolean isVerbose() {
 	return this.verbose;
     }
 

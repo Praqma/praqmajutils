@@ -52,6 +52,10 @@ public class Run {
 	
 	CommandLineInterface cli = CommandLine.getInstance();
 	
+	if( o.isVerbose() ) {
+	    System.out.println( "Command: " + ocommand.getString(true) );
+	}
+	
 	try {
 	    CmdResult r = cli.run(ocommand.getString(true), (opath.isUsed()?new File(opath.getString()):null), omerge.isUsed());
 	    System.out.println(r.stdoutBuffer);
