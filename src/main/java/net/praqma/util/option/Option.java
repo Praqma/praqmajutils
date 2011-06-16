@@ -83,19 +83,30 @@ public class Option {
     public void addValue(String value) {
 	values.add(value);
     }
-
+    
     public String getString() {
+	return getString( false );
+    }
+
+    public String getString( boolean doSpaces ) {
 	StringBuffer sb = new StringBuffer();
 
 	if (values.size() == 0) {
 	    return null;
 	}
 
-	for (String s : values) {
-	    sb.append(s);
+	if (doSpaces) {
+	    for (String s : values) {
+		sb.append(s + " ");
+	    }
+	} else {
+	    for (String s : values) {
+		sb.append(s);
+	    }
 	}
+    	
 
-	return sb.toString();
+	return sb.toString().trim();
     }
 
     public List<String> getStrings() {

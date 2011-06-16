@@ -27,7 +27,7 @@ public class Run {
     public static void run(String[] args) throws IOException {
 	Options o = new Options("1.0");
 
-	Option ocommand = new Option("command", "c", true, 1, "The command to be executed");
+	Option ocommand = new Option("command", "c", true, -1, "The command to be executed");
 	Option opath    = new Option("path", "p", false, 1, "The path where the command is executed");
 	Option omerge   = new Option("merge", "m", false, 0, "If set error out is merged with standard out");
 
@@ -53,7 +53,7 @@ public class Run {
 	CommandLineInterface cli = CommandLine.getInstance();
 	
 	try {
-	    CmdResult r = cli.run(ocommand.getString(), (opath.isUsed()?new File(opath.getString()):null), omerge.isUsed());
+	    CmdResult r = cli.run(ocommand.getString(true), (opath.isUsed()?new File(opath.getString()):null), omerge.isUsed());
 	    System.out.println(r.stdoutBuffer);
 	} catch( AbnormalProcessTerminationException e ) {
 	    System.out.println(e.getMessage());
