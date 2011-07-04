@@ -51,8 +51,8 @@ public class PraqmaLoggerTest {
 	@Test
 	public void testSetLocalLog() throws IOException {
 		Logger logger = PraqmaLogger.getLogger(true);
-	    	File file = new File( BuildNumberStamperTest.class.getClassLoader().getResource( "test.log" ).getFile() );
-	    	file.delete();
+	    	File file = new File("test.log" );
+	    	//file.delete();
 		file.createNewFile();
 
 		logger.setLocalLog(file);
