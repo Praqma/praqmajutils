@@ -28,7 +28,7 @@ public class Run {
 	Options o = new Options("1.0");
 
 	Option ocommand = new Option("command", "c", true, -1, "The command to be executed");
-	Option opath    = new Option("path", "p", false, 1, "The path where the command is executed");
+	Option opath    = new Option("path", "p", false, -1, "The path where the command is executed");
 	Option omerge   = new Option("merge", "m", false, 0, "If set error out is merged with standard out");
 
 	o.setOption(ocommand);
@@ -54,10 +54,13 @@ public class Run {
 	
 	if( o.isVerbose() ) {
 	    System.out.println( "Command: " + ocommand.getString(true) );
+	    if( opath.isUsed() ) {
+		System.out.println( "Path: " + opath.getString(true) );
+	    }
 	}
 	
 	try {
-	    CmdResult r = cli.run(ocommand.getString(true), (opath.isUsed()?new File(opath.getString()):null), omerge.isUsed());
+	    CmdResult r = cli.run(ocommand.getString(true), (opath.isUsed()?new File(opath.getString(true)):null), omerge.isUsed());
 	    System.out.println(r.stdoutBuffer);
 	} catch( AbnormalProcessTerminationException e ) {
 	    System.out.println(e.getMessage());
