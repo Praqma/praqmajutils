@@ -18,29 +18,28 @@ public class Option {
     public boolean required = true;
     public String description = "";
 
-    public Option(String longName, String shortName, String value) {
-	this.longName = longName;
-	this.shortName = shortName;
-	this.values.add(value);
+    public Option( String longName, String shortName, String value ) {
+        this.longName = longName;
+        this.shortName = shortName;
+        this.values.add( value );
     }
 
-    public Option(String longName, String shortName) {
-	this.longName = longName;
-	this.shortName = shortName;
+    public Option( String longName, String shortName ) {
+        this.longName = longName;
+        this.shortName = shortName;
     }
 
-    public Option(String longName, String shortName, boolean required) {
-	this.longName = longName;
-	this.shortName = shortName;
-	this.required = required;
+    public Option( String longName, String shortName, boolean required ) {
+        this.longName = longName;
+        this.shortName = shortName;
+        this.required = required;
     }
 
-    public Option(String longName, String shortName, boolean optional,
-	    int arguments) {
-	this.longName = longName;
-	this.shortName = shortName;
-	this.required = optional;
-	this.arguments = arguments;
+    public Option( String longName, String shortName, boolean optional, int arguments ) {
+        this.longName = longName;
+        this.shortName = shortName;
+        this.required = optional;
+        this.arguments = arguments;
     }
 
     /**
@@ -64,80 +63,83 @@ public class Option {
      * @param description
      *            A description for the display method.
      */
-    public Option(String longName, String shortName, boolean required, int arguments, String description) {
-	this.longName = longName;
-	this.shortName = shortName;
-	this.required = required;
-	this.arguments = arguments;
-	this.description = description;
+    public Option( String longName, String shortName, boolean required, int arguments, String description ) {
+        this.longName = longName;
+        this.shortName = shortName;
+        this.required = required;
+        this.arguments = arguments;
+        this.description = description;
     }
 
     public void setUsed() {
-	used = true;
-    }
-    
-    public boolean isUsed() {
-	return used;
+        used = true;
     }
 
-    public void addValue(String value) {
-	values.add(value);
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void addValue( String value ) {
+        values.add( value );
+    }
+
+    public String getString() {
+        return getString( false );
     }
     
-    public String getString() {
-	return getString( false );
+    public Integer getInteger() {
+        return new Integer( getString( false ) );
     }
 
     public String getString( boolean doSpaces ) {
-	StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
 
-	if (values.size() == 0) {
-	    return null;
-	}
+        if( values.size() == 0 ) {
+            return null;
+        }
 
-	if (doSpaces) {
-	    for (String s : values) {
-		sb.append(s + " ");
-	    }
-	} else {
-	    for (String s : values) {
-		sb.append(s);
-	    }
-	}
-    	
+        if( doSpaces ) {
+            for( String s : values ) {
+                sb.append( s + " " );
+            }
+        } else {
+            for( String s : values ) {
+                sb.append( s );
+            }
+        }
 
-	return sb.toString().trim();
+        return sb.toString().trim();
     }
 
     public List<String> getStrings() {
-	return values;
+        return values;
     }
 
     public int getSum() throws Exception {
-	int sum = 0;
+        int sum = 0;
 
-	for (String s : values) {
-	    try {
-		sum += Integer.parseInt(s);
-	    } catch (NumberFormatException e) {
-		throw new Exception("The value " + longName + " is not an integer.");
-	    }
-	}
+        for( String s : values ) {
+            try {
+                sum += Integer.parseInt( s );
+            } catch( NumberFormatException e ) {
+                throw new Exception( "The value " + longName + " is not an integer." );
+            }
+        }
 
-	return sum;
+        return sum;
     }
 
     public double getRealSum() throws Exception {
-	double sum = 0;
+        double sum = 0;
 
-	for (String s : values) {
-	    try {
-		sum += Double.parseDouble(s);
-	    } catch (NumberFormatException e) {
-		throw new Exception("The value " + longName + " is not a value.");
-	    }
-	}
+        for( String s : values ) {
+            try {
+                sum += Double.parseDouble( s );
+            } catch( NumberFormatException e ) {
+                throw new Exception( "The value " + longName + " is not a value." );
+            }
+        }
 
-	return sum;
+        return sum;
     }
 }
