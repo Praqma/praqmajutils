@@ -65,6 +65,7 @@ public class BuildNumberStamperTest {
 
     }
 //TODO : must fix all the test so that they work propperly
+    @Test
     public void dummy() {
         assertTrue(true);
     }
