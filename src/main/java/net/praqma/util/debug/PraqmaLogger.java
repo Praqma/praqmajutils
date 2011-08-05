@@ -12,547 +12,435 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-
 /**
  * A simple logger class.
+ * 
  * @author wolfgang
- *
+ * 
  */
-public class PraqmaLogger
-{
-	private static PraqmaLogger plogger       = null;
-	private static FileWriter fw              = null;
-	private static PrintWriter out         = null;
-	private static String path                = "./";
-	private static SimpleDateFormat format    = null;
+public class PraqmaLogger {
+	private static PraqmaLogger plogger = null;
+	private static FileWriter fw = null;
+	private static PrintWriter out = null;
+	private static String path = "./";
+	private static SimpleDateFormat format = null;
 	private static SimpleDateFormat logformat = null;
-	private static Calendar nowDate           = null;
-	
-	private static File file                  = null;
-	
-	private static boolean enabled            = true;
-	private static boolean traceEnabled       = false;
-	
-	private static final String filesep       = System.getProperty( "file.separator" );
-	private static final String linesep       = System.getProperty( "line.separator" );
-	
-	private static ArrayList<String> trace    = null;
-	
-	private static boolean append             = false;
-	
+	private static Calendar nowDate = null;
+
+	private static File file = null;
+
+	private static boolean enabled = true;
+	private static boolean traceEnabled = false;
+
+	private static final String filesep = System.getProperty( "file.separator" );
+	private static final String linesep = System.getProperty( "line.separator" );
+
+	private static ArrayList<String> trace = null;
+
+	private static boolean append = false;
+
 	/* Styling */
-	private static final int typemaxlength    = 8;
-	private static final int methodmaxlength  = 55;
-	private static final boolean indent       = false;
-	
+	private static final int typemaxlength = 8;
+	private static final int methodmaxlength = 55;
+	private static final boolean indent = false;
+
 	private boolean toStdOut = false;
 
-	
-	
-	private PraqmaLogger( boolean append, boolean homePath )
-	{
+	private PraqmaLogger( boolean append, boolean homePath ) {
 		PraqmaLogger.append = append;
-		
-		nowDate   = Calendar.getInstance();
-		
-		format    = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+
+		nowDate = Calendar.getInstance();
+
+		format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 		logformat = new SimpleDateFormat( "yyyyMMdd" );
-		
+
 		trace = new ArrayList<String>();
-		
-		if( homePath )
-		{
+
+		if( homePath ) {
 			setPathHomeLogs();
-		}
-		else
-		{
+		} else {
 			newDate( nowDate );
 		}
-		
-		if( System.getProperty( "tostdout" ) != null )
-		{
+
+		if( System.getProperty( "tostdout" ) != null ) {
 			toStdOut = true;
 		}
-		
+
 		PraqmaLogger.addSubscriptions();
 	}
-	
 
-	public static Logger getLogger( boolean append, boolean homePath )
-	{
-		if( plogger == null )
-		{
+	public static Logger getLogger( boolean append, boolean homePath ) {
+		if( plogger == null ) {
 			plogger = new PraqmaLogger( append, homePath );
 		}
-		
+
 		return new Logger( plogger );
 	}
-	
-	public static Logger getLogger( boolean append )
-	{
-		if( plogger == null )
-		{
+
+	public static Logger getLogger( boolean append ) {
+		if( plogger == null ) {
 			plogger = new PraqmaLogger( append, true );
-		}		
-		
+		}
+
 		return new Logger( plogger );
 	}
-	
-	public static Logger getLogger( )
-	{
-		if( plogger == null )
-		{
+
+	public static Logger getLogger() {
+		if( plogger == null ) {
 			plogger = new PraqmaLogger( true, true );
 		}
-		
+
 		return new Logger( plogger );
 	}
-	
-	public static Logger getLogger( Logger l )
-	{
-		if( plogger == null )
-		{
+
+	public static Logger getLogger( Logger l ) {
+		if( plogger == null ) {
 			plogger = new PraqmaLogger( true, true );
 		}
-		
+
 		l.setLogger( plogger );
-		//l.bwout = null;
+		// l.bwout = null;
 		return l;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @author wolfgang
-	 *
+	 * 
 	 */
-	public static class Logger implements Serializable
-	{
+	public static class Logger implements Serializable {
 		private static final long serialVersionUID = 1L;
-		
+
 		public List<String> exclude = new ArrayList<String>();
 		public List<String> include = new ArrayList<String>();
-		public boolean all     = false;
+		public boolean all = false;
 		public boolean enabled = true;
-		
+
 		transient private PraqmaLogger logger = null;
-		
-		transient FileWriter fw     = null;
+
+		transient FileWriter fw = null;
 		transient PrintWriter pwout = null;
-		
+
 		/* Constructor */
-		Logger( PraqmaLogger logger )
-		{
+		Logger( PraqmaLogger logger ) {
 			this.logger = logger;
 			addSubscriptions();
 		}
-		
-		public Logger()
-		{
-			
+
+		public Logger() {
+
 		}
-		
-		public void setLocalLog( File log )
-		{
-			try
-			{
+
+		public void setLocalLog( File log ) {
+			try {
 				fw = new FileWriter( log, true );
-			}
-			catch ( Exception e1 )
-			{
+			} catch (Exception e1) {
 				return;
 			}
-			
+
 			this.pwout = new PrintWriter( fw );
 		}
-		
-		public PrintWriter getLocalLog()
-		{
+
+		public PrintWriter getLocalLog() {
 			return this.pwout;
 		}
-		
-		void setLogger( PraqmaLogger pl )
-		{
+
+		void setLogger( PraqmaLogger pl ) {
 			this.logger = pl;
 		}
-		
+
 		/* Subscriptions */
-		public void subscribe( String s )
-		{
-			if( !isIncluded( s ) )
-			{
+		public void subscribe( String s ) {
+			if( !isIncluded( s ) ) {
 				include.add( s );
 			}
 		}
-		
-		public void subscribeAll( )
-		{
+
+		public void subscribeAll() {
 			this.all = true;
 		}
-		
-		public void unsubscribeAll()
-		{
+
+		public void unsubscribeAll() {
 			this.all = false;
 			this.include.clear();
 		}
-		
-		private void addSubscriptions()
-		{
+
+		private void addSubscriptions() {
 			String includes = System.getenv( "include_classes" );
 			// For now
-			if( includes == null )
-			{
-				//this.all = true;
-			}
-			else
-			{
+			if( includes == null ) {
+				// this.all = true;
+			} else {
 				String[] is = includes.split( "," );
-				for( String i : is )
-				{
+				for( String i : is ) {
 					this.subscribe( i );
 				}
 			}
 		}
 
 		/* INCLUDE EXCLUDE TESTS */
-		public boolean isExcluded( String name )
-		{
-			for( String s : exclude )
-			{
-				if( name.startsWith( s ) )
-				{
+		public boolean isExcluded( String name ) {
+			for( String s : exclude ) {
+				if( name.startsWith( s ) ) {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
-		
-		public boolean isIncluded( String name )
-		{
-			for( String s : include )
-			{
-				if( name.startsWith( s ) )
-				{
+
+		public boolean isIncluded( String name ) {
+			for( String s : include ) {
+				if( name.startsWith( s ) ) {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
-		
-	
-		public void disable()
-		{
+
+		public void disable() {
 			enabled = false;
 		}
-		
-		public void enable()
-		{
+
+		public void enable() {
 			enabled = true;
 		}
-		
-		public void enableTrace()
-		{
+
+		public void enableTrace() {
 			traceEnabled = true;
 		}
-		
-		public String getPath()
-		{
+
+		public String getPath() {
 			return logger.getPath();
 		}
-		
-		public String toString()
-		{
+
+		public String toString() {
 			return net.praqma.util.structure.Printer.listPrinterToString( this.include );
 		}
 
-		/* Logging */		
-		public void print( Object msg )
-		{
+		/* Logging */
+		public void print( Object msg ) {
 			System.out.println( msg );
 		}
-		
-		public String log( Object msg )
-		{
+
+		public String log( Object msg ) {
 			return logger._log( msg, "info", this, 4 );
 		}
-		
-		public String debug( Object msg )
-		{
+
+		public String debug( Object msg ) {
 			return logger._log( msg, "debug", this, 4 );
 		}
-		
-		public String info( Object msg )
-		{
+
+		public String info( Object msg ) {
 			return logger._log( msg, "info", this, 4 );
 		}
-		
-		public String warning( Object msg )
-		{
+
+		public String warning( Object msg ) {
 			/* Testing! */
-			//System.err.println( msg );
+			// System.err.println( msg );
 			return logger._log( msg, "warning", this, 4 );
 		}
-		
-		public String exceptionWarning( Object msg )
-		{
-			//System.err.println( msg );
+
+		public String exceptionWarning( Object msg ) {
+			// System.err.println( msg );
 			return logger._log( msg, "warning", this, 5 );
 		}
-		
-		public String error( Object msg )
-		{
+
+		public String error( Object msg ) {
 			/* Testing */
-			//System.err.println( msg );
+			// System.err.println( msg );
 			return logger._log( msg, "error", this, 4 );
 		}
-		
-		public String log( Object msg, String type )
-		{
+
+		public String log( Object msg, String type ) {
 			return logger._log( msg, type, this, 4 );
 		}
-		
-		public String empty( Object msg )
-		{
+
+		public String empty( Object msg ) {
 			return logger._log( msg, null, this, 4 );
 		}
-		
+
 		/**/
-		public void trace_function()
-		{
-			
+		public void trace_function() {
+
 		}
-		
+
 	}
-	
-	
+
 	private static List<String> exclude = new ArrayList<String>();
 	private static List<String> include = new ArrayList<String>();
 	private boolean all = false;
-	
-	public static boolean isIncluded( String name )
-	{
-		for( String s : include )
-		{
-			if( name.startsWith( s ) )
-			{
+
+	public static boolean isIncluded( String name ) {
+		for( String s : include ) {
+			if( name.startsWith( s ) ) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
-	private static void addSubscriptions()
-	{
+
+	private static void addSubscriptions() {
 		String includes = System.getenv( "include_global_classes" );
 		// For now
-		if( includes == null )
-		{
-			//System.out.println( "NULL" );
-			//this.all = true;
-		}
-		else
-		{
+		if( includes == null ) {
+			// System.out.println( "NULL" );
+			// this.all = true;
+		} else {
 			String[] is = includes.split( "," );
-			for( String i : is )
-			{
+			for( String i : is ) {
 				PraqmaLogger.subscribe( i );
 			}
 		}
 	}
-	
-	public static void subscribe( String s )
-	{
-		if( !isIncluded( s ) )
-		{
+
+	public static void subscribe( String s ) {
+		if( !isIncluded( s ) ) {
 			include.add( s );
 		}
 	}
 
-		
-	
-	public void setPath( String path )
-	{
+	public void setPath( String path ) {
 		PraqmaLogger.path = path;
 		newDate( nowDate );
 	}
-	
-	public boolean setPathHomeLogs()
-	{
+
+	public boolean setPathHomeLogs() {
 		String path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
 		File file = new File( path );
-		
+
 		/* Existence + creation */
-		if( !file.exists() )
-		{
+		if( !file.exists() ) {
 			boolean created = false;
-			try
-			{
+			try {
 				created = file.mkdir();
-			}
-			catch ( Exception e )
-			{
+			} catch (Exception e) {
 				created = false;
 			}
-			
-			if( !created )
-			{
+
+			if( !created ) {
 				return false;
 			}
 		}
-		
+
 		PraqmaLogger.path = path;
-		
+
 		newDate( nowDate );
-		
+
 		return true;
 	}
-	
-	private static Calendar getDate( Calendar c )
-	{
-		Calendar c2 = Calendar.getInstance(  );
+
+	private static Calendar getDate( Calendar c ) {
+		Calendar c2 = Calendar.getInstance();
 		c2.clear();
-		c2.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-		
-		//c2.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
-		//c2.set( Calendar.MILLISECOND, c.get( Calendar.MILLISECOND ) );
+		c2.set( c.get( Calendar.YEAR ), c.get( Calendar.MONTH ), c.get( Calendar.DAY_OF_MONTH ) );
+
+		// c2.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+		// c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY),
+		// c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
+		// c2.set( Calendar.MILLISECOND, c.get( Calendar.MILLISECOND ) );
 
 		return c2;
 	}
-	
-	private static void newDate( Calendar n )
-	{
+
+	private static void newDate( Calendar n ) {
 		nowDate = n;
-		
-		if( fw != null )
-		{
-			try
-			{
+
+		if( fw != null ) {
+			try {
 				fw.close();
 				out.close();
-			}
-			catch ( IOException e )
-			{
+			} catch (IOException e) {
 				System.err.println( "Could not close file writer and/or buffered writer." );
 			}
 		}
-		
-		try
-		{
+
+		try {
 			file = new File( path + "debug_" + logformat.format( nowDate.getTime() ) + ".log" );
-			fw = new FileWriter( file , append );
-			
-		}
-		catch ( IOException e )
-		{
-			//System.err.println( "Cannot use the specified path, \"" + path + "\". Defaulting to current working directory." );
-			//path = "./";
-			try
-			{
+			fw = new FileWriter( file, append );
+
+		} catch (IOException e) {
+			// System.err.println( "Cannot use the specified path, \"" + path +
+			// "\". Defaulting to current working directory." );
+			// path = "./";
+			try {
 				file = new File( "debug_" + logformat.format( nowDate.getTime() ) + ".log" );
 				fw = new FileWriter( file, append );
-			}
-			catch ( IOException e1 )
-			{
+			} catch (IOException e1) {
 				System.err.println( "Failed to use current working directory. Quitting!" );
 				System.exit( 1 );
 			}
 		}
-		
-		//System.out.println( "LOGGER USING " + file.getAbsolutePath() );
-		
+
+		// System.out.println( "LOGGER USING " + file.getAbsolutePath() );
+
 		out = new PrintWriter( fw );
 	}
-	
-	public String getPath()
-	{
+
+	public String getPath() {
 		return file.getAbsolutePath();
 	}
 
-	
-	public String objectToString( Object t )
-	{
-		if( t instanceof Throwable )
-		{
+	public String objectToString( Object t ) {
+		if( t instanceof Throwable ) {
 			Writer sw = new StringWriter();
 			PrintWriter pw = new PrintWriter( sw );
 			( (Throwable) t ).printStackTrace( pw );
-			
+
 			return sw.toString();
-		}
-		else
-		{
+		} else {
 			return String.valueOf( t );
 		}
 	}
 
-	
-	private String _log( Object msg, String type, Logger l, int size )
-	{
-		if( !l.enabled )
-		{
+	private String _log( Object msg, String type, Logger l, int size ) {
+		if( !l.enabled ) {
 			return null;
 		}
-		
+
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 		String name = stack[size].getClassName();
-		//System.out.println( "NAME=" + name );
+		// System.out.println( "NAME=" + name );
 
 		String myMsg = null;
-		if( l.isIncluded( name ) || PraqmaLogger.isIncluded( name ) || l.all || this.all || this.toStdOut )
-		{
-		
+		if( l.isIncluded( name ) || PraqmaLogger.isIncluded( name ) || l.all || this.all || this.toStdOut ) {
+
 			/* Check if the date is changed */
 			Calendar now = Calendar.getInstance();
-	
-			if( getDate( now ).after( getDate( nowDate ) ) )
-			{
+
+			if( getDate( now ).after( getDate( nowDate ) ) ) {
 				newDate( now );
 			}
-	
-			if( type != null )
-			{
-				if( type.length() > PraqmaLogger.typemaxlength )
-				{
+
+			if( type != null ) {
+				if( type.length() > PraqmaLogger.typemaxlength ) {
 					type = type.substring( 0, 8 );
 				}
 				String stackMsg = stack[size].getClassName() + "::" + stack[size].getMethodName() + "," + stack[size].getLineNumber();
-				String msg_ = format.format( now.getTime() ) + " [" + type + "] " + new String(new char[PraqmaLogger.typemaxlength - type.length()]).replace("\0", " ") + stackMsg;
+				String msg_ = format.format( now.getTime() ) + " [" + type + "] " + new String( new char[PraqmaLogger.typemaxlength - type.length()] ).replace( "\0", " " ) + stackMsg;
 				myMsg = msg_ + ": " + objectToString( msg ) + linesep;
-			}
-			else
-			{
+			} else {
 				myMsg = objectToString( msg ) + linesep;
 			}
-			
+
 			/* To sdt out? */
-			if( toStdOut )
-			{
+			if( toStdOut ) {
 				System.out.print( myMsg );
-			}
-			else
-			{
+			} else {
 				/* Writing */
 				out.write( myMsg );
 				out.flush();
-				
-	
-				
+
 				/* Local */
-				if( l.getLocalLog() != null )
-				{
+				if( l.getLocalLog() != null ) {
 					l.getLocalLog().write( myMsg );
 					l.getLocalLog().flush();
 				}
 			}
 		}
-		
+
 		return myMsg;
 	}
 }
-
-
-
-
