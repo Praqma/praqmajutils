@@ -23,7 +23,7 @@ public class Logger {
 	
 	private boolean logAll = true;
 	private boolean enabled = true;
-	private static boolean toStdOut = false;
+	private boolean toStdOut = false;
 	private boolean append = true;
 	
 	private Date current;
@@ -95,8 +95,6 @@ public class Logger {
 				System.err.println( "Could not close file writer and/or buffered writer." );
 			}
 		}
-		
-		System.out.println( "Loggign:" + loggerFile );
 
 		try {
 			fw = new FileWriter( loggerFile, append );
@@ -122,7 +120,7 @@ public class Logger {
 		logAll = true;
 	}
 	
-	public static void toStdOut( boolean tf ) {
+	public void toStdOut( boolean tf ) {
 		toStdOut = tf;
 	}
 	
@@ -149,6 +147,26 @@ public class Logger {
 	
 	public void log( Object message ) {
 		log( message, LogLevel.INFO, 3 );
+	}
+	
+	public void debug( Object message ) {
+		log( message, LogLevel.DEBUG, 3 );
+	}
+	
+	public void info( Object message ) {
+		log( message, LogLevel.INFO, 3 );
+	}
+	
+	public void warning( Object message ) {
+		log( message, LogLevel.WARNING, 3 );
+	}
+	
+	public void error( Object message ) {
+		log( message, LogLevel.ERROR, 3 );
+	}
+	
+	public void fatal( Object message ) {
+		log( message, LogLevel.FATAL, 3 );
 	}
 	
 	public void log( Object message, LogLevel level ) {
