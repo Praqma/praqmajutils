@@ -200,8 +200,9 @@ public class Logger {
 
 		/* To sdt out? */
 		if( toStdOut ) {
-			System.out.print( logMsg );
-		} else {
+			System.out.println( "[" + level + "] " + new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) + message );
+		} 
+		{
 			/* Writing */
 			out.write( logMsg );
 			out.flush();
