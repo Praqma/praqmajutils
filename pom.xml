@@ -121,6 +121,17 @@
 
 	</profiles>
 
+<build>
+    <extensions>
+      <!-- Enabling the use of FTP -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0</version>
+      </extension>
+    </extensions>
+</build>
+
 	<reporting>
 		<plugins>
 		</plugins>
