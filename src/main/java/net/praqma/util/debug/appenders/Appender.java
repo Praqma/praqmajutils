@@ -8,12 +8,16 @@ import net.praqma.util.debug.Logger.LogLevel;
 
 public class Appender {
 	private LogLevel minimumLevel = LogLevel.DEBUG;
-	private PrintWriter out;
+	protected PrintWriter out;
 	private Set<String> included = new LinkedHashSet<String>();
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
 	private String template = "%datetime %level %space %stack %message%newline";
+	
+	public Appender() {
+		
+	}
 	
 	public Appender( PrintWriter out ) {
 		this.setOut( out );
