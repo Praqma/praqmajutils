@@ -3,13 +3,18 @@ package net.praqma.util.debug;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+
+import net.praqma.util.debug.appenders.Appender;
 
 public class Logger {
 
@@ -21,16 +26,9 @@ public class Logger {
 
 	private static Logger instance = null;
 	
-	private boolean logAll = true;
-	private boolean enabled = true;
-	private boolean toStdOut = false;
 	private boolean append = true;
 	
 	private Date current;
-	
-	private LogLevel minLevel = LogLevel.DEBUG;
-	
-	private Set<String> included = new LinkedHashSet<String>();
 	
 	private static String filename = "logger_";
 	
@@ -39,6 +37,9 @@ public class Logger {
 
 	private SimpleDateFormat logformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 	private SimpleDateFormat fileformat = new SimpleDateFormat( "yyyyMMdd" );
+	
+	private static List<Appender> appenders = new ArrayList<Appender>();
+
 
 
 	private FileWriter fw;
@@ -108,28 +109,13 @@ public class Logger {
 		
 		return true;
 	}
+	
+	public static void addAppender( Appender appender ) {
+		appenders.add( appender );
+	}
 
-	public <T> void subscribe( Class<T> tclass ) {
-		if( !included.contains( tclass.getCanonicalName() ) ) {
-			included.add( tclass.getCanonicalName() );
-			logAll = false;
-		}
-	}
-	
-	public void subscribeAll() {
-		logAll = true;
-	}
-	
-	public void toStdOut( boolean tf ) {
-		toStdOut = tf;
-	}
-	
 	public static void setFilename( String filename1 ) {
 		filename = filename1;
-	}
-	
-	public void setMinLogLevel( LogLevel min ) {
-		this.minLevel = min;
 	}
 	
 	
@@ -174,10 +160,6 @@ public class Logger {
 	}
 	
 	private void log( Object message, LogLevel level, int depth ) {
-		if(!enabled || minLevel.ordinal() > level.ordinal()) {
-			return;
-		}
-		
 		Date now = new Date();
 		
 		String logMsg = "";
@@ -198,14 +180,13 @@ public class Logger {
 			logMsg = objectToString( message ) + linesep;
 		}
 
-		/* To sdt out? */
-		if( toStdOut ) {
-			System.out.println( "[" + level + "] " + new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) + message );
-		} 
-		{
-			/* Writing */
-			out.write( logMsg );
-			out.flush();
+		/* Writing */
+		for( Appender a : appenders ) {
+			if(!a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal()) {
+				continue;
+			}
+			a.getOut().write( logMsg );
+			a.getOut().flush();
 		}
 
 	}
