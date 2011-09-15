@@ -10,8 +10,10 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.praqma.util.debug.appenders.Appender;
@@ -35,8 +37,10 @@ public class Logger {
 	private File loggerPath;
 	private File loggerFile;
 
-	private SimpleDateFormat logformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+	private SimpleDateFormat datetimeformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 	private SimpleDateFormat fileformat = new SimpleDateFormat( "yyyyMMdd" );
+	private SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
+	private SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
 	
 	private static List<Appender> appenders = new ArrayList<Appender>();
 
@@ -159,33 +163,52 @@ public class Logger {
 		log( message, level, 3 );
 	}
 	
+	private String parseTemplate( Map<String, String> keywords, String template ) {
+		Set<String> keys = keywords.keySet();
+		for( String key : keys ) {
+			//System.out.println( key + "=" + keywords.get( key ) );
+			template = template.replaceAll( key, keywords.get( key ) );
+		}
+		
+		return template;
+	}
+	
 	private void log( Object message, LogLevel level, int depth ) {
 		Date now = new Date();
-		
-		String logMsg = "";
 		
 		if( current == null ) {
 			instance.initialize();
 		}
 		
+		Map<String, String> keywords = new HashMap<String, String>();
+		
+		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		
+		keywords.put( "%class", stack[depth].getClassName() );
+		keywords.put( "%stack", stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() );
+		keywords.put( "%line", stack[depth].getLineNumber()+"" );
+		keywords.put( "%datetime", datetimeformat.format( now ) );
+		keywords.put( "%date", dateformat.format( now ) );
+		keywords.put( "%time", timeformat.format( now ) );
 		if( level != null ) {
-
-			StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-			String name = stack[depth].getClassName();
-			
-			String stackMsg = stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber();
-			String msg = logformat.format( now ) + " [" + level + "] " + new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) + stackMsg;
-			logMsg = msg + ": " + objectToString( message ) + linesep;
+			keywords.put( "%level", level.toString() );
+			keywords.put( "%space", new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) );
 		} else {
-			logMsg = objectToString( message ) + linesep;
+			keywords.put( "%level", "" );
+			keywords.put( "%space", new String( new char[Logger.levelMaxlength] ).replace( "\0", " " ) );
 		}
+		keywords.put( "%message", objectToString( message ) );
+		keywords.put( "%newline", linesep );
 
 		/* Writing */
 		for( Appender a : appenders ) {
 			if(!a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal()) {
 				continue;
 			}
-			a.getOut().write( logMsg );
+			
+			String finalmsg = parseTemplate( keywords, a.getTemplate() );
+			a.onBeforeLogging();
+			a.getOut().write( finalmsg );
 			a.getOut().flush();
 		}
 

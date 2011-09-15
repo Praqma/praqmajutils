@@ -13,6 +13,8 @@ public class Appender {
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
+	private String template = "%datetime %level %space %stack %message%newline";
+	
 	public Appender( PrintWriter out ) {
 		this.setOut( out );
 	}
@@ -22,6 +24,10 @@ public class Appender {
 			included.add( tclass.getCanonicalName() );
 			subscribeAll = false;
 		}
+	}
+	
+	public void onBeforeLogging() {
+		
 	}
 
 	public LogLevel getMinimumLevel() {
@@ -54,5 +60,13 @@ public class Appender {
 
 	public void setOut( PrintWriter out ) {
 		this.out = out;
+	}
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate( String template ) {
+		this.template = template;
 	}
 }
