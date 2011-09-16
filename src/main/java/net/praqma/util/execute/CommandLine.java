@@ -3,8 +3,7 @@ package net.praqma.util.execute;
 import java.io.File;
 import java.io.IOException;
 
-import net.praqma.util.debug.PraqmaLogger;
-import net.praqma.util.debug.PraqmaLogger.Logger;
+import net.praqma.util.debug.Logger;
 
 /**
  * CLI class
@@ -13,7 +12,7 @@ import net.praqma.util.debug.PraqmaLogger.Logger;
  * 
  */
 public class CommandLine implements CommandLineInterface {
-	protected Logger logger = PraqmaLogger.getLogger();
+	protected Logger logger = Logger.getLogger();
 	protected static final String linesep = System.getProperty( "line.separator" );
 
 	private static CommandLine instance = new CommandLine();
@@ -23,9 +22,8 @@ public class CommandLine implements CommandLineInterface {
 	private String[] cmd = null;
 	private int last = 0;
 
+	@Deprecated
 	public void setLogger( Logger logger ) {
-		this.logger = PraqmaLogger.getLogger( logger );
-		System.out.println( this.logger.toString() );
 	}
 
 	private CommandLine() {
@@ -80,7 +78,6 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws AbnormalProcessTerminationException
 	 */
 	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
-		logger.trace_function();
 		logger.debug( "$ " + cmd );
 
 		/*
@@ -165,5 +162,11 @@ public class CommandLine implements CommandLineInterface {
 			logger.warning( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
 			throw new CommandLineException( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
 		}
+	}
+
+	@Override
+	public void setLogger( net.praqma.util.debug.PraqmaLogger.Logger logger ) {
+		// TODO Auto-generated method stub
+		
 	}
 }
