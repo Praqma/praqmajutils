@@ -179,7 +179,7 @@ public class Logger {
 	private String parseTemplate( Map<String, String> keywords, String template ) {
 		Set<String> keys = keywords.keySet();
 		for( String key : keys ) {
-			//System.out.println( key + "=" + keywords.get( key ) );
+			System.out.println( key + "=" + keywords.get( key ) );
 			try {
 				template = template.replaceAll( key, keywords.get( key ) );
 			} catch( Exception e ) {
@@ -239,7 +239,8 @@ public class Logger {
 			keywords.put( "%space", new String( new char[Logger.levelMaxlength] ).replace( "\0", " " ) );
 		}
 		keywords.put( "%message", Matcher.quoteReplacement( objectToString( message ) ) );
-		keywords.put( "%newline", linesep );
+		//keywords.put( "%newline", linesep );
+		keywords.put( "%newline", "\n" );
 
 		/* Writing */
 		for( Appender a : appenders ) {
