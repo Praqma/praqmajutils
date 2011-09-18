@@ -13,7 +13,7 @@ public class Appender {
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
-	private String template = "%datetime %level %space %stack %message%newline";
+	private String template = "%datetime %level %space %stack %message %newline";
 	
 	public Appender() {
 		
@@ -30,8 +30,8 @@ public class Appender {
 		}
 	}
 	
-	public void onBeforeLogging() {
-		
+	public boolean onBeforeLogging() {
+		return true;
 	}
 
 	public LogLevel getMinimumLevel() {

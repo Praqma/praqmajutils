@@ -39,6 +39,8 @@ public class CommandLine implements CommandLineInterface {
 			thisos = OperatingSystem.UNIX;
 			cmd = new String[1];
 		}
+		
+		logger.debug( "I GOT" );
 	}
 
 	public OperatingSystem getOS() {
@@ -91,6 +93,7 @@ public class CommandLine implements CommandLineInterface {
 		try {
 			ProcessBuilder pb = new ProcessBuilder( this.cmd );
 			pb.redirectErrorStream( merge );
+			//pb.environment().put( key, value )
 
 			if( dir != null ) {
 				logger.debug( "Executing command in " + dir );

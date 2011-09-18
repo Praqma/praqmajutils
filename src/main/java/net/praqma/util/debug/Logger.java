@@ -15,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 import net.praqma.util.debug.appenders.Appender;
 
@@ -37,10 +38,10 @@ public class Logger {
 	private File loggerPath;
 	private File loggerFile;
 
-	private SimpleDateFormat datetimeformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
-	private SimpleDateFormat fileformat = new SimpleDateFormat( "yyyyMMdd" );
-	private SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
-	private SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
+	private static SimpleDateFormat datetimeformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+	private static SimpleDateFormat fileformat = new SimpleDateFormat( "yyyyMMdd" );
+	private static SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
+	private static SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
 	
 	private static List<Appender> appenders = new ArrayList<Appender>();
 
@@ -117,6 +118,13 @@ public class Logger {
 	public static void addAppender( Appender appender ) {
 		appenders.add( appender );
 	}
+	
+	public static void removeAppender( Appender appender ) {
+		System.out.println( "I HAVE " + appenders.contains( appender ) );
+		appenders.remove( appender );
+		appender.getOut().close();
+		System.out.println( "Closing " + appender );
+	}
 
 	public static void setFilename( String filename1 ) {
 		filename = filename1;
@@ -166,8 +174,12 @@ public class Logger {
 	private String parseTemplate( Map<String, String> keywords, String template ) {
 		Set<String> keys = keywords.keySet();
 		for( String key : keys ) {
-			//System.out.println( key + "=" + keywords.get( key ) );
-			template = template.replaceAll( key, keywords.get( key ) );
+			System.out.println( key + "=" + keywords.get( key ) );
+			try {
+				template = template.replaceAll( key, keywords.get( key ) );
+			} catch( Exception e ) {
+				e.printStackTrace();
+			}
 		}
 		
 		return template;
@@ -197,7 +209,7 @@ public class Logger {
 			keywords.put( "%level", "" );
 			keywords.put( "%space", new String( new char[Logger.levelMaxlength] ).replace( "\0", " " ) );
 		}
-		keywords.put( "%message", objectToString( message ) );
+		keywords.put( "%message", Matcher.quoteReplacement( objectToString( message ) ) );
 		keywords.put( "%newline", linesep );
 
 		/* Writing */
@@ -207,7 +219,10 @@ public class Logger {
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );
-			a.onBeforeLogging();
+			if( !a.onBeforeLogging() ) {
+				continue;
+			}
+			
 			a.getOut().write( finalmsg );
 			a.getOut().flush();
 		}

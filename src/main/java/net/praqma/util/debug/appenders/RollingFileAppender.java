@@ -50,7 +50,8 @@ public class RollingFileAppender extends Appender {
 		out = new PrintWriter( fw );
 	}
 	
-	public void onBeforeLogging() {
+	public boolean onBeforeLogging() {
 		initialize( Calendar.getInstance() );
+		return true;
 	}
 }
