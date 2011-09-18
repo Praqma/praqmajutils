@@ -1,8 +1,11 @@
 package net.praqma.util.debug;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -174,7 +177,7 @@ public class Logger {
 	private String parseTemplate( Map<String, String> keywords, String template ) {
 		Set<String> keys = keywords.keySet();
 		for( String key : keys ) {
-			System.out.println( key + "=" + keywords.get( key ) );
+			//System.out.println( key + "=" + keywords.get( key ) );
 			try {
 				template = template.replaceAll( key, keywords.get( key ) );
 			} catch( Exception e ) {
@@ -183,6 +186,30 @@ public class Logger {
 		}
 		
 		return template;
+	}
+	
+	public void redirect( InputStream input ) {
+		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
+		String line = "";
+		try {
+			while( ( line = in.readLine() ) != null ) {
+				writeAppenders( line );
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Write a specific message to appenders
+	 * @param message
+	 * @param level
+	 */
+	private void writeAppenders( String message ) {
+		for( Appender a : appenders ) {
+			a.getOut().write( message );
+			a.getOut().flush();
+		}
 	}
 	
 	private void log( Object message, LogLevel level, int depth ) {
@@ -226,6 +253,5 @@ public class Logger {
 			a.getOut().write( finalmsg );
 			a.getOut().flush();
 		}
-
 	}
 }
