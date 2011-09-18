@@ -124,9 +124,11 @@ public class Logger {
 	
 	public static void removeAppender( Appender appender ) {
 		System.out.println( "I HAVE " + appenders.contains( appender ) );
-		appenders.remove( appender );
-		appender.getOut().close();
-		System.out.println( "Closing " + appender );
+		if( appender != null ) {
+			appenders.remove( appender );
+			appender.getOut().close();
+			System.out.println( "Closing " + appender );
+		}
 	}
 
 	public static void setFilename( String filename1 ) {
