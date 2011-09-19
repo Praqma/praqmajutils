@@ -32,6 +32,13 @@ public class Appender {
 		}
 	}
 	
+	public void subscribe( String tclass ) {
+		if( !included.contains( tclass ) ) {
+			included.add( tclass );
+			subscribeAll = false;
+		}
+	}
+	
 	public boolean onBeforeLogging() {
 		return true;
 	}
