@@ -123,7 +123,6 @@ public class Logger {
 	}
 	
 	public static void removeAppender( Appender appender ) {
-		System.out.println( "I HAVE " + appenders.contains( appender ) );
 		if( appender != null ) {
 			appenders.remove( appender );
 			appender.getOut().close();
@@ -148,32 +147,74 @@ public class Logger {
 		}
 	}
 	
+	/* Log */
+	
 	public void log( Object message ) {
-		log( message, LogLevel.INFO, 3 );
+		log( message, LogLevel.INFO, null, 3 );
 	}
+	
+	public void log( Object message, String tag ) {
+		log( message, LogLevel.INFO, tag, 3 );
+	}
+	
+	/* Debug */
 	
 	public void debug( Object message ) {
-		log( message, LogLevel.DEBUG, 3 );
+		log( message, LogLevel.DEBUG, null, 3 );
 	}
+	
+	public void debug( Object message, String tag ) {
+		log( message, LogLevel.DEBUG, tag, 3 );
+	}
+	
+	/* Info */
 	
 	public void info( Object message ) {
-		log( message, LogLevel.INFO, 3 );
+		log( message, LogLevel.INFO, null, 3 );
 	}
+	
+	public void info( Object message, String tag ) {
+		log( message, LogLevel.INFO, tag, 3 );
+	}
+	
+	/* Warning */
 	
 	public void warning( Object message ) {
-		log( message, LogLevel.WARNING, 3 );
+		log( message, LogLevel.WARNING, null, 3 );
 	}
+	
+	public void warning( Object message, String tag ) {
+		log( message, LogLevel.WARNING, tag, 3 );
+	}
+	
+	/* Error */
 	
 	public void error( Object message ) {
-		log( message, LogLevel.ERROR, 3 );
+		log( message, LogLevel.ERROR, null, 3 );
 	}
+	
+	public void error( Object message, String tag ) {
+		log( message, LogLevel.ERROR, tag, 3 );
+	}
+	
+	/* Fatal */
 	
 	public void fatal( Object message ) {
-		log( message, LogLevel.FATAL, 3 );
+		log( message, LogLevel.FATAL, null, 3 );
 	}
 	
+	public void fatal( Object message, String tag ) {
+		log( message, LogLevel.FATAL, tag, 3 );
+	}
+	
+	/* Log = info? */
+	
 	public void log( Object message, LogLevel level ) {
-		log( message, level, 3 );
+		log( message, level, null, 3 );
+	}
+	
+	public void log( Object message, LogLevel level, String tag ) {
+		log( message, level, tag, 3 );
 	}
 	
 	private String parseTemplate( Map<String, String> keywords, String template ) {
@@ -214,7 +255,7 @@ public class Logger {
 		}
 	}
 	
-	private void log( Object message, LogLevel level, int depth ) {
+	private void log( Object message, LogLevel level, String tag, int depth ) {
 		Date now = new Date();
 		
 		if( current == null ) {
@@ -244,7 +285,12 @@ public class Logger {
 
 		/* Writing */
 		for( Appender a : appenders ) {
-			if(!a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal()) {
+			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
+				continue;
+			}
+			
+			/* Check tags, if tag for appender is defined, a log tag must be provided */
+			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
 				continue;
 			}
 			

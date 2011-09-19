@@ -15,6 +15,8 @@ public class Appender {
 	
 	private String template = "%datetime %level %space %stack %message%newline";
 	
+	private String tag;
+	
 	public Appender() {
 		
 	}
@@ -72,5 +74,13 @@ public class Appender {
 
 	public void setTemplate( String template ) {
 		this.template = template;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag( String tag ) {
+		this.tag = tag;
 	}
 }
