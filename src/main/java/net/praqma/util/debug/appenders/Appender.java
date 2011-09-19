@@ -7,7 +7,7 @@ import java.util.Set;
 import net.praqma.util.debug.Logger.LogLevel;
 
 public class Appender {
-	private LogLevel minimumLevel = LogLevel.DEBUG;
+	private LogLevel minimumLevel = LogLevel.INFO;
 	protected PrintWriter out;
 	private Set<String> included = new LinkedHashSet<String>();
 	private boolean enabled = true;
@@ -23,6 +23,11 @@ public class Appender {
 	
 	public Appender( PrintWriter out ) {
 		this.setOut( out );
+	}
+	
+	public Appender( PrintWriter out, LogLevel level ) {
+		this.setOut( out );
+		this.minimumLevel = level;
 	}
 	
 	public <T> void subscribe( Class<T> tclass ) {

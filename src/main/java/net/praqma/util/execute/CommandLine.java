@@ -80,7 +80,7 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws AbnormalProcessTerminationException
 	 */
 	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
-		logger.debug( "$ " + cmd );
+		logger.info( "$ " + cmd );
 
 		/*
 		 * String[] cmds = new String[3]; cmds[0] = "cmd.exe"; cmds[1] = "/C";
