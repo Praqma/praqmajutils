@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import net.praqma.util.debug.Logger;
 import net.praqma.util.execute.CommandLineInterface.OperatingSystem;
 
 import org.junit.Test;
@@ -19,8 +20,7 @@ public class CommandLineTest {
 	@Test
 	public final void testSetLogger() {
 		CommandLine cli = CommandLine.getInstance();
-		net.praqma.util.debug.PraqmaLogger.Logger l = new net.praqma.util.debug.PraqmaLogger.Logger();
-		cli.setLogger(l);
+		Logger l = Logger.getLogger();
 		assertNotNull(cli);
 	}
 

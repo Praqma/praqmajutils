@@ -167,9 +167,4 @@ public class CommandLine implements CommandLineInterface {
 		}
 	}
 
-	@Override
-	public void setLogger( net.praqma.util.debug.PraqmaLogger.Logger logger ) {
-		// TODO Auto-generated method stub
-		
-	}
 }

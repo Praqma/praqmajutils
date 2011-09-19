@@ -179,7 +179,7 @@ public class Logger {
 	private String parseTemplate( Map<String, String> keywords, String template ) {
 		Set<String> keys = keywords.keySet();
 		for( String key : keys ) {
-			System.out.println( key + "=" + keywords.get( key ) );
+			//System.out.println( key + "=" + keywords.get( key ) );
 			try {
 				template = template.replaceAll( key, keywords.get( key ) );
 			} catch( Exception e ) {
@@ -209,7 +209,7 @@ public class Logger {
 	 */
 	private void writeAppenders( String message ) {
 		for( Appender a : appenders ) {
-			a.getOut().write( message );
+			a.getOut().write( message + linesep );
 			a.getOut().flush();
 		}
 	}
