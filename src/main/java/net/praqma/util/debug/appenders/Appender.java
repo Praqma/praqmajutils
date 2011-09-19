@@ -9,7 +9,7 @@ import net.praqma.util.debug.Logger.LogLevel;
 public class Appender {
 	private LogLevel minimumLevel = LogLevel.INFO;
 	protected PrintWriter out;
-	private Set<String> included = new LinkedHashSet<String>();
+	private Set<String> subscriptions = new LinkedHashSet<String>();
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
@@ -31,21 +31,40 @@ public class Appender {
 	}
 	
 	public <T> void subscribe( Class<T> tclass ) {
-		if( !included.contains( tclass.getCanonicalName() ) ) {
-			included.add( tclass.getCanonicalName() );
+		if( !subscriptions.contains( tclass.getCanonicalName() ) ) {
+			subscriptions.add( tclass.getCanonicalName() );
 			subscribeAll = false;
 		}
 	}
 	
 	public void subscribe( String tclass ) {
-		if( !included.contains( tclass ) ) {
-			included.add( tclass );
+		if( !subscriptions.contains( tclass ) ) {
+			subscriptions.add( tclass );
 			subscribeAll = false;
 		}
 	}
 	
+	public void setSubscriptions( Set<String> subscriptions ) {
+		System.out.println( "Setting subs: " + subscriptions );
+		this.subscriptions = subscriptions;
+	}
+	
 	public boolean onBeforeLogging() {
 		return true;
+	}
+	
+	public Set<String> getSubscriptions() {
+		return subscriptions;
+	}
+	
+	public boolean isSubscribed( String str ) {
+		for( String s : subscriptions ) {
+			if( s.startsWith( str ) ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public LogLevel getMinimumLevel() {
