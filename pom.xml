@@ -15,7 +15,7 @@
         <repository>
             <id>praqma</id>
             <name>praqma</name>
-            <url>file://10.10.1.25:/var/www/repo/maven</url>
+            <url>scp://10.10.1.25:/var/www/repo/maven</url>
         </repository>
     </distributionManagement>
 
@@ -121,39 +121,40 @@
 
 	</profiles>
 
-<build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ssh</artifactId>
-         <version>1.0</version>
-      </extension>
-    </extensions>
-
-<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-			</plugin>
-</plugins>
-
-</build>
-
+	<build>
+	  <extensions>
+	    <extension>
+	      <groupId>org.apache.maven.wagon</groupId>
+	      <artifactId>wagon-ssh</artifactId>
+	      <version>1.0</version>
+	    </extension>
+	  </extensions>
+	  
+	  <plugins>
+	  </plugins>
+	  
+	</build>
+	
 	<reporting>
-		<plugins>
-		</plugins>
+	  <plugins>
+	  </plugins>
 	</reporting>
-
+	
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
-			<scope>test</scope>
-		</dependency>
+	  <dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.8.2</version>
+	    <scope>test</scope>
+	  </dependency>
+	  
+	  <dependency>
+	    <groupId>org.apache.maven.wagon</groupId>
+	    <artifactId>wagon-ssh-external</artifactId>
+	    <version>1.0</version>
+	  </dependency>
 	</dependencies>
-
+	
     <scm>
         <connection>scm:git:http://github.com/Praqma/praqmajutils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
