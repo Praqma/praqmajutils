@@ -17,6 +17,7 @@ import java.util.List;
  * 
  * @author wolfgang
  * 
+ * @deprecated
  */
 public class PraqmaLogger {
 	private static PraqmaLogger plogger = null;

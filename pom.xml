@@ -3,7 +3,7 @@
 	<groupId>net.praqma</groupId>
 	<artifactId>praqmajutils</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.11</version>
+	<version>0.1.12-SNAPSHOT</version>
 	<name>Praqma Java Utils</name>
 	<url>http://maven.apache.org</url>
 
@@ -15,7 +15,7 @@
         <repository>
             <id>praqma</id>
             <name>praqma</name>
-            <url>scp://immer@10.10.1.25:/var/www/repo/maven</url>
+            <url>scp://10.10.1.25:/var/www/repo/maven</url>
         </repository>
     </distributionManagement>
 
@@ -120,6 +120,23 @@
 		</profile>
 
 	</profiles>
+
+<build>
+    <extensions>
+      <!-- Enabling the use of FTP -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh</artifactId>
+         <version>1.0</version>
+      </extension>
+    </extensions>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+			</plugin>
+
+</build>
 
 	<reporting>
 		<plugins>
