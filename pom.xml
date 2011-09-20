@@ -15,7 +15,7 @@
         <repository>
             <id>praqma</id>
             <name>praqma</name>
-            <url>scp://10.10.1.25/repo/maven</url>
+            <url>scp://10.10.1.25:/var/www/repo/maven</url>
         </repository>
     </distributionManagement>
 
@@ -125,8 +125,8 @@
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ssh</artifactId>
-         <version>1.0-beta-6</version>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0</version>
       </extension>
     </extensions>
 
