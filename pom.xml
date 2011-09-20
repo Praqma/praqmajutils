@@ -15,7 +15,7 @@
         <repository>
             <id>praqma</id>
             <name>praqma</name>
-            <url>scp://10.10.1.25:/var/www/repo/maven</url>
+            <url>scpexe://10.10.1.25:/var/www/repo/maven</url>
         </repository>
     </distributionManagement>
 
@@ -123,11 +123,10 @@
 
 <build>
     <extensions>
-      <!-- Enabling the use of FTP -->
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
          <artifactId>wagon-ssh</artifactId>
-         <version>1.0</version>
+         <version>1.0-beta-6</version>
       </extension>
     </extensions>
 
@@ -153,7 +152,7 @@
 	</dependencies>
 
     <scm>
-        <connection>scm:git:ssh://github.com/Praqma/praqmajutils.git</connection>
+        <connection>scm:git:http://github.com/Praqma/praqmajutils.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
         <url>https://github.com/Praqma/praqmajutils.git</url>
     </scm>
