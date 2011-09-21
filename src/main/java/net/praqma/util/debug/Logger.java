@@ -278,7 +278,7 @@ public class Logger {
 		keywords.put( "%class", stack[depth].getClassName() );
 		keywords.put( "%method", stack[depth].getMethodName() );
 		String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
-		keywords.put( "%stack", stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() );
+		keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
 		keywords.put( "%line", stack[depth].getLineNumber()+"" );
 		keywords.put( "%datetime", datetimeformat.format( now ) );
 		keywords.put( "%date", dateformat.format( now ) );
@@ -296,31 +296,31 @@ public class Logger {
 
 		/* Writing */
 		for( Appender a : appenders ) {
-			System.out.print( subscribable + ": " );
+			//System.out.print( subscribable + ": " );
 			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-				System.out.println( "is not enabled" );
+				//System.out.println( "is not enabled" );
 				continue;
 			}
 			
 			/* Check tags, if tag for appender is defined, a log tag must be provided */
 			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-				System.out.println( "did not have tag" );
+				//System.out.println( "did not have tag" );
 				continue;
 			}
 			
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-				System.out.println( "is not subscribed" );
+				//System.out.println( "is not subscribed" );
 				continue;
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );
 			if( !a.onBeforeLogging() ) {
-				System.out.println( "on before logging" );
+				//System.out.println( "on before logging" );
 				continue;
 			}
 			
-			System.out.println( "written" );
+			//System.out.println( "written" );
 			
 			a.getOut().write( finalmsg );
 			a.getOut().flush();
