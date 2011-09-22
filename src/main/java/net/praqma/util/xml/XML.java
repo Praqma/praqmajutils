@@ -26,8 +26,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import net.praqma.util.debug.PraqmaLogger;
-import net.praqma.util.debug.PraqmaLogger.Logger;
+import net.praqma.util.debug.Logger;
 
 import org.w3c.dom.DOMError;
 import org.w3c.dom.DOMException;
@@ -40,7 +39,7 @@ public class XML {
     private Document doc;
     private Element root;
 
-    protected Logger logger = PraqmaLogger.getLogger();
+    protected Logger logger = Logger.getLogger();
     
     public XML() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -68,7 +67,7 @@ public class XML {
         /* Preparing the root note */
         root = (Element) doc.appendChild( doc.createElement( roottag ) );
     }
-
+    
     public XML( File xmlfile ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
@@ -79,6 +78,31 @@ public class XML {
             doc = builder.parse( is );
         } catch( Exception e ) {
             e.printStackTrace();
+        }
+
+        root = doc.getDocumentElement();
+    }
+
+    public XML( File xmlfile, String roottag ) throws IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware( true );
+        InputStream is = new FileInputStream( xmlfile );
+        DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+            doc = builder.parse( is );
+        } catch( Exception e ) {
+        	logger.debug( "The file " + xmlfile + " does not exist" );
+        	if( roottag != null ) {
+	            try {
+					builder = factory.newDocumentBuilder();
+					doc = builder.newDocument();
+					logger.debug( "The document was created" );
+				} catch (ParserConfigurationException e1) {
+					e1.printStackTrace();
+					logger.error( "Could not create document" );
+				}
+        	}            
         }
 
         root = doc.getDocumentElement();
