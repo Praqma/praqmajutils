@@ -37,10 +37,11 @@ public class CommandLine implements CommandLineInterface {
 			last = 2;
 		} else {
 			thisos = OperatingSystem.UNIX;
-			cmd = new String[1];
+			cmd = new String[3];
+			cmd[0] = "bash";
+			cmd[1] = "-c";
+			last = 2;
 		}
-		
-		logger.debug( "I GOT" );
 	}
 
 	public OperatingSystem getOS() {
