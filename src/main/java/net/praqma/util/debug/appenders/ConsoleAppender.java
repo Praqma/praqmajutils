@@ -6,7 +6,6 @@ public class ConsoleAppender extends Appender {
 	
 	public ConsoleAppender() {
 		super( new PrintWriter( System.out ) );
-		
-		this.template = "[%level] %space %stack %message%newline";
+		setTemplate( "[%level] %space %message%newline" );
 	}	
 }
