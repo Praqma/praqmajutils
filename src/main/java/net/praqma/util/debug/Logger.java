@@ -252,6 +252,14 @@ public class Logger {
 		return all;
 	}
 	
+	public static LoggerSetting getLoggerSettings( LogLevel level ) {
+		LoggerSetting settings = new LoggerSetting();
+		settings.setSubscriptions( Logger.getSubscriptions() );
+		settings.setMinimumLevel( level );
+		
+		return settings;
+	}
+	
 	/**
 	 * Write a specific message to appenders
 	 * @param message
@@ -298,25 +306,25 @@ public class Logger {
 		for( Appender a : appenders ) {
 			//System.out.print( subscribable + ": " );
 			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-				System.out.println( subscribable + " is not enabled" );
+				//System.out.println( subscribable + " is not enabled" );
 				continue;
 			}
 			
 			/* Check tags, if tag for appender is defined, a log tag must be provided */
 			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-				System.out.println( subscribable + " did not have tag" );
+				//System.out.println( subscribable + " did not have tag" );
 				continue;
 			}
 			
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-				System.out.println( subscribable + " is not subscribed" );
+				//System.out.println( subscribable + " is not subscribed" );
 				continue;
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );
 			if( !a.onBeforeLogging() ) {
-				System.out.println( subscribable + " on before logging" );
+				//System.out.println( subscribable + " on before logging" );
 				continue;
 			}
 			

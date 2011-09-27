@@ -139,7 +139,7 @@ public class CommandLine implements CommandLineInterface {
 
 			/* Abnormal process termination, with error out as message */
 			if( exitValue != 0 ) {
-				logger.debug( "Abnormal process termination(" + exitValue + "): " + output.sres.toString() );
+				logger.warning( "Abnormal process termination(" + exitValue + "): " + output.sres.toString() );
 
 				/*
 				 * Only throw the exception if it is not ignored, this is

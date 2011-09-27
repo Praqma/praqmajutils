@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.LoggerSetting;
 import net.praqma.util.debug.Logger.LogLevel;
 
 public class Appender {
@@ -16,6 +18,8 @@ public class Appender {
 	protected String template = "%datetime %level %space %stack %message%newline";
 	
 	private String tag;
+	
+	private Logger logger = Logger.getLogger();
 	
 	public Appender() {
 		
@@ -47,6 +51,12 @@ public class Appender {
 	public void setSubscriptions( Set<String> subscriptions ) {
 		System.out.println( "Setting subs: " + subscriptions );
 		this.subscriptions = subscriptions;
+	}
+	
+	public void setSettings( LoggerSetting settings ) {
+		logger.debug( "Setting, " + settings.getMinimumLevel() + ": " + settings.getSubscriptions() );
+		this.minimumLevel = settings.getMinimumLevel();
+		this.setSubscriptions( settings.getSubscriptions() );
 	}
 	
 	public boolean onBeforeLogging() {
