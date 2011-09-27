@@ -298,25 +298,25 @@ public class Logger {
 		for( Appender a : appenders ) {
 			//System.out.print( subscribable + ": " );
 			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-				//System.out.println( "is not enabled" );
+				System.out.println( subscribable + " is not enabled" );
 				continue;
 			}
 			
 			/* Check tags, if tag for appender is defined, a log tag must be provided */
 			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-				//System.out.println( "did not have tag" );
+				System.out.println( subscribable + " did not have tag" );
 				continue;
 			}
 			
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-				//System.out.println( "is not subscribed" );
+				System.out.println( subscribable + " is not subscribed" );
 				continue;
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );
 			if( !a.onBeforeLogging() ) {
-				//System.out.println( "on before logging" );
+				System.out.println( subscribable + " on before logging" );
 				continue;
 			}
 			
