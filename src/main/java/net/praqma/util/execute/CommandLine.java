@@ -2,6 +2,8 @@ package net.praqma.util.execute;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import net.praqma.util.debug.Logger;
 
@@ -53,15 +55,19 @@ public class CommandLine implements CommandLineInterface {
 	}
 
 	public CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException {
-		return run( cmd, null, true, false );
+		return run( cmd, null, true, false, null );
 	}
 
 	public CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException {
-		return run( cmd, dir, true, false );
+		return run( cmd, dir, true, false, null );
 	}
 
 	public CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException {
-		return run( cmd, dir, merge, false );
+		return run( cmd, dir, merge, false, null );
+	}
+	
+	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
+		return run( cmd, dir, merge, ignore, null );
 	}
 
 	/**
@@ -80,7 +86,7 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws CommandLineException
 	 * @throws AbnormalProcessTerminationException
 	 */
-	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
+	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
 		logger.info( "$ " + cmd );
 
 		/*
@@ -99,6 +105,16 @@ public class CommandLine implements CommandLineInterface {
 			if( dir != null ) {
 				logger.debug( "Executing command in " + dir );
 				pb.directory( dir );
+			}
+			
+			/* If any variables, put them in the environment */
+			if( variables != null && variables.size() > 0 ) {
+				logger.debug( "CommandLine: " + variables );
+				Map<String, String> env = pb.environment();
+				Set<String> keys = variables.keySet();
+				for( String key : keys ) {
+					env.put( key, variables.get( key ) );
+				}
 			}
 
 			CmdResult result = new CmdResult();

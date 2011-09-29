@@ -10,12 +10,14 @@ import org.junit.Test;
 
 public class CommandTest extends TestSuite {
 
+	private static CommandLine cli = CommandLine.getInstance();
+	
 	@Test
 	public void testRunCommand() {
 
 		String cmd = "java";
 
-		CmdResult res = Command.run(cmd);
+		CmdResult res = cli.run(cmd);
 
 		assertNotNull(res);
 	}
@@ -24,7 +26,7 @@ public class CommandTest extends TestSuite {
 	public void testRunCommandDir() {
 		String cmd = "java";
 
-		CmdResult res = Command.run(cmd,
+		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")));
 
 		assertNotNull(res);
@@ -34,7 +36,7 @@ public class CommandTest extends TestSuite {
 	public void testRunCommandDirMerge() {
 		String cmd = "java";
 
-		CmdResult res = Command.run(cmd,
+		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")), true);
 
 		assertNotNull(res);
@@ -44,7 +46,7 @@ public class CommandTest extends TestSuite {
 	public void testRunCommandDirMergeIgnore() {
 		String cmd = "java";
 
-		CmdResult res = Command.run(cmd,
+		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")), true);
 
 		assertNotNull(res);
