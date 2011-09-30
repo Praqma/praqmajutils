@@ -1,7 +1,16 @@
 package net.praqma.util.option;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import net.praqma.util.debug.Logger;
+import net.praqma.util.debug.Logger.LogLevel;
+import net.praqma.util.debug.appenders.FileAppender;
 
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed
@@ -21,6 +30,8 @@ import java.util.List;
  * 
  */
 public class Options {
+	private static Logger logger = Logger.getLogger();
+	
 	private List<Option> options = new ArrayList<Option>();
 	private String syntax = "";
 	private String header = "";
@@ -31,6 +42,7 @@ public class Options {
 	private Option ohelp = null;
 	private Option oversion = null;
 	private Option overbose = null;
+	private Option ologfile = null;
 
 	private boolean verbose = false;
 
@@ -50,10 +62,12 @@ public class Options {
 		ohelp = new Option( "help", "h", false, 0, "Display help" );
 		oversion = new Option( "version", "v", false, 0, "Print the version" );
 		overbose = new Option( "verbose", "V", false, 0, "Verbose" );
+		ologfile = new Option( "logfile", "L", false, -1, "Set a file to log to" );
 
 		this.setOption( ohelp );
 		this.setOption( oversion );
 		this.setOption( overbose );
+		this.setOption( ologfile );
 	}
 
 	public void setSyntax( String syntax ) {
@@ -121,6 +135,8 @@ public class Options {
 				}
 			}
 		}
+		
+		this.verboseUsed();
 	}
 
 	private void helpUsed() {
@@ -142,11 +158,45 @@ public class Options {
 			this.verbose = true;
 		}
 	}
+	
+	private void logfileUsed() {
+		System.out.println( "logger is " + logger );
+		if( ologfile != null && ologfile.used ) {
+			try {
+				List<String> as = ologfile.getStrings();
+				logger.debug( "Logging to " + as.get( 0 ) );
+				FileAppender appender = new FileAppender( new File( as.get( 0 ) ) );
+				if( as.size() > 1 ) {
+					logger.debug( "Logging " + as.get( 1 ) );
+					appender.setMinimumLevel( LogLevel.valueOf( as.get( 1 ) ) );
+				}
+				
+				if( as.size() > 2 ) {
+					Set<String> ss = new HashSet<String>( Arrays.asList( as.get( 2 ).split( "\\s+" ) ) );
+					
+					if( ss.size() > 0 ) {
+						logger.debug( "Setting subscriptions to " + ss );
+						appender.setSubscribeAll( false );
+						appender.setSubscriptions( ss );
+					}
+				}
+				
+				if( as.size() > 3 ) {
+					logger.debug( "Setting template to " + as.get( 3 ) );
+					appender.setTemplate( as.get( 3 ) );
+				}
+				
+				Logger.addAppender( appender );
+			} catch (IOException e) {
+				logger.warning( "Could not add file appender "  + ologfile.getString());
+			}
+		}
+	}
 
 	public void checkOptions() throws Exception {
 		this.helpUsed();
 		this.versionUsed();
-		this.verboseUsed();
+		this.logfileUsed();
 
 		String errors = "";
 
