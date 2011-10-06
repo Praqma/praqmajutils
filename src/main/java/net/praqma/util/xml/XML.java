@@ -91,6 +91,7 @@ public class XML {
         try {
             builder = factory.newDocumentBuilder();
             doc = builder.parse( is );
+            root = doc.getDocumentElement();
         } catch( Exception e ) {
         	logger.debug( "The file " + xmlfile + " does not exist" );
         	if( roottag != null ) {
@@ -98,6 +99,7 @@ public class XML {
 					builder = factory.newDocumentBuilder();
 					doc = builder.newDocument();
 					logger.debug( "The document was created" );
+					root = (Element) doc.appendChild( doc.createElement( roottag ) );
 				} catch (ParserConfigurationException e1) {
 					e1.printStackTrace();
 					logger.error( "Could not create document" );
@@ -105,7 +107,8 @@ public class XML {
         	}            
         }
 
-        root = doc.getDocumentElement();
+        
+        
     }
 
     public XML( InputStream is ) {
