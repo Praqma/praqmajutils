@@ -17,14 +17,9 @@ public class Time {
 			time -= ( hours * 3600 );
 		}
 		
-		if( time > 60000 ) {
+		if( time > 60 ) {
 			minutes = (int) ( time % 60 );
 			time -= ( minutes * 60 );
-		}
-		
-		if( time > 1000 ) {
-			//seconds = (int) ( time % 1000 );
-			//time -= ( seconds * 1000 );
 		}
 		
 		seconds = (int) time;

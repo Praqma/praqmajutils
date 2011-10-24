@@ -126,7 +126,6 @@ public class Logger {
 		if( appender != null ) {
 			appenders.remove( appender );
 			appender.getOut().close();
-			System.out.println( "Closing " + appender );
 		}
 	}
 
