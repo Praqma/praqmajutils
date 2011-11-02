@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import net.praqma.util.debug.Logger;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.w3c.dom.DOMError;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -314,6 +315,10 @@ public class XML {
         }
 
         return "";
+    }
+    
+    public String escape( String str ) {
+    	return StringEscapeUtils.escapeXml( str );
     }
 
     public void saveState( File filename ) {
