@@ -28,7 +28,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import net.praqma.util.debug.Logger;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.w3c.dom.DOMError;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -219,6 +218,26 @@ public class XML {
 
         return result;
     }
+    
+    public List<Element> getElementsWithAttribute( Element e, String tag, String attr, String name ) {
+        NodeList list = e.getChildNodes();
+
+        List<Element> result = new ArrayList<Element>();
+
+        for( int i = 0; i < list.getLength(); i++ ) {
+            Node node = list.item( i );
+
+            if( node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase( tag ) ) {
+                Element e1 = (Element) node;
+
+                if( e1.getAttribute( attr ).equals( name ) ) {
+                    result.add( e1 );
+                }
+            }
+        }
+
+        return result;
+    }    
 
     public String getXML() {
         StringWriter out = new StringWriter();
@@ -315,10 +334,6 @@ public class XML {
         }
 
         return "";
-    }
-    
-    public String escape( String str ) {
-    	return StringEscapeUtils.escapeXml( str );
     }
 
     public void saveState( File filename ) {
