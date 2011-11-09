@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -46,9 +47,7 @@ public class Logger {
 	private static SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
 	private static SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
 	
-	private static List<Appender> appenders = new ArrayList<Appender>();
-
-
+	private static List<Appender> appenders = Collections.synchronizedList( new ArrayList<Appender>() );
 
 	private FileWriter fw;
 	private PrintWriter out;
