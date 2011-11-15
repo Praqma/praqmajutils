@@ -15,7 +15,7 @@ public class Appender {
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
-	protected String template = "%datetime %level %space %stack %message%newline";
+	protected String template = "%datetime %level %space [%tag] %stack %message%newline";
 	
 	private String tag;
 	

@@ -209,7 +209,6 @@ public class Options {
 	}
 	
 	private void logfileUsed() {
-		System.out.println( "logger is " + logger );
 		if( ologfile != null && ologfile.used ) {
 			try {
 				List<String> as = ologfile.getStrings();
@@ -232,7 +231,7 @@ public class Options {
 				}
 				
 				if( as.size() > 3 ) {
-					logger.fatal( "Setting template to " + as.get( 3 ) );
+					logger.debug( "Setting template to " + as.get( 3 ) );
 					appender.setTemplate( as.get( 3 ) );
 				}
 				
