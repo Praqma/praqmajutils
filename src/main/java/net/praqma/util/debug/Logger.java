@@ -54,6 +54,7 @@ public class Logger {
 	
 	public enum LogLevel {
 		DEBUG,
+		VERBOSE,
 		INFO,
 		WARNING,
 		ERROR,
@@ -163,6 +164,16 @@ public class Logger {
 	
 	public void debug( Object message, String tag ) {
 		log( message, LogLevel.DEBUG, tag, 3 );
+	}
+	
+	/* Debug */
+	
+	public void verbose( Object message ) {
+		log( message, LogLevel.VERBOSE, null, 3 );
+	}
+	
+	public void verbose( Object message, String tag ) {
+		log( message, LogLevel.VERBOSE, tag, 3 );
 	}
 	
 	/* Info */

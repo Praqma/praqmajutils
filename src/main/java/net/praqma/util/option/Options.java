@@ -10,7 +10,9 @@ import java.util.Set;
 
 import net.praqma.util.debug.Logger;
 import net.praqma.util.debug.Logger.LogLevel;
+import net.praqma.util.debug.appenders.Appender;
 import net.praqma.util.debug.appenders.FileAppender;
+import net.praqma.util.debug.appenders.StreamAppender;
 
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed
@@ -31,6 +33,7 @@ import net.praqma.util.debug.appenders.FileAppender;
  */
 public class Options {
 	private static Logger logger = Logger.getLogger();
+	private StreamAppender out = new StreamAppender( System.out );
 	
 	private List<Option> options = new ArrayList<Option>();
 	private String syntax = "";
@@ -42,6 +45,7 @@ public class Options {
 	private Option ohelp = null;
 	private Option oversion = null;
 	private Option overbose = null;
+	private Option otemplate = null;
 	private Option ologfile = null;
 
 	private boolean verbose = false;
@@ -51,22 +55,46 @@ public class Options {
 	/* CONSTRUCTORS */
 
 	public Options() {
-
+		initialize();
 	}
 
 	public Options( String version ) {
 		this.version = version;
+		initialize();
+	}
+	
+	private void initialize() {
+        out.setTemplate( "[%level]%space %message%newline" );
+        Logger.addAppender( out );
+        
+        registerShutdownHook();
+	}
+	
+	private void registerShutdownHook() {
+		Runtime.getRuntime().addShutdownHook( new Thread() {
+			@Override
+			public void run() {
+				shutdown();
+			}
+		} );
+	}
+
+	protected void shutdown() {
+		logger.verbose( "Shutting down" );
+		Logger.removeAppender( out );
 	}
 
 	public void setDefaultOptions() {
 		ohelp = new Option( "help", "h", false, 0, "Display help" );
-		oversion = new Option( "version", "v", false, 0, "Print the version" );
-		overbose = new Option( "verbose", "V", false, 0, "Verbose" );
-		ologfile = new Option( "logfile", "L", false, -1, "Set a file to log to" );
+		oversion = new Option( "version", null, false, 0, "Print the version" );
+		overbose = new Option( "verbose", null, false, 0, "Verbose" );
+		otemplate = new Option( "template", null, false, 1, "Output template" );
+		ologfile = new Option( "logfile", null, false, -1, "Set a file to log to" );
 
 		this.setOption( ohelp );
 		this.setOption( oversion );
 		this.setOption( overbose );
+		this.setOption( otemplate );
 		this.setOption( ologfile );
 	}
 
@@ -137,6 +165,14 @@ public class Options {
 		}
 		
 		this.verboseUsed();
+		
+		setTemplate();
+		
+        if( isVerbose() ) {
+        	out.setMinimumLevel( LogLevel.VERBOSE );
+        } else {
+        	out.setMinimumLevel( LogLevel.INFO );
+        }
 	}
 
 	private void helpUsed() {
@@ -156,6 +192,12 @@ public class Options {
 	private void verboseUsed() {
 		if( overbose != null && overbose.used ) {
 			this.verbose = true;
+		}
+	}
+	
+	public void setTemplate() {
+		if( otemplate.isUsed() ) {
+			out.setTemplate( otemplate.getString( true ) );
 		}
 	}
 	
@@ -188,7 +230,7 @@ public class Options {
 				
 				Logger.addAppender( appender );
 			} catch (IOException e) {
-				logger.warning( "Could not add file appender "  + ologfile.getString());
+				logger.warning( "Could not add file appender " + ologfile.getString());
 			}
 		}
 	}
@@ -257,8 +299,10 @@ public class Options {
 		for( Option o : options ) {
 			System.out.print( "  --" + o.longName );
 
-			if( o.shortName.length() > 0 ) {
+			if( o.shortName != null && o.shortName.length() > 0 ) {
 				System.out.print( new String( new char[15 - o.longName.length()] ).replace( "\0", " " ) + "-" + o.shortName );
+			} else {
+				System.out.print( new String( new char[16 - o.longName.length()] ).replace( "\0", " " ) );
 			}
 
 			System.out.print( "\t" + ( o.required ? "Required" : "Optional" ) );
