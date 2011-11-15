@@ -45,6 +45,7 @@ public class Options {
 	private Option ohelp = null;
 	private Option oversion = null;
 	private Option overbose = null;
+	private Option odebug = null;
 	private Option otemplate = null;
 	private Option ologfile = null;
 
@@ -80,7 +81,7 @@ public class Options {
 	}
 
 	protected void shutdown() {
-		logger.verbose( "Shutting down" );
+		logger.debug( "Shutting down" );
 		Logger.removeAppender( out );
 	}
 
@@ -88,12 +89,14 @@ public class Options {
 		ohelp = new Option( "help", "h", false, 0, "Display help" );
 		oversion = new Option( "version", null, false, 0, "Print the version" );
 		overbose = new Option( "verbose", null, false, 0, "Verbose" );
+		odebug = new Option( "debug", null, false, 0, "Debug" );
 		otemplate = new Option( "template", null, false, 1, "Output template" );
 		ologfile = new Option( "logfile", null, false, -1, "Set a file to log to" );
 
 		this.setOption( ohelp );
 		this.setOption( oversion );
 		this.setOption( overbose );
+		this.setOption( odebug );
 		this.setOption( otemplate );
 		this.setOption( ologfile );
 	}
@@ -173,6 +176,10 @@ public class Options {
         } else {
         	out.setMinimumLevel( LogLevel.INFO );
         }
+        
+        if( odebug.isUsed() ) {
+        	out.setMinimumLevel( LogLevel.DEBUG );
+        }
 	}
 
 	private void helpUsed() {
@@ -206,6 +213,7 @@ public class Options {
 		if( ologfile != null && ologfile.used ) {
 			try {
 				List<String> as = ologfile.getStrings();
+				logger.debug( "List: " + as );
 				logger.debug( "Logging to " + as.get( 0 ) );
 				FileAppender appender = new FileAppender( new File( as.get( 0 ) ) );
 				if( as.size() > 1 ) {
@@ -216,7 +224,7 @@ public class Options {
 				if( as.size() > 2 ) {
 					Set<String> ss = new HashSet<String>( Arrays.asList( as.get( 2 ).split( "\\s+" ) ) );
 					
-					if( ss.size() > 0 ) {
+					if( ss.size() > 0 && as.get( 2 ).length() > 0 ) {
 						logger.debug( "Setting subscriptions to " + ss );
 						appender.setSubscribeAll( false );
 						appender.setSubscriptions( ss );
@@ -224,7 +232,7 @@ public class Options {
 				}
 				
 				if( as.size() > 3 ) {
-					logger.debug( "Setting template to " + as.get( 3 ) );
+					logger.fatal( "Setting template to " + as.get( 3 ) );
 					appender.setTemplate( as.get( 3 ) );
 				}
 				
