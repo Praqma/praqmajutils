@@ -30,7 +30,8 @@ public class BuildNumberStamperTest {
 
     @Before
     public void setUp() throws Exception {
-        file = new File(BuildNumberStamperTest.class.getClassLoader().getResource("temp.cpp").getFile());
+        //file = new File(BuildNumberStamperTest.class.getClassLoader().getResource("temp.cpp").getFile());
+        File file = new File("c:\\temp.cpp");
         file.delete();
         file.createNewFile();
         FileOutputStream fop = new FileOutputStream(file);
@@ -41,8 +42,8 @@ public class BuildNumberStamperTest {
         fop.flush();
         fop.close();
 
-        //File nfile = new File("c:\\not_valid_temp.cpp");
-        nfile = new File(BuildNumberStamperTest.class.getClassLoader().getResource("not_valid_temp.cpp").getFile());
+        File nfile = new File("c:\\not_valid_temp.cpp");
+        //nfile = new File(BuildNumberStamperTest.class.getClassLoader().getResource("not_valid_temp.cpp").getFile());
         nfile.delete();
         nfile.createNewFile();
         FileOutputStream nfop = new FileOutputStream(nfile);
