@@ -118,13 +118,17 @@ public class Logger {
 	}
 	
 	public static void addAppender( Appender appender ) {
-		appenders.add( appender );
+		synchronized( appenders ) {
+			appenders.add( appender );
+		}
 	}
 	
 	public static void removeAppender( Appender appender ) {
 		if( appender != null ) {
-			appenders.remove( appender );
-			appender.getOut().close();
+			synchronized( appenders ) {
+				appenders.remove( appender );
+				appender.getOut().close();
+			}
 		}
 	}
 
