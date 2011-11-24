@@ -321,35 +321,37 @@ public class Logger {
 		}
 
 		/* Writing */
-		for( Appender a : appenders ) {
-			//System.out.print( subscribable + ": " );
-			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-				//System.out.println( subscribable + " is not enabled" );
-				continue;
+		synchronized( appenders ) {
+			for( Appender a : appenders ) {
+				//System.out.print( subscribable + ": " );
+				if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
+					//System.out.println( subscribable + " is not enabled" );
+					continue;
+				}
+				
+				/* Check tags, if tag for appender is defined, a log tag must be provided */
+				if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
+					//System.out.println( subscribable + " did not have tag" );
+					continue;
+				}
+				
+				/* Check subscriptions */
+				if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
+					//System.out.println( subscribable + " is not subscribed" );
+					continue;
+				}
+				
+				String finalmsg = parseTemplate( keywords, a.getTemplate() );
+				if( !a.onBeforeLogging() ) {
+					//System.out.println( subscribable + " on before logging" );
+					continue;
+				}
+				
+				//System.out.println( "written" );
+				
+				a.getOut().write( finalmsg );
+				a.getOut().flush();
 			}
-			
-			/* Check tags, if tag for appender is defined, a log tag must be provided */
-			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-				//System.out.println( subscribable + " did not have tag" );
-				continue;
-			}
-			
-			/* Check subscriptions */
-			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-				//System.out.println( subscribable + " is not subscribed" );
-				continue;
-			}
-			
-			String finalmsg = parseTemplate( keywords, a.getTemplate() );
-			if( !a.onBeforeLogging() ) {
-				//System.out.println( subscribable + " on before logging" );
-				continue;
-			}
-			
-			//System.out.println( "written" );
-			
-			a.getOut().write( finalmsg );
-			a.getOut().flush();
 		}
 	}
 }
