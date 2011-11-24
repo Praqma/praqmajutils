@@ -47,7 +47,6 @@ public class Logger {
 	private static SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
 	private static SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
 	
-	//private static List<Appender> appenders = Collections.synchronizedList( new ArrayList<Appender>() );
 	private static List<Appender> appenders = new CopyOnWriteArrayList<Appender>();
 
 	private FileWriter fw;
@@ -120,17 +119,13 @@ public class Logger {
 	}
 	
 	public static void addAppender( Appender appender ) {
-		//synchronized( appenders ) {
-			appenders.add( appender );
-		//}
+		appenders.add( appender );
 	}
 	
 	public static void removeAppender( Appender appender ) {
 		if( appender != null ) {
-			//synchronized( appenders ) {
-				appenders.remove( appender );
-				appender.getOut().close();
-			//}
+			appenders.remove( appender );
+			appender.getOut().close();
 		}
 	}
 
@@ -259,11 +254,9 @@ public class Logger {
 	
 	public static Set<String> getSubscriptions() {
 		Set<String> all = new LinkedHashSet<String>();
-		//synchronized( appenders ) {
-			for( Appender a : appenders ) {
-				all.addAll( a.getSubscriptions() );
-			}
-		//}
+		for( Appender a : appenders ) {
+			all.addAll( a.getSubscriptions() );
+		}
 		
 		return all;
 	}
@@ -325,37 +318,35 @@ public class Logger {
 		}
 
 		/* Writing */
-		//synchronized( appenders ) {
-			for( Appender a : appenders ) {
-				//System.out.print( subscribable + ": " );
-				if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-					//System.out.println( subscribable + " is not enabled" );
-					continue;
-				}
-				
-				/* Check tags, if tag for appender is defined, a log tag must be provided */
-				if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-					//System.out.println( subscribable + " did not have tag" );
-					continue;
-				}
-				
-				/* Check subscriptions */
-				if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-					//System.out.println( subscribable + " is not subscribed" );
-					continue;
-				}
-				
-				String finalmsg = parseTemplate( keywords, a.getTemplate() );
-				if( !a.onBeforeLogging() ) {
-					//System.out.println( subscribable + " on before logging" );
-					continue;
-				}
-				
-				//System.out.println( "written" );
-				
-				a.getOut().write( finalmsg );
-				a.getOut().flush();
+		for( Appender a : appenders ) {
+			//System.out.print( subscribable + ": " );
+			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
+				//System.out.println( subscribable + " is not enabled" );
+				continue;
 			}
-		//}
+			
+			/* Check tags, if tag for appender is defined, a log tag must be provided */
+			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
+				//System.out.println( subscribable + " did not have tag" );
+				continue;
+			}
+			
+			/* Check subscriptions */
+			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
+				//System.out.println( subscribable + " is not subscribed" );
+				continue;
+			}
+			
+			String finalmsg = parseTemplate( keywords, a.getTemplate() );
+			if( !a.onBeforeLogging() ) {
+				//System.out.println( subscribable + " on before logging" );
+				continue;
+			}
+			
+			//System.out.println( "written" );
+			
+			a.getOut().write( finalmsg );
+			a.getOut().flush();
+		}
 	}
 }
