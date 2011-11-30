@@ -269,6 +269,10 @@ public class Logger {
 		return settings;
 	}
 	
+	public static int getNumberOfAppenders() {
+		return appenders.size();
+	}
+	
 	/**
 	 * Write a specific message to appenders
 	 * @param message
@@ -334,6 +338,11 @@ public class Logger {
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
 				//System.out.println( subscribable + " is not subscribed" );
+				continue;
+			}
+			
+			if( a.getThreadId() != null && !a.getThreadId().equals( Thread.currentThread().getId() ) ) {
+				//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
 				continue;
 			}
 			

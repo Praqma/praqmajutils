@@ -15,6 +15,8 @@ public class Appender {
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
+	private Long threadId = null;
+	
 	protected String template = "%datetime %level %space [%tag] %stack %message%newline";
 	
 	private String tag;
@@ -123,5 +125,14 @@ public class Appender {
 
 	public void setTag( String tag ) {
 		this.tag = tag;
+	}
+	
+	public void lockToCurrentThread() {
+		System.out.println( "Locking to " + Thread.currentThread().getName() + "(" + Thread.currentThread().getId() + ")" );
+		threadId = Thread.currentThread().getId();
+	}
+	
+	public Long getThreadId() {
+		return threadId;
 	}
 }
