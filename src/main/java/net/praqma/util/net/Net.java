@@ -31,6 +31,8 @@ public class Net {
 		try {
 			List<String> list = CommandLine.getInstance().run( "netstat -rn" ).stdoutList;
 
+			logger.debug( "Out: " + list );
+			
 			switch( CommandLine.getInstance().getOS() ) {
 			case UNIX:
 				for( String l : list ) {
@@ -50,7 +52,7 @@ public class Net {
 				}
 				break;
 			}
-			throw new IOException( "Unable to get default gateway: not in the list" );
+			throw new IOException( "Not in the list" );
 		} catch( Exception e ) {
 			throw new IOException( "Unable to get default gateway: " + e.getMessage() );
 		}
