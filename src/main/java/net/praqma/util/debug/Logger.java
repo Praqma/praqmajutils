@@ -297,6 +297,9 @@ public class Logger {
 		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
 		
 		keywords.put( "%class", stack[depth].getClassName() );
+		keywords.put( "%threadid", "[" + Thread.currentThread().getId()+ "]" );
+		keywords.put( "%threadname", Thread.currentThread().getName() );
+		keywords.put( "%thread", "[(" + Thread.currentThread().getId()+ ")" + Thread.currentThread().getName() + "]" );
 		keywords.put( "%method", stack[depth].getMethodName() );
 		String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
 		keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
@@ -341,7 +344,7 @@ public class Logger {
 				continue;
 			}
 			
-			if( a.getThreadId() != null && !a.getThreadId().equals( Thread.currentThread().getId() ) ) {
+			if( a.getThreadId() != null && !a.getThreadId().equals( getThreadId( Thread.currentThread() ) ) ) {
 				//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
 				continue;
 			}
@@ -357,5 +360,9 @@ public class Logger {
 			a.getOut().write( finalmsg );
 			a.getOut().flush();
 		}
+	}
+	
+	public static String getThreadId( Thread t ) {
+		return t.getId() + "::" + t.getName();
 	}
 }

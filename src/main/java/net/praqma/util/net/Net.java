@@ -19,9 +19,10 @@ import net.praqma.util.execute.CommandLine;
 public class Net {
 
 	private static Logger logger = Logger.getLogger();
-	// private static final Pattern rx_gateway = Pattern.compile(
-	// "^(0\\.0\\.0\\.0|default)\\s+(\\S)\\s+.*$" );
-	private static final Pattern rx_gateway = Pattern.compile( "^(0\\.0\\.0\\.0|default)\\s+(\\S+)\\s+.*$" );
+
+	private static final Pattern rx_nix_gateway = Pattern.compile( "^(0\\.0\\.0\\.0|default)\\s+(\\S+)\\s+.*$" );
+	private static final Pattern rx_ms_gateway = Pattern.compile( "^(Default Gateway:)\\s+(\\S+)\\s+.*$" );
+	// MS: Default Gateway:         10.10.1.1
 	
 	private static final Pattern rx_ms_ping = Pattern.compile( "^.*Average = (\\d+).*$", Pattern.DOTALL );
 	private static final Pattern rx_nix_ping = Pattern.compile( "^.*[\\d\\.]+/([\\d\\.]+)/[\\d\\.]+/[\\d\\.]+ ms.*$", Pattern.DOTALL );
@@ -30,11 +31,24 @@ public class Net {
 		try {
 			List<String> list = CommandLine.getInstance().run( "netstat -rn" ).stdoutList;
 
-			for( String l : list ) {
-				Matcher m = rx_gateway.matcher( l );
-				if( m.find() ) {
-					return m.group( 2 );
+			switch( CommandLine.getInstance().getOS() ) {
+			case UNIX:
+				for( String l : list ) {
+					Matcher m = rx_nix_gateway.matcher( l );
+					if( m.find() ) {
+						return m.group( 2 );
+					}
 				}
+				break;
+				
+			case WINDOWS:
+				for( String l : list ) {
+					Matcher m = rx_ms_gateway.matcher( l );
+					if( m.find() ) {
+						return m.group( 2 );
+					}
+				}
+				break;
 			}
 			throw new IOException( "Unable to get default gateway: not in the list" );
 		} catch( Exception e ) {
@@ -45,10 +59,11 @@ public class Net {
 	public static void main( String[] args ) throws IOException {
 		StreamAppender app = new StreamAppender( System.out );
 		app.setMinimumLevel( LogLevel.DEBUG );
+		app.setTemplate( "[%level] %space%message%newline" );
 		Logger.addAppender( app );
 		String host = getDefaultGateway();
-		System.out.println( "Host: " + host );
-		System.out.println( "PING: " + ping( host, 10000 ) );
+		logger.info( "Host: " + host );
+		logger.info( "PING: " + ping( host, 10000 ) );
 	}
 	
 

@@ -15,9 +15,10 @@ public class Appender {
 	private boolean enabled = true;
 	private boolean subscribeAll = true;
 	
-	private Long threadId = null;
+	private String threadId = null;
 	
-	protected String template = "%datetime %level %space [%tag] %stack %message%newline";
+	//protected String template = "%datetime %level %space [%tag] %stack %message%newline";
+	protected String template = "%datetime %level %space %thread%stack %message%newline";
 	
 	private String tag;
 	
@@ -128,11 +129,12 @@ public class Appender {
 	}
 	
 	public void lockToCurrentThread() {
-		System.out.println( "Locking to " + Thread.currentThread().getName() + "(" + Thread.currentThread().getId() + ")" );
-		threadId = Thread.currentThread().getId();
+		String tid = Logger.getThreadId( Thread.currentThread() );
+		System.out.println( "Locking to " + tid );
+		threadId = tid;
 	}
 	
-	public Long getThreadId() {
+	public String getThreadId() {
 		return threadId;
 	}
 }
