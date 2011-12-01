@@ -21,7 +21,7 @@ public class Net {
 	private static Logger logger = Logger.getLogger();
 
 	private static final Pattern rx_nix_gateway = Pattern.compile( "^(0\\.0\\.0\\.0|default)\\s+(\\S+)\\s+.*$" );
-	private static final Pattern rx_ms_gateway = Pattern.compile( "^(Default Gateway:)\\s+(\\S+)\\s+.*$" );
+	private static final Pattern rx_ms_gateway = Pattern.compile( "^(Default Gateway:)\\s+(\\S+)\\s*$" );
 	// MS: Default Gateway:         10.10.1.1
 	
 	private static final Pattern rx_ms_ping = Pattern.compile( "^.*Average = (\\d+).*$", Pattern.DOTALL );
