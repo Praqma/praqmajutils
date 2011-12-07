@@ -130,7 +130,6 @@ public class Appender {
 	
 	public void lockToCurrentThread() {
 		String tid = Logger.getThreadId( Thread.currentThread() );
-		System.out.println( "Locking to " + tid );
 		threadId = tid;
 	}
 	
