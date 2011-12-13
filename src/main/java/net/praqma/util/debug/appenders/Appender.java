@@ -22,7 +22,7 @@ public class Appender {
 	private String threadId = null;
 	
 	//protected String template = "%datetime %level %space [%tag] %stack %message%newline";
-	protected String template = "%datetime %level %space %thread%stack %message[%tag/%atag]%newline";
+	protected String template = "%datetime %level %space %thread%stack %message%newline";
 	
 	private String tag;
 	
@@ -141,6 +141,10 @@ public class Appender {
 		return threadId;
 	}
 	
+	/**
+	 * Write the given input stream to the appender
+	 * @param input
+	 */
 	public void write( InputStream input ) {
 		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
 		String line = "";

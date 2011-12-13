@@ -240,6 +240,11 @@ public class Logger {
 		return template;
 	}
 	
+	/**
+	 * 
+	 * @param input
+	 * @deprecated as of 0.1.17, use {@link Appender#write}
+	 */
 	public void redirect( InputStream input ) {
 		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
 		String line = "";
@@ -352,13 +357,6 @@ public class Logger {
 			if( a.getThreadId() != null && !a.getThreadId().equals( getThreadId( Thread.currentThread() ) ) ) {
 				//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
 				continue;
-			}
-			
-			/* Testing */
-			if( a.getTag() != null ) {
-				keywords.put( "%atag", a.getTag() );
-			} else {
-				keywords.put( "%atag", "*null*" );
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );
