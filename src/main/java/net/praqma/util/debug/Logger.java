@@ -10,8 +10,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -29,7 +27,7 @@ public class Logger {
 	
 
 	private static final String filesep = System.getProperty( "file.separator" );
-	private static final String linesep = System.getProperty( "line.separator" );
+	public static final String linesep = System.getProperty( "line.separator" );
 
 	private static Logger instance = null;
 	

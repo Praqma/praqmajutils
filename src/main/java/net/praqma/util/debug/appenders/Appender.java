@@ -154,7 +154,7 @@ public class Appender {
 		String line = "";
 		try {
 			while( ( line = in.readLine() ) != null ) {
-				getOut().write( line );
+				getOut().write( line + Logger.linesep );
 				getOut().flush();
 			}
 		} catch (IOException e) {
