@@ -306,7 +306,12 @@ public class Logger {
 		keywords.put( "%method", stack[depth].getMethodName() );
 		String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
 		keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
-		keywords.put( "%caller", Matcher.quoteReplacement( stack[depth+1].getClassName() + "::" + stack[depth+1].getMethodName() + "," + stack[depth+1].getLineNumber() ) );
+		try {
+			keywords.put( "%caller", Matcher.quoteReplacement( stack[depth+1].getClassName() + "::" + stack[depth+1].getMethodName() + "," + stack[depth+1].getLineNumber() ) );
+		} catch( ArrayIndexOutOfBoundsException e ) {
+			/* Too deep */
+		}
+		
 		keywords.put( "%line", stack[depth].getLineNumber()+"" );
 		keywords.put( "%datetime", datetimeformat.format( now ) );
 		keywords.put( "%date", dateformat.format( now ) );

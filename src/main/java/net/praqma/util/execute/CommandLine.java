@@ -23,6 +23,8 @@ public class CommandLine implements CommandLineInterface {
 	private OperatingSystem thisos = OperatingSystem.WINDOWS;
 	private String[] cmd = null;
 	private int last = 0;
+	
+	private static Integer counter = 0;
 
 	@Deprecated
 	public void setLogger( Logger logger ) {
@@ -87,12 +89,17 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws AbnormalProcessTerminationException
 	 */
 	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
-		logger.debug( "$ " + cmd );
-
 		/*
 		 * String[] cmds = new String[3]; cmds[0] = "cmd.exe"; cmds[1] = "/C";
 		 * cmds[2] = cmd;
 		 */
+		
+		int mycounter = 0;
+		synchronized( counter ) {
+			mycounter = counter++;
+		}
+		
+		logger.debug( "$(" + mycounter + ") " + cmd );
 
 		// cmd = this.cmd + cmd;
 		this.cmd[last] = cmd;
@@ -152,6 +159,11 @@ public class CommandLine implements CommandLineInterface {
 			/* Closing streams */
 			p.getErrorStream().close();
 			p.getInputStream().close();
+			
+			/* we're done, decrement the counter */
+			synchronized( counter ) {
+				mycounter = counter--;
+			}
 
 			/* Abnormal process termination, with error out as message */
 			if( exitValue != 0 ) {
