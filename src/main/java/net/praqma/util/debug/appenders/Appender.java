@@ -12,6 +12,11 @@ import net.praqma.util.debug.Logger;
 import net.praqma.util.debug.LoggerSetting;
 import net.praqma.util.debug.Logger.LogLevel;
 
+/**
+ * Appender class for the logger
+ * @author wolfgang
+ *
+ */
 public class Appender {
 	private LogLevel minimumLevel = LogLevel.INFO;
 	protected PrintWriter out;
@@ -21,7 +26,6 @@ public class Appender {
 	
 	private String threadId = null;
 	
-	//protected String template = "%datetime %level %space [%tag] %stack %message%newline";
 	protected String template = "%datetime %level %space %thread%stack %message%newline";
 	
 	private String tag;
