@@ -1,5 +1,9 @@
 package net.praqma.util.debug.appenders;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,7 +22,7 @@ public class Appender {
 	private String threadId = null;
 	
 	//protected String template = "%datetime %level %space [%tag] %stack %message%newline";
-	protected String template = "%datetime %level %space %thread%stack %message%newline";
+	protected String template = "%datetime %level %space %thread%stack %message[%tag/%atag]%newline";
 	
 	private String tag;
 	
@@ -135,5 +139,18 @@ public class Appender {
 	
 	public String getThreadId() {
 		return threadId;
+	}
+	
+	public void write( InputStream input ) {
+		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
+		String line = "";
+		try {
+			while( ( line = in.readLine() ) != null ) {
+				getOut().write( line );
+				getOut().flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -303,6 +303,7 @@ public class Logger {
 		keywords.put( "%method", stack[depth].getMethodName() );
 		String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
 		keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
+		keywords.put( "%caller", Matcher.quoteReplacement( stack[depth+1].getClassName() + "::" + stack[depth+1].getMethodName() + "," + stack[depth+1].getLineNumber() ) );
 		keywords.put( "%line", stack[depth].getLineNumber()+"" );
 		keywords.put( "%datetime", datetimeformat.format( now ) );
 		keywords.put( "%date", dateformat.format( now ) );
@@ -338,6 +339,10 @@ public class Logger {
 				continue;
 			}
 			
+			if( a.getTag() != null ) {
+				System.out.println( a.getTag() + "=" + tag );
+			}
+			
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
 				//System.out.println( subscribable + " is not subscribed" );
@@ -347,6 +352,13 @@ public class Logger {
 			if( a.getThreadId() != null && !a.getThreadId().equals( getThreadId( Thread.currentThread() ) ) ) {
 				//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
 				continue;
+			}
+			
+			/* Testing */
+			if( a.getTag() != null ) {
+				keywords.put( "%atag", a.getTag() );
+			} else {
+				keywords.put( "%atag", "*null*" );
 			}
 			
 			String finalmsg = parseTemplate( keywords, a.getTemplate() );

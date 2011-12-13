@@ -15,6 +15,7 @@ public class StopWatch {
 
 		if( !sws.containsKey( name ) ) {
 			sw = new StopWatch();
+			sw.setName( name );
 			sws.put( name, sw );
 		} else {
 			sw = sws.get( name );
@@ -26,6 +27,7 @@ public class StopWatch {
 	private long startTime = 0;
 	private long endTime = 0;
 	private long time = 0;
+	private String name;
 
 	public void start() {
 		this.startTime = System.nanoTime();
@@ -55,6 +57,18 @@ public class StopWatch {
 		startTime = 0;
 		endTime = 0;
 		time = 0;
+	}
+	
+	public void setName( String name ) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void delete() {
+		sws.remove( name );
 	}
 
 	public double getSeconds() {
