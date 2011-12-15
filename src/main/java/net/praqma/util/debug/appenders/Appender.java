@@ -60,7 +60,7 @@ public class Appender {
 	}
 	
 	public void setSubscriptions( Set<String> subscriptions ) {
-		System.out.println( "Setting subs: " + subscriptions );
+		//System.out.println( "Setting subs: " + subscriptions );
 		this.subscriptions = subscriptions;
 	}
 	
@@ -150,15 +150,17 @@ public class Appender {
 	 * @param input
 	 */
 	public void write( InputStream input ) {
-		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
-		String line = "";
-		try {
-			while( ( line = in.readLine() ) != null ) {
-				getOut().write( line + Logger.linesep );
-				getOut().flush();
+		if( enabled ) {
+			BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
+			String line = "";
+			try {
+				while( ( line = in.readLine() ) != null ) {
+					getOut().write( line + Logger.linesep );
+					getOut().flush();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

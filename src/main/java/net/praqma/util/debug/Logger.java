@@ -347,10 +347,6 @@ public class Logger {
 				continue;
 			}
 			
-			if( a.getTag() != null ) {
-				System.out.println( a.getTag() + "=" + tag );
-			}
-			
 			/* Check subscriptions */
 			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
 				//System.out.println( subscribable + " is not subscribed" );
