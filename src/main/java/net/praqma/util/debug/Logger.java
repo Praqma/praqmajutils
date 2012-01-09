@@ -50,6 +50,9 @@ public class Logger {
 	private FileWriter fw;
 	private PrintWriter out;
 	
+	private boolean enabled = true;
+	private LogLevel minLogLevel = LogLevel.DEBUG;
+	
 	public enum LogLevel {
 		DEBUG,
 		VERBOSE,
@@ -129,6 +132,22 @@ public class Logger {
 
 	public static void setFilename( String filename1 ) {
 		filename = filename1;
+	}
+	
+	public void enable() {
+		enabled = true;
+	}
+	
+	public void disable() {
+		enabled = false;
+	}
+	
+	public void setMinLogLevel( LogLevel level ) {
+		this.minLogLevel = level;
+	}
+	
+	public LogLevel getMinLogLevel() {
+		return this.minLogLevel;
 	}
 	
 	
@@ -289,89 +308,89 @@ public class Logger {
 	}
 	
 	private void log( Object message, LogLevel level, String tag, int depth ) {
-		Date now = new Date();
 		
-		if( current == null ) {
-			instance.initialize();
-		}
-		
-		Map<String, String> keywords = new HashMap<String, String>();
-		
-		StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-		
-		keywords.put( "%class", stack[depth].getClassName() );
-		keywords.put( "%threadid", "[" + Thread.currentThread().getId()+ "]" );
-		keywords.put( "%threadname", Thread.currentThread().getName() );
-		keywords.put( "%thread", "[(" + Thread.currentThread().getId()+ ")" + Thread.currentThread().getName() + "]" );
-		keywords.put( "%method", stack[depth].getMethodName() );
-		String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
-		keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
-		try {
-			keywords.put( "%caller", Matcher.quoteReplacement( stack[depth+1].getClassName() + "::" + stack[depth+1].getMethodName() + "," + stack[depth+1].getLineNumber() ) );
-		} catch( ArrayIndexOutOfBoundsException e ) {
-			/* Too deep */
-		}
-		
-		keywords.put( "%line", stack[depth].getLineNumber()+"" );
-		keywords.put( "%datetime", datetimeformat.format( now ) );
-		keywords.put( "%date", dateformat.format( now ) );
-		keywords.put( "%time", timeformat.format( now ) );
-		if( level != null ) {
-			keywords.put( "%level", level.toString() );
-			keywords.put( "%space", new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) );
-		} else {
-			keywords.put( "%level", "" );
-			keywords.put( "%space", new String( new char[Logger.levelMaxlength] ).replace( "\0", " " ) );
-		}
-		keywords.put( "%message", Matcher.quoteReplacement( objectToString( message ) ) );
-		//keywords.put( "%newline", linesep );
-		keywords.put( "%newline", "\n" );
-		
-		if( tag != null ) {
-			keywords.put( "%tag", tag );
-		} else {
-			keywords.put( "%tag", "" );
-		}
-
-		/* Writing */
-		for( Appender a : appenders ) {
-			//System.out.print( subscribable + ": " );
-			if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
-				//System.out.println( subscribable + " is not enabled" );
-				continue;
+		if( enabled && level.compareTo( minLogLevel ) >= 0 ) {
+			Date now = new Date();
+			
+			if( current == null ) {
+				instance.initialize();
 			}
 			
-			/* Check tags, if tag for appender is defined, a log tag must be provided */
-			if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
-				//System.out.println( subscribable + " did not have tag" );
-				continue;
+			Map<String, String> keywords = new HashMap<String, String>();
+			
+			StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+			
+			keywords.put( "%class", stack[depth].getClassName() );
+			keywords.put( "%threadid", "[" + Thread.currentThread().getId()+ "]" );
+			keywords.put( "%threadname", Thread.currentThread().getName() );
+			keywords.put( "%thread", "[(" + Thread.currentThread().getId()+ ")" + Thread.currentThread().getName() + "]" );
+			keywords.put( "%method", stack[depth].getMethodName() );
+			String subscribable = stack[depth].getClassName() + "." + stack[depth].getMethodName();
+			keywords.put( "%stack", Matcher.quoteReplacement( stack[depth].getClassName() + "::" + stack[depth].getMethodName() + "," + stack[depth].getLineNumber() ) );
+			try {
+				keywords.put( "%caller", Matcher.quoteReplacement( stack[depth+1].getClassName() + "::" + stack[depth+1].getMethodName() + "," + stack[depth+1].getLineNumber() ) );
+			} catch( ArrayIndexOutOfBoundsException e ) {
+				/* Too deep */
 			}
 			
-			if( a.getTag() != null ) {
-				System.out.println( a.getTag() + "=" + tag );
+			keywords.put( "%line", stack[depth].getLineNumber()+"" );
+			keywords.put( "%datetime", datetimeformat.format( now ) );
+			keywords.put( "%date", dateformat.format( now ) );
+			keywords.put( "%time", timeformat.format( now ) );
+			if( level != null ) {
+				keywords.put( "%level", level.toString() );
+				keywords.put( "%space", new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) );
 			}
+			keywords.put( "%message", Matcher.quoteReplacement( objectToString( message ) ) );
+			//keywords.put( "%newline", linesep );
+			keywords.put( "%newline", "\n" );
 			
-			/* Check subscriptions */
-			if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
-				//System.out.println( subscribable + " is not subscribed" );
-				continue;
+			if( tag != null ) {
+				keywords.put( "%tag", tag );
+			} else {
+				keywords.put( "%tag", "" );
 			}
-			
-			if( a.getThreadId() != null && !a.getThreadId().equals( getThreadId( Thread.currentThread() ) ) ) {
-				//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
-				continue;
+	
+			/* Writing */
+			for( Appender a : appenders ) {
+				//System.out.print( subscribable + ": " );
+				if( !a.isEnabled() || a.getMinimumLevel().ordinal() > level.ordinal() ) {
+					//System.out.println( subscribable + " is not enabled" );
+					continue;
+				}
+				
+				/* Check tags, if tag for appender is defined, a log tag must be provided */
+				if( a.getTag() != null && ( tag == null || !tag.equals( a.getTag() ) ) ) {
+					//System.out.println( subscribable + " did not have tag" );
+					continue;
+				}
+				
+				if( a.getTag() != null ) {
+					System.out.println( a.getTag() + "=" + tag );
+				}
+				
+				/* Check subscriptions */
+				if( !a.isSubscribeAll() && !a.isSubscribed( subscribable ) ) {
+					//System.out.println( subscribable + " is not subscribed" );
+					continue;
+				}
+				
+				if( a.getThreadId() != null && !a.getThreadId().equals( getThreadId( Thread.currentThread() ) ) ) {
+					//System.out.println( a.getThreadId() + " is not the same as " + Thread.currentThread().getId() );
+					continue;
+				}
+				
+				String finalmsg = parseTemplate( keywords, a.getTemplate() );
+				if( !a.onBeforeLogging() ) {
+					//System.out.println( subscribable + " on before logging" );
+					continue;
+				}
+				
+				//System.out.println( "written" );
+				
+				a.getOut().write( finalmsg );
+				a.getOut().flush();
 			}
-			
-			String finalmsg = parseTemplate( keywords, a.getTemplate() );
-			if( !a.onBeforeLogging() ) {
-				//System.out.println( subscribable + " on before logging" );
-				continue;
-			}
-			
-			//System.out.println( "written" );
-			
-			a.getOut().write( finalmsg );
-			a.getOut().flush();
 		}
 	}
 	
