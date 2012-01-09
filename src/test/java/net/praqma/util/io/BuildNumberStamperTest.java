@@ -65,11 +65,13 @@ public class BuildNumberStamperTest {
         }
 
     }
-//TODO : must fix all the test so that they work propperly
+//TODO : must fix all the test so that they work properly
+    /*
     @Test
     public void dummy() {
         assertTrue(true);
     }
+    */
     /**
      * Test method for
      * {@link net.praqma.util.io.BuildNumberStamper#stampIntoCode(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}

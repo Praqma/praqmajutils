@@ -50,8 +50,8 @@ public class Logger {
 	private FileWriter fw;
 	private PrintWriter out;
 	
-	private boolean enabled = true;
-	private LogLevel minLogLevel = LogLevel.DEBUG;
+	private static boolean enabled = true;
+	private static LogLevel minLogLevel = LogLevel.DEBUG;
 	
 	public enum LogLevel {
 		DEBUG,
@@ -134,20 +134,20 @@ public class Logger {
 		filename = filename1;
 	}
 	
-	public void enable() {
+	public static void enable() {
 		enabled = true;
 	}
 	
-	public void disable() {
+	public static void disable() {
 		enabled = false;
 	}
 	
-	public void setMinLogLevel( LogLevel level ) {
-		this.minLogLevel = level;
+	public static void setMinLogLevel( LogLevel level ) {
+		minLogLevel = level;
 	}
 	
-	public LogLevel getMinLogLevel() {
-		return this.minLogLevel;
+	public static LogLevel getMinLogLevel() {
+		return minLogLevel;
 	}
 	
 	
@@ -308,7 +308,6 @@ public class Logger {
 	}
 	
 	private void log( Object message, LogLevel level, String tag, int depth ) {
-		
 		if( enabled && level.compareTo( minLogLevel ) >= 0 ) {
 			Date now = new Date();
 			
