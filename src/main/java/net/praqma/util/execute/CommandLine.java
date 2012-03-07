@@ -23,7 +23,7 @@ public class CommandLine implements CommandLineInterface {
 	private OperatingSystem thisos = OperatingSystem.WINDOWS;
 	private String[] cmd = null;
 	private int last = 0;
-	
+
 	private static Integer counter = 0;
 
 	@Deprecated
@@ -67,7 +67,7 @@ public class CommandLine implements CommandLineInterface {
 	public CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, dir, merge, false, null );
 	}
-	
+
 	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, dir, merge, ignore, null );
 	}
@@ -93,12 +93,12 @@ public class CommandLine implements CommandLineInterface {
 		 * String[] cmds = new String[3]; cmds[0] = "cmd.exe"; cmds[1] = "/C";
 		 * cmds[2] = cmd;
 		 */
-		
+
 		int mycounter = 0;
 		synchronized( counter ) {
 			mycounter = counter++;
 		}
-		
+
 		logger.debug( "$(" + mycounter + ") " + cmd );
 
 		// cmd = this.cmd + cmd;
@@ -107,13 +107,13 @@ public class CommandLine implements CommandLineInterface {
 		try {
 			ProcessBuilder pb = new ProcessBuilder( this.cmd );
 			pb.redirectErrorStream( merge );
-			//pb.environment().put( key, value )
+			// pb.environment().put( key, value )
 
 			if( dir != null ) {
 				logger.debug( "Executing command in " + dir );
 				pb.directory( dir );
 			}
-			
+
 			/* If any variables, put them in the environment */
 			if( variables != null && variables.size() > 0 ) {
 				logger.debug( "CommandLine: " + variables );
@@ -138,7 +138,7 @@ public class CommandLine implements CommandLineInterface {
 			int exitValue = 0;
 			try {
 				exitValue = p.waitFor();
-			} catch (InterruptedException e) {
+			} catch( InterruptedException e ) {
 				p.destroy();
 			} finally {
 				Thread.interrupted();
@@ -146,20 +146,20 @@ public class CommandLine implements CommandLineInterface {
 
 			try {
 				output.join();
-			} catch (InterruptedException e) {
+			} catch( InterruptedException e ) {
 				logger.error( "Could not join output thread" );
 			}
 
 			try {
 				errors.join();
-			} catch (InterruptedException e) {
+			} catch( InterruptedException e ) {
 				logger.error( "Could not join errors thread" );
 			}
 
 			/* Closing streams */
 			p.getErrorStream().close();
 			p.getInputStream().close();
-			
+
 			/* we're done, decrement the counter */
 			synchronized( counter ) {
 				mycounter = counter--;
@@ -175,9 +175,9 @@ public class CommandLine implements CommandLineInterface {
 				 */
 				if( !ignore ) {
 					if( merge ) {
-						throw new AbnormalProcessTerminationException( output.sres.toString() );
+						throw new AbnormalProcessTerminationException( output.sres.toString(), exitValue );
 					} else {
-						throw new AbnormalProcessTerminationException( errors.sres.toString() );
+						throw new AbnormalProcessTerminationException( errors.sres.toString(), exitValue );
 					}
 				}
 			}
@@ -190,7 +190,7 @@ public class CommandLine implements CommandLineInterface {
 			result.errorList = errors.lres;
 
 			return result;
-		} catch (IOException e) {
+		} catch( IOException e ) {
 			logger.warning( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
 			throw new CommandLineException( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
 		}

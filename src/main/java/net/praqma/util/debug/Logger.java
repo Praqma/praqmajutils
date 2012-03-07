@@ -387,8 +387,11 @@ public class Logger {
 				
 				//System.out.println( "written" );
 				
-				a.getOut().write( finalmsg );
-				a.getOut().flush();
+				synchronized( a.getOut() ) {
+					a.getOut().write( finalmsg );
+					a.getOut().flush();					
+				}
+
 			}
 		}
 	}
