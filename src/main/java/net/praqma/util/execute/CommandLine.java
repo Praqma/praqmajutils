@@ -175,9 +175,9 @@ public class CommandLine implements CommandLineInterface {
 				 */
 				if( !ignore ) {
 					if( merge ) {
-						throw new AbnormalProcessTerminationException( output.sres.toString(), exitValue );
+						throw new AbnormalProcessTerminationException( output.sres.toString(), cmd, exitValue );
 					} else {
-						throw new AbnormalProcessTerminationException( errors.sres.toString(), exitValue );
+						throw new AbnormalProcessTerminationException( errors.sres.toString(), cmd, exitValue );
 					}
 				}
 			}
