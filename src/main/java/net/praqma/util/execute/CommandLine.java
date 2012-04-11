@@ -26,8 +26,10 @@ public class CommandLine implements CommandLineInterface {
 
 	private static Integer counter = 0;
 
-	@Deprecated
-	public void setLogger( Logger logger ) {
+	private static Recorder recorder;
+	
+	public void setRecorder( Recorder recorder ) {
+		this.recorder = recorder;
 	}
 
 	private CommandLine() {
@@ -163,6 +165,15 @@ public class CommandLine implements CommandLineInterface {
 			/* we're done, decrement the counter */
 			synchronized( counter ) {
 				mycounter = counter--;
+			}
+			
+			/* If enabled, record the command */
+			if( recorder != null ) {
+				if( merge ) {
+					recorder.addCommand( cmd, exitValue, dir, output.sres.toString() );
+				} else {
+					recorder.addCommand( cmd, exitValue, dir, errors.sres.toString() );
+				}
 			}
 
 			/* Abnormal process termination, with error out as message */
