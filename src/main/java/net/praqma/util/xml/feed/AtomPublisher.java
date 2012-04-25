@@ -1,5 +1,6 @@
 package net.praqma.util.xml.feed;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import net.praqma.util.xml.XML;
 public class AtomPublisher extends FeedPublisher {
 	
 	@Override
-	public String toFeed( Feed feed ) throws FeedException {
+	public String toFeed( Feed feed, int limit ) throws FeedException {
 		XML xml = new XML( "feed" );
 		Element root = xml.getRoot();
 		root.setAttribute( "xmlns", "http://www.w3.org/2005/Atom" );
@@ -101,9 +102,23 @@ public class AtomPublisher extends FeedPublisher {
 		
 		Feed feed = new Feed( title, id, updated );
 		
-		/* Get other */
+		/* Get other fields */
+		/* Author */
+		try {
+			feed.author = getPerson( xml.getFirstElement( "author" ), xml );
+		} catch( Exception ex ) {
+			/* no op */
+		}
+		
+		/* Link */
+		try {
+			feed.link = xml.getFirstElement( "link" ).getTextContent();
+		} catch( Exception ex ) {
+			/* no op */
+		}
 		
 		List<Element> elements = xml.getElements( root, "entry" );
+		Collections.reverse( elements );
 		
 		for( Element e : elements ) {
 			String etitle = "";
@@ -119,7 +134,34 @@ public class AtomPublisher extends FeedPublisher {
 			
 			Entry entry = new Entry( etitle, eid, eupdated );
 			
-			/* Other */
+			/* Summary */
+			try {
+				entry.summary = xml.getFirstElement( e, "summary" ).getTextContent();
+			} catch( Exception ex ) {
+				/* no op */
+			}
+			
+			/* Content */
+			try {
+				entry.content = xml.getFirstElement( e, "content" ).getTextContent();
+			} catch( Exception ex ) {
+				/* no op */
+			}
+			
+			/* Link */
+			try {
+				entry.link = xml.getFirstElement( e, "link" ).getTextContent();
+			} catch( Exception ex ) {
+				/* no op */
+			}
+			
+			/* Author */
+			try {
+				entry.author = getPerson( xml.getFirstElement( e, "author" ), xml );
+			} catch( Exception ex ) {
+				/* no op */
+			}
+			
 			
 			feed.addEntry( entry );
 		}		

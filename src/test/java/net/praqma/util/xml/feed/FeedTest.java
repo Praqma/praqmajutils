@@ -22,6 +22,12 @@ public class FeedTest extends TestCase {
 		e.content = "A very long content tag";
 		feed.addEntry( e );
 		
+		Entry e2 = new Entry( "Title E2", "My-id-002", new Date() );
+		e2.summary = "Something cool 2";
+		e2.author = new Person( "PRAQMA #2" );
+		e2.content = "A very long content tag 2";
+		feed.addEntry( e2 );
+		
 		String xml = feed.getXML( new AtomPublisher() );
 		
 		System.out.println( "XML: " + xml );
@@ -32,10 +38,6 @@ public class FeedTest extends TestCase {
 		File xml = new File( FeedTest.class.getClassLoader().getResource( "feed.xml" ).getFile() );
 		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
 		
-		System.out.println( "FEED: " + feed );
-		
-		for( Entry entry : feed.getEntries() ) {
-			System.out.println( "ENTRY: " + entry );
-		}
+		System.out.println( "XML2way: " + feed.getXML( new AtomPublisher() ) );
 	}
 }

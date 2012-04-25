@@ -33,7 +33,7 @@ public class Feed {
 	}
 	
 	public String getXML( FeedPublisher publisher ) throws FeedException {
-		return publisher.toFeed( this );
+		return publisher.toFeed( this, -1 );
 	}
 	
 	public static Feed getFeed( FeedPublisher publisher, File file ) throws FeedException, IOException {
