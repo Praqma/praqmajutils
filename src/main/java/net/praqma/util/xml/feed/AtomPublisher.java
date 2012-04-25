@@ -1,6 +1,5 @@
 package net.praqma.util.xml.feed;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +41,11 @@ public class AtomPublisher extends FeedPublisher {
 		}
 		
 		/* Process entries */
+		int count = 0;
 		for( Entry entry : feed.getEntries() ) {
+			if( count == limit ) {
+				break;
+			}
 			Element e = xml.createElement( "entry", root );
 			
 			/* Title */
@@ -79,6 +82,8 @@ public class AtomPublisher extends FeedPublisher {
 			if( entry.content != null ) {
 				xml.addElement( e, "content" ).setTextContent( entry.content );
 			}
+			
+			count++;
 		}
 		
 		return xml.getXML();
@@ -118,7 +123,6 @@ public class AtomPublisher extends FeedPublisher {
 		}
 		
 		List<Element> elements = xml.getElements( root, "entry" );
-		Collections.reverse( elements );
 		
 		for( Element e : elements ) {
 			String etitle = "";

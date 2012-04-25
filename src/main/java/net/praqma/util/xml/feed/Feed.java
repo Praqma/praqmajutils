@@ -3,6 +3,8 @@ package net.praqma.util.xml.feed;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -33,16 +35,40 @@ public class Feed {
 	}
 	
 	public String getXML( FeedPublisher publisher ) throws FeedException {
+		Collections.sort( entries, new AscendingDateSort() );
 		return publisher.toFeed( this, -1 );
+	}
+	
+	public String getXML( FeedPublisher publisher, int limit ) throws FeedException {
+		Collections.sort( entries, new AscendingDateSort() );
+		return publisher.toFeed( this, limit );
 	}
 	
 	public static Feed getFeed( FeedPublisher publisher, File file ) throws FeedException, IOException {
 		XML xml = new XML( file );
-		return publisher.fromFeed( xml );
+		Feed feed = publisher.fromFeed( xml );
+		Collections.sort( feed.entries, new AscendingDateSort() );
+		return feed;
 	}
 	
 	public static Feed getFeed( FeedPublisher publisher, XML xml ) throws FeedException {
-		return publisher.fromFeed( xml );
+		Feed feed = publisher.fromFeed( xml );
+		Collections.sort( feed.entries, new AscendingDateSort() );
+		return feed;
+	}
+	
+	public static class AscendingDateSort implements Comparator<Entry> {
+
+		@Override
+		public int compare( Entry e1, Entry e2 ) {
+			if( e1.updated == null ) {
+				return -1;
+			}
+			if( e2.updated == null ) {
+				return 1;
+			}
+			return (int) ( ( e2.updated.getTime() / 1000 ) - ( e1.updated.getTime() / 1000 ) );
+		}
 	}
 	
 	@Override
