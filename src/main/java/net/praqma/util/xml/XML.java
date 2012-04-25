@@ -134,6 +134,48 @@ public class XML {
     public Element addElement( Element root, String tag ) {
         return (Element) root.appendChild( doc.createElement( tag ) );
     }
+    
+    /**
+     * Append an element to the root element
+     * @param e
+     * @return
+     */
+    public Element appendElement( Element e ) {
+    	root.appendChild( e );
+    	return e;
+    }
+    
+    /**
+     * Append an element to a specified root element
+     * @param e
+     * @param root
+     * @return
+     */
+    public Element appendElement( Element e, Element root ) {
+    	root.appendChild( e );
+    	return e;
+    }
+    
+    /**
+     * Create an un-rooted element
+     * @param tagName The tag name of the element
+     * @return The element created in the process.
+     */
+    public Element createElement( String tagName ) {
+    	return doc.createElement( tagName );
+    }
+    
+    /**
+     * Create a rooted element
+     * @param tagName The tag name of the element
+     * @param root The root element of the new element
+     * @return The element created in the process.
+     */
+    public Element createElement( String tagName, Element root ) {
+    	Element e = doc.createElement( tagName );
+    	root.appendChild( e );
+    	return e;
+    }
 
     /* Getters */
 

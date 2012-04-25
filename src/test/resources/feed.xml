@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>test</title>
+    <link>http://www.praqma.net</link>
+    <updated>2012-04-25T15:53:35Z</updated>
+    <author>
+        <name>PRAQMA</name>
+    </author>
+    <id>my--001</id>
+    <entry>
+        <title>Title E1</title>
+        <author>
+            <name>PRAQMA #1</name>
+        </author>
+        <id>My-id-001</id>
+        <updated>2012-04-25T15:53:35Z</updated>
+        <summary>Something cool</summary>
+        <content>A very long content tag</content>
+    </entry>
+</feed>

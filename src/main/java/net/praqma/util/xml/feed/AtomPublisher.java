@@ -1,0 +1,164 @@
+package net.praqma.util.xml.feed;
+
+import java.util.Date;
+import java.util.List;
+
+import org.w3c.dom.Element;
+
+import net.praqma.util.xml.XML;
+
+public class AtomPublisher extends FeedPublisher {
+	
+	@Override
+	public String toFeed( Feed feed ) throws FeedException {
+		XML xml = new XML( "feed" );
+		Element root = xml.getRoot();
+		root.setAttribute( "xmlns", "http://www.w3.org/2005/Atom" );
+		
+		/* Title */
+		if( feed.title != null ) {
+			xml.addElement( "title" ).setTextContent( feed.title );
+		}
+		
+		/* Link */
+		if( feed.link != null ) {
+			xml.addElement( "link" ).setTextContent( feed.link );
+		}
+		
+		/* Updated */
+		if( feed.updated != null ) {
+			xml.addElement( "updated" ).setTextContent( dateToString( feed.updated ) );
+		}		
+		
+		/* Author */
+		if( feed.author != null ) {
+			xml.appendElement( getPerson( feed.author, xml ) );
+		}
+		
+		/* ID */
+		if( feed.id != null ) {
+			xml.addElement( "id" ).setTextContent( feed.id );
+		}
+		
+		/* Process entries */
+		for( Entry entry : feed.getEntries() ) {
+			Element e = xml.createElement( "entry", root );
+			
+			/* Title */
+			if( entry.title != null ) {
+				xml.addElement( e, "title" ).setTextContent( entry.title );
+			}
+			
+			/* Link */
+			if( entry.link != null ) {
+				xml.addElement( e, "link" ).setTextContent( entry.link );
+			}
+			
+			/* Author */
+			if( entry.author != null ) {
+				xml.appendElement( getPerson( entry.author, xml ), e );
+			}
+			
+			/* Id */
+			if( entry.id != null ) {
+				xml.addElement( e, "id" ).setTextContent( entry.id );
+			}
+			
+			/* Updated */
+			if( entry.updated != null ) {
+				xml.addElement( e, "updated" ).setTextContent( dateToString( entry.updated ) );
+			}
+			
+			/* Summary */
+			if( entry.summary != null ) {
+				xml.addElement( e, "summary" ).setTextContent( entry.summary );
+			}
+			
+			/* Content */
+			if( entry.content != null ) {
+				xml.addElement( e, "content" ).setTextContent( entry.content );
+			}
+		}
+		
+		return xml.getXML();
+	}
+	
+	@Override
+	public Feed fromFeed( XML xml ) throws FeedException {
+		Element root = xml.getRoot();
+		
+		String title = "";
+		String id = "";
+		Date updated = null;
+		
+		try {
+			title = xml.getFirstElement( "title" ).getTextContent();
+			id = xml.getFirstElement( "id" ).getTextContent();
+			updated = format.parse( xml.getFirstElement( "updated" ).getTextContent() );
+		} catch( Exception ex ) {
+			throw new FeedException( "Missing required elements in feed", ex );
+		}
+		
+		Feed feed = new Feed( title, id, updated );
+		
+		/* Get other */
+		
+		List<Element> elements = xml.getElements( root, "entry" );
+		
+		for( Element e : elements ) {
+			String etitle = "";
+			String eid = "";
+			Date eupdated = null;
+			try {
+				etitle = xml.getFirstElement( e, "title" ).getTextContent();
+				eid = xml.getFirstElement( e, "id" ).getTextContent();
+				eupdated = format.parse( xml.getFirstElement( e, "updated" ).getTextContent() );
+			} catch( Exception ex ) {
+				continue;
+			}
+			
+			Entry entry = new Entry( etitle, eid, eupdated );
+			
+			/* Other */
+			
+			feed.addEntry( entry );
+		}		
+		
+		return feed;
+	}
+
+	public static Element getPerson( Person author, XML xml ) throws FeedException {
+		Element e = xml.createElement( "author" );
+		
+		if( author.name != null ) {
+			xml.createElement( "name", e ).setTextContent( author.name );
+		} else {
+			throw new FeedException( "Author requires name" );
+		}
+		
+		if( author.uri != null ) {
+			xml.createElement( "uri", e ).setTextContent( author.uri );
+		}
+		
+		if( author.email != null ) {
+			xml.createElement( "email", e ).setTextContent( author.email );
+		}
+		
+		return e;
+	}
+	
+	public static Person getPerson( Element e, XML xml ) throws FeedException {
+		String name = "";
+		try {
+			name = xml.getFirstElement( e, "name" ).getTextContent();
+		} catch( Exception ex ) {
+			throw new FeedException( "Missing required elements in person", ex );
+		}
+		
+		Person p = new Person( name );
+		
+		/* Other */
+		
+		return p;
+	}
+}
