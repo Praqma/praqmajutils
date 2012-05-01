@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>test</title>
     <link>http://www.praqma.net</link>
-    <updated>2012-01-01T00:00:00Z</updated>
+    <updated>2012-01-01T00:00:00+0200</updated>
     <author>
         <name>PRAQMA</name>
     </author>
@@ -13,7 +13,7 @@
             <name>PRAQMA #1</name>
         </author>
         <id>My-id-001</id>
-        <updated>2012-01-02T00:00:00Z</updated>
+        <updated>2012-01-02T00:00:00+0200</updated>
         <summary>Something cool</summary>
         <content>A very long content tag</content>
     </entry>
@@ -23,7 +23,7 @@
             <name>PRAQMA #2</name>
         </author>
         <id>My-id-002</id>
-        <updated>2012-01-03T00:00:00Z</updated>
+        <updated>2012-01-03T00:00:00+0200</updated>
         <summary>Something cool 2</summary>
         <content>A very long content tag 2</content>
     </entry>
@@ -33,7 +33,7 @@
             <name>PRAQMA #3</name>
         </author>
         <id>My-id-003</id>
-        <updated>2012-01-04T00:00:00Z</updated>
+        <updated>2012-01-04T00:00:00+0200</updated>
         <summary>Something cool 3</summary>
         <content>A very long content tag 3</content>
     </entry>
@@ -43,7 +43,7 @@
             <name>PRAQMA #4</name>
         </author>
         <id>My-id-004</id>
-        <updated>2012-01-05T00:00:00Z</updated>
+        <updated>2012-01-05T00:00:00+0200</updated>
         <summary>Something cool 4</summary>
         <content>A very long content tag 4</content>
     </entry>
@@ -53,7 +53,7 @@
             <name>PRAQMA #5</name>
         </author>
         <id>My-id-005</id>
-        <updated>2012-01-06T00:00:00Z</updated>
+        <updated>2012-01-06T00:00:00+0200</updated>
         <summary>Something cool 5</summary>
         <content>A very long content tag 5</content>
     </entry>
