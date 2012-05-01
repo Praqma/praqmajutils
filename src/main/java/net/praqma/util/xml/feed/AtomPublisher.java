@@ -80,7 +80,9 @@ public class AtomPublisher extends FeedPublisher {
 			
 			/* Content */
 			if( entry.content != null ) {
-				xml.addElement( e, "content" ).setTextContent( entry.content );
+				Element cElement = xml.addElement( e, "content" );
+                cElement.setAttribute("type", "html");
+                cElement.setTextContent(entry.content);
 			}
 			
 			count++;
