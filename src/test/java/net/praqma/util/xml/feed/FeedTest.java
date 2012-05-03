@@ -66,4 +66,16 @@ public class FeedTest extends TestCase {
 		
 		System.out.println( "LIMIT TO 3: " + feed.getXML( new AtomPublisher(), 3 ) );
 	}
+	
+	@Test
+	public void testBackwardsCompToOldFormat() throws FeedException, IOException, ParseException {
+		File xml = new File( FeedTest.class.getClassLoader().getResource( "feedOldFormat.xml" ).getFile() );
+		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
+		
+		System.out.println( "FEED: " + feed );
+		
+		Date when = FeedPublisher.oldformat.parse( "2012-01-01T00:00:00Z" );
+		assertEquals( when, feed.updated );
+		
+	}
 }

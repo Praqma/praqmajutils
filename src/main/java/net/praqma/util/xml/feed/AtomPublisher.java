@@ -1,5 +1,6 @@
 package net.praqma.util.xml.feed;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -102,7 +103,12 @@ public class AtomPublisher extends FeedPublisher {
 		try {
 			title = xml.getFirstElement( "title" ).getTextContent();
 			id = xml.getFirstElement( "id" ).getTextContent();
-			updated = format.parse( xml.getFirstElement( "updated" ).getTextContent() );
+			try {
+				updated = format.parse( xml.getFirstElement( "updated" ).getTextContent() );
+			} catch( ParseException e ) {
+				/* Unable to parse date format, try old */
+				updated = oldformat.parse( xml.getFirstElement( "updated" ).getTextContent() );
+			}
 		} catch( Exception ex ) {
 			throw new FeedException( "Missing required elements in feed", ex );
 		}
