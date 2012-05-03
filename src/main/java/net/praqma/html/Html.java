@@ -47,6 +47,20 @@ public class Html {
         }    
     }
     
+    public static class Break {
+        private String text;
+        public Break() {
+            this.text = "<br/>";
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+        
+        
+    }
+    
     public static class Tr {
         public Tr(Td... columns) {
             
