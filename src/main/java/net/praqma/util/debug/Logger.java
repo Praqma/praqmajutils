@@ -20,6 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 
 import net.praqma.util.debug.appenders.Appender;
+import net.praqma.util.execute.CouldNotCreateLoggerException;
 
 public class Logger {
 
@@ -74,10 +75,29 @@ public class Logger {
 		return instance;
 	}
 	
+    /**
+     * This method has now been modified. 
+     * 
+     * http://stackoverflow.com/questions/1554488/java-system-getpropertyuser-dir-gives-wrong-result-in-ubuntu
+     * 
+     * http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
+     * 
+     * It turns out that "user.dir" is the shell working directory, in case of a service we don't know exactly how that behaves.
+     * 
+     * If permissions currently does not allow the process to write to "user.dir". In some cases it would end up writing to "/" root.  
+     * 
+     * @return 
+     */
 	private boolean initialize() {
 		/* CWD */
 		if( loggerPath == null ) {
 			loggerPath = new File( System.getProperty("user.dir") );
+            if(!loggerPath.canWrite()) {
+                loggerPath = new File( System.getProperty("user.home") );
+                if(!loggerPath.canWrite()) {
+                    throw new CouldNotCreateLoggerException("Failed to create logger");
+                }
+            }
 		}
 		
 		String format = instance.fileformat.format( new Date() );
@@ -111,7 +131,8 @@ public class Logger {
 
 		} catch (IOException e) {
 			System.err.println( "Could not create logger. Quitting!" );
-			System.exit( 1 );
+			//System.exit( 1 );
+            throw new CouldNotCreateLoggerException(String.format("Failed to create logger for file: %s",loggerFile));
 		}
 
 		out = new PrintWriter( fw );
