@@ -20,7 +20,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 
 import net.praqma.util.debug.appenders.Appender;
-import net.praqma.util.execute.CouldNotCreateLoggerException;
 
 public class Logger {
 
