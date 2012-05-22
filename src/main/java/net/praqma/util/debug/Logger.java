@@ -31,24 +31,11 @@ public class Logger {
 
 	private static Logger instance = null;
 	
-	private boolean append = true;
-	
-	private Date current;
-	
-	private static String filename = "logger_";
-	
-	private File loggerPath;
-	private File loggerFile;
-
 	private static SimpleDateFormat datetimeformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
-	private static SimpleDateFormat fileformat = new SimpleDateFormat( "yyyyMMdd" );
 	private static SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
 	private static SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy-MM-dd" );
 	
 	private static List<Appender> appenders = new CopyOnWriteArrayList<Appender>();
-
-	private FileWriter fw;
-	private PrintWriter out;
 	
 	private static boolean enabled = true;
 	private static LogLevel minLogLevel = LogLevel.DEBUG;
@@ -73,72 +60,7 @@ public class Logger {
 		
 		return instance;
 	}
-	
-    /**
-     * This method has now been modified. 
-     * 
-     * http://stackoverflow.com/questions/1554488/java-system-getpropertyuser-dir-gives-wrong-result-in-ubuntu
-     * 
-     * http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
-     * 
-     * It turns out that "user.dir" is the shell working directory, in case of a service we don't know exactly how that behaves.
-     * 
-     * If permissions currently does not allow the process to write to "user.dir". In some cases it would end up writing to "/" root.  
-     * 
-     * @return 
-     */
-	private boolean initialize() {
-		/* CWD */
-		if( loggerPath == null ) {
-			loggerPath = new File( System.getProperty("user.dir") );
-            if(!loggerPath.canWrite()) {
-                loggerPath = new File( System.getProperty("user.home") );
-                if(!loggerPath.canWrite()) {
-                    throw new CouldNotCreateLoggerException("Failed to create logger");
-                }
-            }
-		}
 		
-		String format = instance.fileformat.format( new Date() );
-		loggerFile = new File( loggerPath, filename + format + ".log" );
-		
-		/* Existence + creation */
-		if( !loggerPath.exists() ) {
-			boolean created = false;
-			try {
-				created = loggerFile.mkdirs();
-			} catch (Exception e) {
-				created = false;
-			}
-
-			if( !created ) {
-				return false;
-			}
-		}
-		
-		if( fw != null ) {
-			try {
-				fw.close();
-				out.close();
-			} catch (IOException e) {
-				System.err.println( "Could not close file writer and/or buffered writer." );
-			}
-		}
-
-		try {
-			fw = new FileWriter( loggerFile, append );
-
-		} catch (IOException e) {
-			System.err.println( "Could not create logger. Quitting!" );
-			//System.exit( 1 );
-            throw new CouldNotCreateLoggerException(String.format("Failed to create logger for file: %s",loggerFile));
-		}
-
-		out = new PrintWriter( fw );
-		
-		return true;
-	}
-	
 	public static void addAppender( Appender appender ) {
 		appenders.add( appender );
 	}
@@ -148,10 +70,6 @@ public class Logger {
 			appenders.remove( appender );
 			appender.getOut().close();
 		}
-	}
-
-	public static void setFilename( String filename1 ) {
-		filename = filename1;
 	}
 	
 	public static void enable() {
@@ -168,8 +86,7 @@ public class Logger {
 	
 	public static LogLevel getMinLogLevel() {
 		return minLogLevel;
-	}
-	
+	}	
 	
 	public String objectToString( Object t ) {
 		if( t instanceof Throwable ) {
@@ -330,10 +247,6 @@ public class Logger {
 	private void log( Object message, LogLevel level, String tag, int depth ) {
 		if( enabled && level.compareTo( minLogLevel ) >= 0 ) {
 			Date now = new Date();
-			
-			if( current == null ) {
-				instance.initialize();
-			}
 			
 			Map<String, String> keywords = new HashMap<String, String>();
 			
