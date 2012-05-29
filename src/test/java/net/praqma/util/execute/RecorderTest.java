@@ -7,7 +7,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 public class RecorderTest extends TestCase {
-
+    /*
 	@Test
 	public void testRecorder() {
 		CommandLine cli = CommandLine.getInstance();
@@ -18,4 +18,5 @@ public class RecorderTest extends TestCase {
 		
 		cli.run( "dir", new File( "c:/" ) );
 	}
+    */
 }
