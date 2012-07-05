@@ -244,7 +244,7 @@ public class Logger {
 		}
 	}
 	
-	private void log( Object message, LogLevel level, String tag, int depth ) {
+	private synchronized void log( Object message, LogLevel level, String tag, int depth ) {
 		if( enabled && level.compareTo( minLogLevel ) >= 0 ) {
 			Date now = new Date();
 			
