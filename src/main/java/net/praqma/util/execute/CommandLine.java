@@ -97,6 +97,8 @@ public class CommandLine implements CommandLineInterface {
 
 		// cmd = this.cmd + cmd;
 		this.cmd[last] = cmd;
+		
+		logger.debug( "$ " + cmd );
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder( this.cmd );
