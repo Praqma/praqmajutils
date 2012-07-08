@@ -24,8 +24,6 @@ public class CommandLine implements CommandLineInterface {
 	private String[] cmd = null;
 	private int last = 0;
 
-	private static Integer counter = 0;
-
 	private static Recorder recorder;
 	
 	public void setRecorder( Recorder recorder ) {
@@ -90,18 +88,12 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws CommandLineException
 	 * @throws AbnormalProcessTerminationException
 	 */
-	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
+    @Override
+	public synchronized CmdResult run( String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
 		/*
 		 * String[] cmds = new String[3]; cmds[0] = "cmd.exe"; cmds[1] = "/C";
 		 * cmds[2] = cmd;
 		 */
-
-		int mycounter = 0;
-		synchronized( counter ) {
-			mycounter = counter++;
-		}
-
-		logger.debug( "$(" + mycounter + ") " + cmd );
 
 		// cmd = this.cmd + cmd;
 		this.cmd[last] = cmd;
@@ -162,10 +154,6 @@ public class CommandLine implements CommandLineInterface {
 			p.getErrorStream().close();
 			p.getInputStream().close();
 
-			/* we're done, decrement the counter */
-			synchronized( counter ) {
-				mycounter = counter--;
-			}
 			
 			/* If enabled, record the command */
 			if( recorder != null ) {
