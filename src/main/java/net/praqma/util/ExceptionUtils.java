@@ -51,6 +51,26 @@ public abstract class ExceptionUtils {
 		return previous;
 	}
 	
+	public static Throwable unpackFrom( Class<? extends Throwable> parentClass, Throwable throwable ) {
+		
+		Throwable origin = throwable;
+		
+		while( throwable != null ) {
+			if( throwable.getClass().isAssignableFrom( parentClass ) ) {
+				Throwable child = throwable.getCause();
+				if( child != null ) {
+					return child;
+				} else {
+					return throwable;
+				}
+			}
+			
+			throwable = throwable.getCause();
+		}
+		
+		return origin;
+	}
+	
 	public static Throwable unpack( Class<? extends Throwable> parentClass, Throwable throwable ) {
 		/* When cause is no longer assignable from end */
 		if( !throwable.getClass().isAssignableFrom( parentClass ) ) {
