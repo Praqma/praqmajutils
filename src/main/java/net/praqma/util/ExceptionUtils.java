@@ -51,12 +51,18 @@ public abstract class ExceptionUtils {
 		return previous;
 	}
 	
-	public static Throwable unpackFrom( Class<? extends Throwable> parentClass, Throwable throwable ) {
+	/**
+	 * Unpack an exception from a given throwable. Returning the cause of the first matched end throwable. 
+	 * @param from - Stopping condition
+	 * @param throwable - The throwable
+	 * @return Cause of the first matched throwable
+	 */
+	public static Throwable unpackFrom( Class<? extends Throwable> from, Throwable throwable ) {
 		
 		Throwable origin = throwable;
 		
 		while( throwable != null ) {
-			if( throwable.getClass().isAssignableFrom( parentClass ) ) {
+			if( throwable.getClass().isAssignableFrom( from ) ) {
 				Throwable child = throwable.getCause();
 				if( child != null ) {
 					return child;
