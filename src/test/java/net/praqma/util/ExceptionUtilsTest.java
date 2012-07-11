@@ -50,4 +50,47 @@ public class ExceptionUtilsTest {
 		
 		assertEquals( e, t );
 	}
+	
+	@Test
+	public void unpackFrom() {
+		Exception inner = new ClassNotFoundException( "Inner", null );
+		Exception e = new ExecutionException( "Outer", new IOException( "Middle", inner ) );
+		
+		Throwable t = ExceptionUtils.unpackFrom( IOException.class, e );
+		
+		assertEquals( inner, t );
+	}
+	
+	@Test
+	public void unpackFromNoEndMatch() {
+		Exception inner = new ExecutionException( "Inner", null );
+		Exception middle = new ExecutionException( "Middle", inner );
+		Exception outer = new ExecutionException( "Outer", middle );
+		
+		Throwable t = ExceptionUtils.unpackFrom( IOException.class, outer );
+		
+		assertEquals( outer, t );
+	}
+	
+	@Test
+	public void unpackFromEndLast() {
+		Exception inner = new IOException( "Inner", null );
+		Exception middle = new ExecutionException( "Middle", inner );
+		Exception outer = new ExecutionException( "Outer", middle );
+		
+		Throwable t = ExceptionUtils.unpackFrom( IOException.class, outer );
+		
+		assertEquals( inner, t );
+	}
+	
+	@Test
+	public void unpackFromEnds() {
+		Exception inner = new IOException( "Inner", null );
+		Exception middle = new IOException( "Middle", inner );
+		Exception outer = new IOException( "Outer", middle );
+		
+		Throwable t = ExceptionUtils.unpackFrom( IOException.class, outer );
+		
+		assertEquals( middle, t );
+	}
 }
