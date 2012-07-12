@@ -44,6 +44,8 @@ public class XML {
     public XML() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
+        factory.setXIncludeAware( true );
+        
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
@@ -56,6 +58,7 @@ public class XML {
     public XML( String roottag ) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
+        factory.setXIncludeAware( true );
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
@@ -71,6 +74,8 @@ public class XML {
     public XML( File xmlfile ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
+        factory.setXIncludeAware( true );
+        
         InputStream is = new FileInputStream( xmlfile );
         DocumentBuilder builder;
         try {
@@ -86,6 +91,8 @@ public class XML {
     public XML( File xmlfile, String roottag ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
+        factory.setXIncludeAware( true );
+        
         InputStream is = new FileInputStream( xmlfile );
         DocumentBuilder builder;
         try {
@@ -114,6 +121,8 @@ public class XML {
     public XML( InputStream is ) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
+        factory.setXIncludeAware( true );
+
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
