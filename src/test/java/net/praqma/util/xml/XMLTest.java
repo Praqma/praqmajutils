@@ -12,7 +12,7 @@ public class XMLTest {
 	
 	public static final String newLine = System.getProperty( "line.separator" );
 
-	public static final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + newLine + "<data xmlns=\"foo\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">" + newLine + "\tHello, world." + newLine + newLine + "</data>" + newLine;
+	public static final String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + newLine + "<data xmlns=\"foo\" xmlns:xi=\"http://www.w3.org/2001/XInclude\">" + newLine + "\tHello, world." + newLine + "</data>" + newLine;
 	
 	@Test
 	public void includeAware() throws IOException {
