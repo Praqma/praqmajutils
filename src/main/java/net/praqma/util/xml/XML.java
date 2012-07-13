@@ -42,9 +42,15 @@ public class XML {
     protected Logger logger = Logger.getLogger();
     
     public XML() {
+    	this( false );
+    }
+    
+    public XML( boolean XIncludeAware ) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
-        factory.setXIncludeAware( true );
+        if( XIncludeAware ) {
+        	factory.setXIncludeAware( true );
+        }
         
         DocumentBuilder builder;
         try {
@@ -56,9 +62,16 @@ public class XML {
     }
 
     public XML( String roottag ) {
+    	this( roottag, false );
+    }
+    
+    public XML( String roottag, boolean XIncludeAware ) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
-        factory.setXIncludeAware( true );
+        if( XIncludeAware ) {
+        	factory.setXIncludeAware( true );
+        }
+        
         DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
@@ -72,9 +85,15 @@ public class XML {
     }
     
     public XML( File xmlfile ) throws IOException {
+    	this( xmlfile, false );
+    }
+    
+    public XML( File xmlfile, boolean XIncludeAware ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
-        factory.setXIncludeAware( true );
+        if( XIncludeAware ) {
+        	factory.setXIncludeAware( true );
+        }
         
         InputStream is = new FileInputStream( xmlfile );
         DocumentBuilder builder;
@@ -89,9 +108,15 @@ public class XML {
     }
 
     public XML( File xmlfile, String roottag ) throws IOException {
+    	this( xmlfile, roottag, false );
+    }
+    
+    public XML( File xmlfile, String roottag, boolean XIncludeAware ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
-        factory.setXIncludeAware( true );
+        if( XIncludeAware ) {
+        	factory.setXIncludeAware( true );
+        }
         
         InputStream is = new FileInputStream( xmlfile );
         DocumentBuilder builder;
@@ -119,9 +144,15 @@ public class XML {
     }
 
     public XML( InputStream is ) {
+    	this( is, false );
+    }
+    
+    public XML( InputStream is, boolean XIncludeAware ) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
-        factory.setXIncludeAware( true );
+        if( XIncludeAware ) {
+        	factory.setXIncludeAware( true );
+        }
 
         DocumentBuilder builder;
         try {
