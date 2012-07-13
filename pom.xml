@@ -3,7 +3,7 @@
 	<groupId>net.praqma</groupId>
 	<artifactId>praqmajutils</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1.23-SNAPSHOT</version>
+	<version>0.1.23</version>
 	<name>Praqma Java Utils</name>
 	<url>http://maven.apache.org</url>
 
