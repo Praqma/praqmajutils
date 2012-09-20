@@ -1,5 +1,8 @@
 package net.praqma.util.option;
 
+import net.praqma.logging.LoggingUtil;
+import net.praqma.logging.PraqmaticFormatter;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,12 +10,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import net.praqma.util.debug.Logger;
-import net.praqma.util.debug.Logger.LogLevel;
-import net.praqma.util.debug.appenders.Appender;
-import net.praqma.util.debug.appenders.FileAppender;
-import net.praqma.util.debug.appenders.StreamAppender;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * An Option has a longName and an optional shortName. The longName is prefixed
@@ -32,8 +31,7 @@ import net.praqma.util.debug.appenders.StreamAppender;
  * 
  */
 public class Options {
-	private static Logger logger = Logger.getLogger();
-	private StreamAppender out = new StreamAppender( System.out );
+	private static Logger logger = Logger.getLogger( Options.class.getName() );
 	
 	private List<Option> options = new ArrayList<Option>();
 	private String syntax = "";
@@ -65,8 +63,7 @@ public class Options {
 	}
 	
 	private void initialize() {
-        out.setTemplate( "[%level]%space %message%newline" );
-        Logger.addAppender( out );
+        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
         
         registerShutdownHook();
 	}
@@ -81,8 +78,7 @@ public class Options {
 	}
 
 	protected void shutdown() {
-		logger.debug( "Shutting down" );
-		Logger.removeAppender( out );
+		logger.fine( "Shutting down" );
 	}
 
 	public void setDefaultOptions() {
@@ -172,13 +168,13 @@ public class Options {
 		setTemplate();
 		
         if( isVerbose() ) {
-        	out.setMinimumLevel( LogLevel.VERBOSE );
+        	LoggingUtil.changeLoggerLevel( Level.CONFIG );
         } else {
-        	out.setMinimumLevel( LogLevel.INFO );
+            LoggingUtil.changeLoggerLevel( Level.INFO );
         }
         
         if( odebug.isUsed() ) {
-        	out.setMinimumLevel( LogLevel.DEBUG );
+            LoggingUtil.changeLoggerLevel( Level.FINEST );
         }
 	}
 
@@ -204,11 +200,13 @@ public class Options {
 	
 	public void setTemplate() {
 		if( otemplate.isUsed() ) {
-			out.setTemplate( otemplate.getString( true ) );
+            LoggingUtil.changeLoggerFormat( new PraqmaticFormatter( otemplate.getString() ) );
 		}
 	}
 	
 	private void logfileUsed() {
+
+        /*
 		if( ologfile != null && ologfile.used ) {
 			try {
 				List<String> as = ologfile.getStrings();
@@ -240,6 +238,7 @@ public class Options {
 				logger.warning( "Could not add file appender " + ologfile.getString());
 			}
 		}
+		*/
 	}
 
 	public void checkOptions() throws Exception {
