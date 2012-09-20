@@ -15,7 +15,7 @@ public class CommandTest extends TestSuite {
 	@Test
 	public void testRunCommand() {
 
-		String cmd = "java";
+		String cmd = "java -version";
 
 		CmdResult res = cli.run(cmd);
 
@@ -24,7 +24,7 @@ public class CommandTest extends TestSuite {
 
 	@Test
 	public void testRunCommandDir() {
-		String cmd = "java";
+		String cmd = "java -version";
 
 		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")));
@@ -34,7 +34,7 @@ public class CommandTest extends TestSuite {
 
 	@Test
 	public void testRunCommandDirMerge() {
-		String cmd = "java";
+		String cmd = "java -version";
 
 		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")), true);
@@ -44,7 +44,7 @@ public class CommandTest extends TestSuite {
 
 	@Test
 	public void testRunCommandDirMergeIgnore() {
-		String cmd = "java";
+		String cmd = "java -version";
 
 		CmdResult res = cli.run(cmd,
 				new File(System.getProperty("user.home")), true);
