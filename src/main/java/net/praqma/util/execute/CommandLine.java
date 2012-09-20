@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
-
-import net.praqma.util.debug.Logger;
+import java.util.logging.Logger;
 
 /**
  * CLI class
@@ -14,7 +13,7 @@ import net.praqma.util.debug.Logger;
  * 
  */
 public class CommandLine implements CommandLineInterface {
-	protected Logger logger = Logger.getLogger();
+	protected Logger logger = Logger.getLogger( CommandLine.class.getName() );
 	protected static final String linesep = System.getProperty( "line.separator" );
 
 	private static CommandLine instance = new CommandLine();
@@ -32,9 +31,9 @@ public class CommandLine implements CommandLineInterface {
 
 	private CommandLine() {
 		os = System.getProperty( "os.name" );
-		logger.debug( "Running on " + os );
+		logger.finer( "Running on " + os );
 		if( os.matches( "^.*(?i)windows.*$" ) ) {
-			logger.debug( "Using special windows environment" );
+			logger.finer( "Using special windows environment" );
 			cmd = new String[3];
 			cmd[0] = "cmd.exe";
 			cmd[1] = "/C";
@@ -98,7 +97,7 @@ public class CommandLine implements CommandLineInterface {
 		// cmd = this.cmd + cmd;
 		this.cmd[last] = cmd;
 		
-		logger.debug( "$ " + cmd );
+		logger.fine( "$ " + cmd );
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder( this.cmd );
@@ -106,13 +105,13 @@ public class CommandLine implements CommandLineInterface {
 			// pb.environment().put( key, value )
 
 			if( dir != null ) {
-				logger.debug( "Executing command in " + dir );
+				logger.fine( "Executing command in " + dir );
 				pb.directory( dir );
 			}
 
 			/* If any variables, put them in the environment */
 			if( variables != null && variables.size() > 0 ) {
-				logger.debug( "CommandLine: " + variables );
+				logger.fine( "CommandLine: " + variables );
 				Map<String, String> env = pb.environment();
 				Set<String> keys = variables.keySet();
 				for( String key : keys ) {
@@ -143,13 +142,13 @@ public class CommandLine implements CommandLineInterface {
 			try {
 				output.join();
 			} catch( InterruptedException e ) {
-				logger.error( "Could not join output thread" );
+				logger.severe( "Could not join output thread" );
 			}
 
 			try {
 				errors.join();
 			} catch( InterruptedException e ) {
-				logger.error( "Could not join errors thread" );
+				logger.severe( "Could not join errors thread" );
 			}
 
 			/* Closing streams */
@@ -168,7 +167,7 @@ public class CommandLine implements CommandLineInterface {
 
 			/* Abnormal process termination, with error out as message */
 			if( exitValue != 0 ) {
-				logger.debug( "Abnormal process termination(" + exitValue + "): " + output.sres.toString() );
+				logger.fine( "Abnormal process termination(" + exitValue + "): " + output.sres.toString() );
 
 				/*
 				 * Only throw the exception if it is not ignored, this is
