@@ -97,7 +97,7 @@ public class CommandLine implements CommandLineInterface {
 		// cmd = this.cmd + cmd;
 		this.cmd[last] = cmd;
 		
-		logger.fine( "$ " + cmd );
+		logger.config( "$ " + cmd );
 
 		try {
 			ProcessBuilder pb = new ProcessBuilder( this.cmd );
@@ -105,7 +105,7 @@ public class CommandLine implements CommandLineInterface {
 			// pb.environment().put( key, value )
 
 			if( dir != null ) {
-				logger.fine( "Executing command in " + dir );
+				logger.config( "Executing command in " + dir );
 				pb.directory( dir );
 			}
 
