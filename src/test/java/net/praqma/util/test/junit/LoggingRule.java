@@ -30,12 +30,7 @@ public class LoggingRule implements TestRule {
     }
 
     private void before() {
-        LoggingUtil.changeLoggerLevel( level );
-        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
-
-        for( String ln : this.loggerNames ) {
-
-        }
+        LoggingUtil.setPraqmaticHandler( level, loggerNames );
     }
 
     private void after() {
