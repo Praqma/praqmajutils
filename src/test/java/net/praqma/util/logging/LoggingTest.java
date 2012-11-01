@@ -18,4 +18,21 @@ public class LoggingTest {
         logger.fine("FINE");
         logger.info("INFO");
     }
+
+
+
+    @Test
+    public void test2() {
+        Logger logger = Logger.getLogger( "net.praqma.test" );
+
+        LoggingUtil.setPraqmaticHandler( Level.ALL, "net.praqma.test" );
+
+        logger.info("INF222O");
+
+        logger.fine("->" + logger.getParent());
+        logger.severe("->" + logger.getParent().getFilter());
+
+        logger.fine("FINE");
+        logger.info("INFO");
+    }
 }

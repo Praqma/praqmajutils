@@ -6,6 +6,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -14,16 +15,27 @@ public class LoggingRule implements TestRule {
 
     private Level level;
     private List<Handler> handlers;
+    private List<String> loggerNames = new LinkedList<String>();
 
     public LoggingRule( Level level ) {
         this.level = level;
+    }
+
+    public LoggingRule( Level level, String ... loggerNames ) {
+        this.level = level;
+
+        for( String ln : loggerNames ) {
+            this.loggerNames.add( ln );
+        }
     }
 
     private void before() {
         LoggingUtil.changeLoggerLevel( level );
         LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
 
+        for( String ln : this.loggerNames ) {
 
+        }
     }
 
     private void after() {
