@@ -6,13 +6,17 @@ import java.util.logging.*;
 public class LoggingUtil {
     private LoggingUtil() {}
 
+    public static void changeLoggerFormat( ) {
+        changeLoggerFormat( Logger.getLogger( "" ), new PraqmaticFormatter() );
+    }
+
     public static void changeLoggerFormat( Formatter formatter ) {
         changeLoggerFormat( Logger.getLogger( "" ), formatter );
     }
 
     public static void changeLoggerFormat( Logger logger, Formatter formatter ) {
         for( Handler h : logger.getHandlers() ) {
-            h.setFormatter( new PraqmaticFormatter() );
+            h.setFormatter( formatter );
         }
     }
 
@@ -26,5 +30,13 @@ public class LoggingUtil {
         for( Handler h : logger.getHandlers() ) {
             h.setLevel( level );
         }
+    }
+
+    public static void setHandler( Handler handler ) {
+        setHandler( Logger.getLogger( "" ), handler );
+    }
+
+    public static void setHandler( Logger logger, Handler handler ) {
+        logger.addHandler( handler );
     }
 }

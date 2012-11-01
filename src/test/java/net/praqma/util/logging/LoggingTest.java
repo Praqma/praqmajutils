@@ -12,7 +12,7 @@ public class LoggingTest {
     @Test
     public void test() {
         LoggingUtil.changeLoggerLevel( Level.ALL );
-        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter());
+        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
 
         Logger logger = Logger.getLogger( "snade" );
         logger.fine("FINE");
