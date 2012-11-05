@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
-public class PraqmaticFormatter extends Formatter {
+public class PraqmaticLogFormatter extends Formatter {
 	
 	public String format = "";
 	
@@ -14,9 +14,9 @@ public class PraqmaticFormatter extends Formatter {
 	
 	private MessageFormat messageFormat = new MessageFormat( "{3,date,hh:mm:ss} [{1}]{5} {6}.{7}, {99}: {4} \n" );
 	
-	public PraqmaticFormatter() {}
+	public PraqmaticLogFormatter() {}
 	
-	public PraqmaticFormatter( String format ) {
+	public PraqmaticLogFormatter( String format ) {
 		messageFormat = new MessageFormat( format );
 		this.format = format;
 	}

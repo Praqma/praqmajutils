@@ -1,15 +1,10 @@
 package net.praqma.util.option;
 
 import net.praqma.logging.LoggingUtil;
-import net.praqma.logging.PraqmaticFormatter;
+import net.praqma.logging.PraqmaticLogFormatter;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +58,7 @@ public class Options {
 	}
 	
 	private void initialize() {
-        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
+        LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter() );
         
         registerShutdownHook();
 	}
@@ -200,7 +195,7 @@ public class Options {
 	
 	public void setTemplate() {
 		if( otemplate.isUsed() ) {
-            LoggingUtil.changeLoggerFormat( new PraqmaticFormatter( otemplate.getString() ) );
+            LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter( otemplate.getString() ) );
 		}
 	}
 	

@@ -10,7 +10,7 @@ public class LoggingUtil {
     private LoggingUtil() {}
 
     public static void changeLoggerFormat( ) {
-        changeLoggerFormat( Logger.getLogger( "" ), new PraqmaticFormatter() );
+        changeLoggerFormat( Logger.getLogger( "" ), new PraqmaticLogFormatter() );
     }
 
     public static void changeLoggerFormat( Formatter formatter ) {
@@ -42,7 +42,7 @@ public class LoggingUtil {
     public static void setPraqmaticHandler( Level level, List<String> names ) {
         removeRootHandlers();
 
-        PraqmaticHandler h = new PraqmaticHandler( System.out, new PraqmaticFormatter() );
+        PraqmaticLogHandler h = new PraqmaticLogHandler( System.out, new PraqmaticLogFormatter() );
         h.addTargets( level, names );
         h.setLevel( Level.ALL );
     }

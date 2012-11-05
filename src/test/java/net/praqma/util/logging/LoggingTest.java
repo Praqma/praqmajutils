@@ -1,7 +1,7 @@
 package net.praqma.util.logging;
 
 import net.praqma.logging.LoggingUtil;
-import net.praqma.logging.PraqmaticFormatter;
+import net.praqma.logging.PraqmaticLogFormatter;
 import org.junit.Test;
 
 import java.util.logging.Level;
@@ -12,7 +12,7 @@ public class LoggingTest {
     @Test
     public void test() {
         LoggingUtil.changeLoggerLevel( Level.ALL );
-        LoggingUtil.changeLoggerFormat( new PraqmaticFormatter() );
+        LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter() );
 
         Logger logger = Logger.getLogger( "snade" );
         logger.fine("FINE");

@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.*;
 
-public class PraqmaticHandler extends StreamHandler {
+public class PraqmaticLogHandler extends StreamHandler {
 
     private int threadId;
-    private Set<LoggingTarget> targets = new HashSet<LoggingTarget>();
+    private Set<LoggerTarget> targets = new HashSet<LoggerTarget>();
     private OutputStream out;
 
-    public PraqmaticHandler( OutputStream fos, Formatter formatter ) {
+    public PraqmaticLogHandler( OutputStream fos, Formatter formatter ) {
         super( fos, formatter );
         this.out = fos;
 
@@ -26,7 +26,7 @@ public class PraqmaticHandler extends StreamHandler {
         return out;
     }
 
-    public void addTarget( LoggingTarget target ) {
+    public void addTarget( LoggerTarget target ) {
         targets.add( target );
 
         /* Creating or updating existing loggers */
@@ -43,20 +43,20 @@ public class PraqmaticHandler extends StreamHandler {
         }
     }
 
-    public void addTargets( List<LoggingTarget> targets ) {
-        for( LoggingTarget t : targets ) {
+    public void addTargets( List<LoggerTarget> targets ) {
+        for( LoggerTarget t : targets ) {
             addTarget( t );
         }
     }
 
     public void addTargets( Level level, List<String> targets ) {
         for( String t : targets ) {
-            addTarget( new LoggingTarget( t, level ) );
+            addTarget( new LoggerTarget( t, level ) );
         }
     }
 
     public void removeTargets() {
-        for( LoggingTarget t : targets ) {
+        for( LoggerTarget t : targets ) {
             Logger logger = LogManager.getLogManager().getLogger( t.getName() );
             if( logger != null ) {
                 logger.removeHandler( this );
@@ -77,7 +77,7 @@ public class PraqmaticHandler extends StreamHandler {
     }
 
     private boolean checkTargets( LogRecord lr ) {
-        for( LoggingTarget target : targets ) {
+        for( LoggerTarget target : targets ) {
             if( checkTarget( target, lr ) ) {
                 return true;
             }
@@ -86,7 +86,7 @@ public class PraqmaticHandler extends StreamHandler {
         return false;
     }
 
-    private boolean checkTarget( LoggingTarget target, LogRecord lr ) {
+    private boolean checkTarget( LoggerTarget target, LogRecord lr ) {
 
         if( lr.getLevel().intValue() < target.getLogLevel() ) {
             return false;
