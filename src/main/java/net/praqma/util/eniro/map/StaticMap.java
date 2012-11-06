@@ -35,14 +35,38 @@ public class StaticMap {
         return setWidth( width ).setHeight( height );
     }
 
+    public StaticMap setBoundingBox( Point lowerLeft, Point upperRight ) {
+        url.addKeyValues( "bbox", lowerLeft, upperRight );
+
+        return this;
+    }
+
+    public StaticMap setCenter( Point center ) {
+        url.addKeyValue( "cc", center );
+
+        return this;
+    }
+
+    public StaticMap setZoom( int value ) {
+        url.addKeyValue( "zoom", value );
+
+        return this;
+    }
+
     public StaticMap addPoint( Point point ) {
         url.addKeyValue( "p", point );
 
         return this;
     }
 
+    public StaticMap addPoint( Point point, String name ) {
+        url.addKeyValues( "p", point.y+","+point.x, name );
+
+        return this;
+    }
+
     public StaticMap addPoint( double x, double y, String name ) {
-        url.addKeyValues( "p", y + "," + x, name, null );
+        url.addKeyValues( "p", y + "," + x, name );
 
         return this;
     }

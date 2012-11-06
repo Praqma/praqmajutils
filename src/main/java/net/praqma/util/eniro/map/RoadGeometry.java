@@ -42,24 +42,16 @@ public class RoadGeometry {
 
 
         int returnCode = client.executeMethod( get );
-        System.out.println( "CODE=" + returnCode );
         if( returnCode == HttpStatus.SC_NOT_IMPLEMENTED ) {
-            throw new IllegalStateException( "REUTRN CODELDLE " + returnCode );
+            throw new IllegalStateException( "Return code " + returnCode );
         } else {
             BufferedReader br = new BufferedReader(new InputStreamReader( get.getResponseBodyAsStream() ) );
             String jsonLine = br.readLine();
             JsonElement jelement = new JsonParser().parse(jsonLine);
 
-            //System.out.println( jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ).getAsJsonArray( "coordinates" ) );
-            //System.out.println( jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ).get( 0 ).getAsJsonObject().getAsJsonObject( "geometry" ) );
             JsonObject geometry = jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ).get( 0 ).getAsJsonObject().getAsJsonObject( "geometry" );
 
-            System.out.println( "Geo: " + geometry );
-
             JsonArray coords = geometry.getAsJsonArray( "coordinates" );
-
-            System.out.println( "Coords: " + coords );
-            System.out.println( "Coords: " + coords.size() );
 
             return coords;
         }
