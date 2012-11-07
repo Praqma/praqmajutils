@@ -7,6 +7,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
 /**
  * User: cwolfgang
  * Date: 05-11-12
@@ -15,9 +19,14 @@ import java.util.List;
 public class RoadGeometryTest {
 
     @Test
-    public void test1() throws IOException {
+    public void test1() throws IOException, EniroMapException {
         JsonArray points = RoadGeometry.get( "Ejbyvej, 2610" );
+        assertNotNull( points );
+        assertThat( points.size(), is( 10 ) );
+    }
 
-        System.out.println( points );
+    @Test( expected = EniroMapException.class )
+    public void test2() throws IOException, EniroMapException {
+        JsonArray points = RoadGeometry.get( "Ingenvej, 2610" );
     }
 }

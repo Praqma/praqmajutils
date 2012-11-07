@@ -26,7 +26,7 @@ public class RoadGeometry {
     public static String url = "http://map.krak.dk/api/geocode";
 
 
-    public static JsonArray get( String roadName ) throws IOException {
+    public static JsonArray get( String roadName ) throws IOException, EniroMapException {
         JsonObject data = new JsonObject();
 
         data.addProperty( "country", "dk" );
@@ -49,7 +49,16 @@ public class RoadGeometry {
             String jsonLine = br.readLine();
             JsonElement jelement = new JsonParser().parse(jsonLine);
 
-            JsonObject geometry = jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ).get( 0 ).getAsJsonObject().getAsJsonObject( "geometry" );
+            if( jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ) == null ) {
+                throw new EniroMapException( "No locations for " + roadName );
+            }
+
+            JsonObject geometry = null;
+            try {
+                geometry = jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ).get( 0 ).getAsJsonObject().getAsJsonObject( "geometry" );
+            } catch( Exception e ) {
+                throw new EniroMapException( "Unable to get geometry from result", e );
+            }
 
             JsonArray coords = geometry.getAsJsonArray( "coordinates" );
 
