@@ -71,7 +71,7 @@ public class Net {
 
 	public static double ping( String host, int timeout ) throws IOException {
 		try {
-			StopWatch sw = StopWatch.get( "ping" );
+			StopWatch sw = new StopWatch();
 
 			sw.start();
 			String out = "";
@@ -108,7 +108,7 @@ public class Net {
 	}
 	
 	public static double getPing( String host ) {
-		StopWatch sw = StopWatch.get( "ping" );
+		StopWatch sw = new StopWatch();
 
 		sw.start();
 		try {
