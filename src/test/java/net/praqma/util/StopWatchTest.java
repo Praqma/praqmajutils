@@ -11,20 +11,20 @@ public class StopWatchTest {
 
 	@Test
 	public void testGet() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		assertNotNull( sw );
 	}
 
 	@Test
 	public void testStart() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		assertTrue( sw.getStartTime() > 0 );
 	}
 
 	@Test
 	public void testStop() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		sw.stop();
 		assertTrue( sw.getEndTime() > 0 );
@@ -32,7 +32,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testGetTime() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		sw.stop();
 		assertTrue( sw.getTime() > 0 );
@@ -40,7 +40,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testReset() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		sw.stop();
 		sw.reset();
@@ -50,7 +50,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testGetSeconds() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		sw.stop();
 
@@ -59,7 +59,7 @@ public class StopWatchTest {
 
 	@Test
 	public void testToSeconds() {
-		StopWatch sw = StopWatch.get( "test" );
+		StopWatch sw = new StopWatch();
 		sw.start();
 		for( int i = 0; i < 1000000; i++ ) {
 
@@ -73,7 +73,7 @@ public class StopWatchTest {
 	
 	@Test
 	public void multipleTasks() throws InterruptedException {
-		StopWatch sw = StopWatch.get( "test1" );
+		StopWatch sw = new StopWatch();
 		
 		sw.start( "title1" );
 		Thread.sleep( 100 );
@@ -90,7 +90,7 @@ public class StopWatchTest {
 	
 	@Test
 	public void multipleTasks2() throws InterruptedException {
-		StopWatch sw = StopWatch.get( "test1" );
+		StopWatch sw = new StopWatch();
 		
 		sw.start( "title1" );
 		Thread.sleep( 100 );

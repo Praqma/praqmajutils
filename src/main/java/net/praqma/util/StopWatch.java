@@ -1,12 +1,10 @@
 package net.praqma.util;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class StopWatch {
-	private static Map<String, StopWatch> sws = new HashMap<String, StopWatch>();
+
 	private static final String SEP = System.getProperty( "line.separator" );
 	
 	private class Task {
@@ -26,22 +24,8 @@ public class StopWatch {
 	private List<Task> tasks = new LinkedList<Task>();
 	private Task currentTask;
 
-	private StopWatch() {
-
-	}
-
-	public static StopWatch get( String name ) {
-		StopWatch sw = null;
-
-		if( !sws.containsKey( name ) ) {
-			sw = new StopWatch();
-			sws.put( name, sw );
-			sw.initial = System.nanoTime();
-		} else {
-			sw = sws.get( name );
-		}
-
-		return sw;
+	public StopWatch() {
+        this.initial = System.nanoTime();
 	}
 
 	private long initial = 0;
