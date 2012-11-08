@@ -3,8 +3,10 @@ package net.praqma.util.eniro.map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.praqma.util.net.url.UrlBuilder;
+import org.apache.http.client.utils.URIBuilder;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,8 +16,10 @@ import java.util.List;
  * Time: 21:31
  */
 public class StaticMap {
-    public static final String URL = "http://kartor.eniro.se/api/statmap";
+    //public static final String URL = "http://kartor.eniro.se/api/statmap";
     private UrlBuilder url = new UrlBuilder( "kartor.eniro.se" ).addSubPage( "api" ).addSubPage( "statmap" );
+
+    private URIBuilder builder;
 
     public StaticMap setWidth( int width ) {
         url.addKeyValue( "iwidth", width );
