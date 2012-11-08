@@ -10,6 +10,10 @@ public class EniroMapException extends Exception {
         super( m );
     }
 
+    public EniroMapException( Exception e ) {
+        super( e );
+    }
+
     public EniroMapException( String m, Exception e ) {
         super( m, e );
     }

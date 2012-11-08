@@ -1,10 +1,10 @@
 package net.praqma.util.eniro.map;
 
 import com.google.gson.JsonArray;
-import org.apache.commons.httpclient.URIException;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
@@ -19,14 +19,14 @@ import static org.junit.Assert.assertThat;
 public class RoadGeometryTest {
 
     @Test
-    public void test1() throws IOException, EniroMapException {
+    public void test1() throws IOException, EniroMapException, URISyntaxException {
         JsonArray points = RoadGeometry.get( "Ejbyvej, 2610" );
         assertNotNull( points );
         assertThat( points.size(), is( 10 ) );
     }
 
     @Test( expected = EniroMapException.class )
-    public void test2() throws IOException, EniroMapException {
+    public void test2() throws IOException, EniroMapException, URISyntaxException {
         JsonArray points = RoadGeometry.get( "Ingenvej, 2610" );
     }
 }

@@ -3,8 +3,6 @@ package net.praqma.util.eniro.map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.praqma.util.net.url.UrlBuilder;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 
 import java.io.IOException;
 import java.util.LinkedList;
