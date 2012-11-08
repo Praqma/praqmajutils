@@ -38,7 +38,9 @@ public class LoggingRule implements TestRule {
 
     public void checkLoggingOption() {
         String level = System.getProperty( "loggingLevel", "INFO" ).toUpperCase();
+        System.out.println( "LEVEL IS " + level );
         this.level = Level.parse( level );
+        System.out.println( "THIS LEVEL IS " + this.level );
     }
 
     private void before() {
