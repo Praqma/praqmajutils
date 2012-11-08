@@ -28,6 +28,19 @@ public class LoggingRule implements TestRule {
         }
     }
 
+    public LoggingRule( String ... loggerNames ) {
+        checkLoggingOption();
+
+        for( String ln : loggerNames ) {
+            this.loggerNames.add( ln );
+        }
+    }
+
+    public void checkLoggingOption() {
+        String level = System.getProperty( "loggingLevel", "INFO" ).toUpperCase();
+        this.level = Level.parse( level );
+    }
+
     private void before() {
         LoggingUtil.setPraqmaticHandler( level, loggerNames );
     }
