@@ -1,5 +1,9 @@
 package net.praqma.logging;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,6 +47,16 @@ public class LoggingUtil {
         removeRootHandlers();
 
         PraqmaticLogHandler h = new PraqmaticLogHandler( System.out, new PraqmaticLogFormatter() );
+        h.addTargets( level, names );
+        h.setLevel( Level.ALL );
+    }
+
+    public static void setPraqmaticHandler( Level level, List<String> names, File outputFile ) throws FileNotFoundException {
+        removeRootHandlers();
+
+        OutputStream out = new FileOutputStream( outputFile );
+
+        PraqmaticLogHandler h = new PraqmaticLogHandler( out, new PraqmaticLogFormatter() );
         h.addTargets( level, names );
         h.setLevel( Level.ALL );
     }
