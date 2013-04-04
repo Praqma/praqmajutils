@@ -9,18 +9,26 @@ import java.util.logging.LogRecord;
 
 public class PraqmaticLogFormatter extends Formatter {
 
+    public static final String NORMAL_FORMAT = "{3,date,HH:mm:ss} [{1}]{5} {6}.{7}, {19}: {4} \n{8}";
+    public static final String SMALL_FORMAT = "{3,date,HH:mm:ss} [{1}]{5}: {4} \n{8}";
+    public static final String TINY_FORMAT = "[{1}]{5} {4} \n{8}";
+
     public String format = "";
 
     private static final int width = 8;
     private boolean enableLineNumbers = true;
 
-    private MessageFormat messageFormat = new MessageFormat( "{3,date,HH:mm:ss} [{1}]{5} {6}.{7}, {19}: {4} \n{8}" );
+    private MessageFormat messageFormat = new MessageFormat( NORMAL_FORMAT );
 
     public PraqmaticLogFormatter() {}
 
     public PraqmaticLogFormatter( String format ) {
         messageFormat = new MessageFormat( format );
         this.format = format;
+    }
+
+    public void setFormat( String format ) {
+        this.messageFormat = new MessageFormat( format );
     }
 
     @Override

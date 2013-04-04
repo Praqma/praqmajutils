@@ -26,6 +26,10 @@ public class PraqmaticLogHandler extends StreamHandler {
         return out;
     }
 
+    public int getThreadId() {
+        return threadId;
+    }
+
     public void addTarget( LoggerTarget target ) {
         targets.add( target );
 

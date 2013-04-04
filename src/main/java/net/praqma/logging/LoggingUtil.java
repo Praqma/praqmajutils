@@ -44,9 +44,13 @@ public class LoggingUtil {
     }
 
     public static void setPraqmaticHandler( Level level, List<String> names ) {
+        setPraqmaticHandler( level, names, PraqmaticLogFormatter.NORMAL_FORMAT );
+    }
+
+    public static void setPraqmaticHandler( Level level, List<String> names, String format ) {
         removeRootHandlers();
 
-        PraqmaticLogHandler h = new PraqmaticLogHandler( System.out, new PraqmaticLogFormatter() );
+        PraqmaticLogHandler h = new PraqmaticLogHandler( System.out, new PraqmaticLogFormatter( format ) );
         h.addTargets( level, names );
         h.setLevel( Level.ALL );
     }
@@ -68,6 +72,7 @@ public class LoggingUtil {
     public static void removeHandlers( Logger logger ) {
         for( Handler h : logger.getHandlers() ) {
             logger.removeHandler( h );
+            h.close();
         }
     }
 

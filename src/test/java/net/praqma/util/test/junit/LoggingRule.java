@@ -1,6 +1,7 @@
 package net.praqma.util.test.junit;
 
 import net.praqma.logging.LoggingUtil;
+import net.praqma.logging.PraqmaticLogFormatter;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -15,6 +16,7 @@ public class LoggingRule implements TestRule {
     private Level level;
     private List<Handler> handlers;
     private List<String> loggerNames = new LinkedList<String>();
+    private String format = PraqmaticLogFormatter.NORMAL_FORMAT;
 
     public LoggingRule( Level level ) {
         this.level = level;
@@ -36,13 +38,19 @@ public class LoggingRule implements TestRule {
         }
     }
 
+    public LoggingRule setFormat( String format ) {
+        this.format = format;
+
+        return this;
+    }
+
     public void checkLoggingOption() {
         String level = System.getProperty( "loggingLevel", "INFO" ).toUpperCase();
         this.level = Level.parse( level );
     }
 
     private void before() {
-        LoggingUtil.setPraqmaticHandler( level, loggerNames );
+        LoggingUtil.setPraqmaticHandler( level, loggerNames, format );
     }
 
     private void after() {
