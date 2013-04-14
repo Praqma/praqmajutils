@@ -40,12 +40,11 @@ public class StreamGobbler extends Thread
     {
 		try
 		{
-			InputStreamReader isr = new InputStreamReader( is );
+			InputStreamReader isr = new InputStreamReader( is /*, "utf-8" */ );
 			BufferedReader br = new BufferedReader( isr );
 			String line = null;
 			
-			while( ( line = br.readLine() ) != null )
-			{
+			while( ( line = br.readLine() ) != null ) {
 				//logger.debug( line );
 				lres.add( line );
 			}
@@ -56,19 +55,16 @@ public class StreamGobbler extends Thread
 				sres.append( lres.get( i ) + linesep );
 			}
 			
-			if( lres.size() > 0 )
-			{
+			if( lres.size() > 0 ) {
 				sres.append( lres.get( lres.size()-1 ) );
 			}
 			
 			
-			synchronized( this )
-			{
+			synchronized( this ) {
 				notifyAll();
 			}
 		}
-		catch ( IOException ioe )
-		{
+		catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}
 	}
