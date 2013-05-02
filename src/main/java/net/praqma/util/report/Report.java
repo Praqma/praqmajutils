@@ -3,16 +3,19 @@ package net.praqma.util.report;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author cwolfgang
  */
 public abstract class Report {
 
+    private static Logger logger = Logger.getLogger( Report.class.getName() );
+
     protected List<List<String>> rows = new ArrayList<List<String>>();
 
     protected File output;
-    protected PrintWriter out;
+    protected Writer out;
 
     public Report addRow( List<String> row ) {
         rows.add( row );
@@ -26,21 +29,36 @@ public abstract class Report {
         return this;
     }
 
-    public void generate() throws IOException {
+    public Report setWriter( Writer out ) {
+        this.out = out;
 
-        if( output != null ) {
-            out = new PrintWriter( output );
+        return this;
+    }
+
+    public void generate() throws IOException {
+        logger.fine( "Generating report" );
+
+        PrintWriter thisOut;
+
+        if( out == null ) {
+            if( output != null ) {
+                thisOut = new PrintWriter( output );
+            } else {
+                throw new IllegalStateException( "No output destination given" );
+            }
         } else {
-            throw new IllegalStateException( "No output destination given" );
+            thisOut = new PrintWriter( out );
         }
 
-        generateHeader( out );
+        logger.fine( "Output is " + thisOut );
+
+        generateHeader( thisOut );
 
         for( List<String> row : rows ) {
-            generateRow( out, row );
+            generateRow( thisOut, row );
         }
 
-        generateFooter( out );
+        generateFooter( thisOut );
 
         out.close();
     }
