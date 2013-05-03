@@ -27,6 +27,15 @@ public class LoggingUtil {
         }
     }
 
+    public static void addOutput( OutputStream output, Formatter formatter ) {
+        addOutput( Logger.getLogger( "" ), output, formatter );
+    }
+
+    public static void addOutput( Logger logger, OutputStream output, Formatter formatter ) {
+        StreamHandler handler = new StreamHandler( output, formatter );
+        logger.addHandler( handler );
+    }
+
     public static void changeLoggerLevel( Level level ) {
         changeLoggerLevel( Logger.getLogger( "" ), level );
     }

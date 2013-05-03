@@ -3,6 +3,10 @@ package net.praqma.util.option;
 import net.praqma.logging.LoggingUtil;
 import net.praqma.logging.PraqmaticLogFormatter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,10 +45,14 @@ public class Options {
 	private Option odebug = null;
 	private Option otemplate = null;
 	private Option ologfile = null;
+    private Level used = Level.INFO;
 
 	private boolean verbose = false;
 
 	public static final String linesep = System.getProperty( "line.separator" );
+
+    private Option otiming = null;
+    private long millis;
 
 	/* CONSTRUCTORS */
 
@@ -55,6 +63,7 @@ public class Options {
 	public Options( String version ) {
 		this.version = version;
 		initialize();
+        millis = System.currentTimeMillis();
 	}
 	
 	private void initialize() {
@@ -67,13 +76,22 @@ public class Options {
 		Runtime.getRuntime().addShutdownHook( new Thread() {
 			@Override
 			public void run() {
-				shutdown();
+				shutdown( otiming.used, millis );
 			}
 		} );
 	}
 
-	protected void shutdown() {
-		logger.fine( "Shutting down" );
+	protected void shutdown( boolean used, long millis ) {
+        try {
+            if( used ) {
+                long now = System.currentTimeMillis();
+                double t = ( Math.floor( (double)( now - millis ) ) ) / 1000;
+                System.out.println( "Time taken: " + t + "s" );
+            }
+
+        } catch( Throwable e ) {
+            e.printStackTrace();
+        }
 	}
 
 	public void setDefaultOptions() {
@@ -83,11 +101,13 @@ public class Options {
 		odebug = new Option( "debug", null, false, 0, "Debug" );
 		otemplate = new Option( "template", null, false, 1, "Output template" );
 		ologfile = new Option( "logfile", null, false, -1, "Set a file to log to" );
+        otiming = new Option( "timing", null, false, 0, "Enable timing" );
 
 		this.setOption( ohelp );
 		this.setOption( oversion );
 		this.setOption( overbose );
 		this.setOption( odebug );
+        this.setOption( otiming );
 		this.setOption( otemplate );
 		this.setOption( ologfile );
 	}
@@ -164,12 +184,15 @@ public class Options {
 		
         if( isVerbose() ) {
         	LoggingUtil.changeLoggerLevel( Level.CONFIG );
+            used = Level.CONFIG;
         } else {
             LoggingUtil.changeLoggerLevel( Level.INFO );
+            used = Level.INFO;
         }
         
         if( odebug.isUsed() ) {
-            LoggingUtil.changeLoggerLevel( Level.FINEST );
+            LoggingUtil.changeLoggerLevel( Level.ALL );
+            used = Level.ALL;
         }
 	}
 
@@ -200,40 +223,16 @@ public class Options {
 	}
 	
 	private void logfileUsed() {
-
-        /*
-		if( ologfile != null && ologfile.used ) {
-			try {
-				List<String> as = ologfile.getStrings();
-				logger.debug( "List: " + as );
-				logger.debug( "Logging to " + as.get( 0 ) );
-				FileAppender appender = new FileAppender( new File( as.get( 0 ) ) );
-				if( as.size() > 1 ) {
-					logger.debug( "Logging " + as.get( 1 ) );
-					appender.setMinimumLevel( LogLevel.valueOf( as.get( 1 ) ) );
-				}
-				
-				if( as.size() > 2 ) {
-					Set<String> ss = new HashSet<String>( Arrays.asList( as.get( 2 ).split( "\\s+" ) ) );
-					
-					if( ss.size() > 0 && as.get( 2 ).length() > 0 ) {
-						logger.debug( "Setting subscriptions to " + ss );
-						appender.setSubscribeAll( false );
-						appender.setSubscriptions( ss );
-					}
-				}
-				
-				if( as.size() > 3 ) {
-					logger.debug( "Setting template to " + as.get( 3 ) );
-					appender.setTemplate( as.get( 3 ) );
-				}
-				
-				Logger.addAppender( appender );
-			} catch (IOException e) {
-				logger.warning( "Could not add file appender " + ologfile.getString());
-			}
-		}
-		*/
+        if( ologfile.isUsed() ) {
+            File file = new File( ologfile.getString() );
+            try {
+                OutputStream out = new FileOutputStream( file );
+                LoggingUtil.addOutput( out, new PraqmaticLogFormatter() );
+                LoggingUtil.changeLoggerLevel( used );
+            } catch( FileNotFoundException e ) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public void checkOptions() throws Exception {
