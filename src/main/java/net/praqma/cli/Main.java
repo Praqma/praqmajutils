@@ -1,8 +1,8 @@
 package net.praqma.cli;
 
-import java.util.List;
-
 import net.praqma.util.PackageUtils;
+
+import java.util.List;
 
 public class Main {
 	public static void main( String[] args ) throws Exception {
