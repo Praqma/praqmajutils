@@ -10,61 +10,55 @@ import net.praqma.util.execute.CommandLineInterface;
 import net.praqma.util.option.Option;
 import net.praqma.util.option.Options;
 
-public class Run {
+public class Run extends CLI {
 
-    /**
-     * @param args
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws IOException {
-	try {
-	    run(args);
-	} catch (IOException e) {
-	    throw e;
-	}
+    public static void main( String[] args ) throws Exception {
+        Run s = new Run();
+        s.perform( args );
     }
-    
-    public static void run(String[] args) throws IOException {
-	Options o = new Options("1.0");
 
-	Option ocommand = new Option("command", "c", true, -1, "The command to be executed");
-	Option opath    = new Option("path", "p", false, -1, "The path where the command is executed");
-	Option omerge   = new Option("merge", "m", false, 0, "If set error out is merged with standard out");
+    @Override
+    public void perform( String[] args ) throws Exception {
+        Options o = new Options( "1.0" );
 
-	o.setOption(ocommand);
-	o.setOption(opath);
-	o.setOption(omerge);
+        Option ocommand = new Option( "command", "c", true, -1, "The command to be executed" );
+        Option opath = new Option( "path", "p", false, -1, "The path where the command is executed" );
+        Option omerge = new Option( "merge", "m", false, 0, "If set error out is merged with standard out" );
 
-	o.setDefaultOptions();
+        o.setOption( ocommand );
+        o.setOption( opath );
+        o.setOption( omerge );
 
-	o.setSyntax("Run -c dir");
-	o.setDescription("Execute a command through Java");
+        o.setDefaultOptions();
 
-	o.parse(args);
+        o.setSyntax( "Run -c dir" );
+        o.setDescription( "Execute a command through Java" );
 
-	try {
-	    o.checkOptions();
-	} catch (Exception e) {
-	    System.err.println("Incorrect option: " + e.getMessage());
-	    o.display();
-	    System.exit(1);
-	}
-	
-	CommandLineInterface cli = CommandLine.getInstance();
-	
-	if( o.isVerbose() ) {
-	    System.out.println( "Command: " + ocommand.getString(true) );
-	    if( opath.isUsed() ) {
-		System.out.println( "Path: " + opath.getString(true) );
-	    }
-	}
-	
-	try {
-	    CmdResult r = cli.run(ocommand.getString(true), (opath.isUsed()?new File(opath.getString(true)):null), omerge.isUsed());
-	    System.out.println(r.stdoutBuffer);
-	} catch( AbnormalProcessTerminationException e ) {
-	    System.out.println(e.getMessage());
-	}
+        o.parse( args );
+
+        try {
+            o.checkOptions();
+        } catch( Exception e ) {
+            System.err.println( "Incorrect option: " + e.getMessage() );
+            o.display();
+            System.exit( 1 );
+        }
+
+        CommandLineInterface cli = CommandLine.getInstance();
+
+        if( o.isVerbose() ) {
+            System.out.println( "Command: " + ocommand.getString( true ) );
+            if( opath.isUsed() ) {
+                System.out.println( "Path: " + opath.getString( true ) );
+            }
+        }
+
+        try {
+            CmdResult r = cli.run( ocommand.getString( true ), ( opath.isUsed() ? new File( opath.getString( true ) ) : null ), omerge.isUsed() );
+            System.out.println( r.stdoutBuffer );
+        } catch( AbnormalProcessTerminationException e ) {
+            System.out.println( e.getMessage() );
+        }
     }
 
 }
