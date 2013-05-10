@@ -25,7 +25,7 @@
 			<id>jenkins</id>
 			<activation>
 				<property>
-					<name>BUILD_NUMBER</name>
+					<name>env.BUILD_NUMBER</name>
 				</property>
 			</activation>
 			<build>
