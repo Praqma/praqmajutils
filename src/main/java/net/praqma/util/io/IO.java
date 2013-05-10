@@ -30,7 +30,7 @@ public class IO {
 
 			char[] buffer = new char[1024];
 			try {
-				Reader reader = new BufferedReader( new InputStreamReader( is ) );
+				Reader reader = new BufferedReader( new InputStreamReader( is, "UTF-8" ) );
 				int n;
 				while( ( n = reader.read( buffer ) ) != -1 ) {
 					writer.write( buffer, 0, n );
@@ -48,7 +48,7 @@ public class IO {
 		if( is != null ) {
 			List<String> lines = new ArrayList<String>();
 			try {
-				BufferedReader reader = new BufferedReader( new InputStreamReader( is ) );
+				BufferedReader reader = new BufferedReader( new InputStreamReader( is, "UTF-8" ) );
 				String line = "";
 				while( ( line = reader.readLine() ) != null ) {
 					lines.add( line );

@@ -140,11 +140,11 @@ public class AtomPublisher extends FeedPublisher {
 				etitle = xml.getFirstElement( e, "title" ).getTextContent();
 				eid = xml.getFirstElement( e, "id" ).getTextContent();
 				eupdated = format.parse( xml.getFirstElement( e, "updated" ).getTextContent() );
-			} catch( Exception ex ) {
+			} catch( ParseException ex ) {
 				continue;
 			}
-			
-			Entry entry = new Entry( etitle, eid, eupdated );
+
+            Entry entry = new Entry( etitle, eid, eupdated );
 			
 			/* Summary */
 			try {

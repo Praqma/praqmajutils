@@ -1,12 +1,6 @@
 package net.praqma.util.io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,7 +48,7 @@ public class BuildNumberStamper {
 	 * @throws IOException
 	 */
 	public int stampIntoCode( String flvl ) throws IOException {
-		BufferedReader reader = new BufferedReader( new FileReader( src ) );
+		BufferedReader reader = new BufferedReader( new InputStreamReader( new FileInputStream( src ), "UTF8" ) );
 		FileWriter writer = new FileWriter( this.dst );
 
 		String s = "";

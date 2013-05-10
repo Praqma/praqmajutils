@@ -22,12 +22,12 @@ public class FileAppender extends Appender {
 	}
 	
 	public FileAppender( File file ) throws IOException {
-		super( new PrintWriter( new FileWriter( file, true ) ) );
+		super( new PrintWriter( file, "UTF-8" ) );
 		this.file = file;
 	}
 	
 	public FileAppender( File file, LogLevel level ) throws IOException {
-		super( new PrintWriter( new FileWriter( file, true ) ), level );
+		super( new PrintWriter( file, "UTF-8" ), level );
 		this.file = file;
 	}
 }

@@ -24,7 +24,7 @@ import java.net.URISyntaxException;
  */
 public class RoadGeometry {
 
-    public static String url = "http://map.krak.dk/api/geocode";
+    public static final String url = "http://map.krak.dk/api/geocode";
 
     public static JsonArray get( String roadName ) throws EniroMapException {
 
@@ -56,7 +56,7 @@ public class RoadGeometry {
 
             JsonElement jelement = null;
             try {
-                BufferedReader br = new BufferedReader(new InputStreamReader( entity.getContent() ) );
+                BufferedReader br = new BufferedReader( new InputStreamReader( entity.getContent(), "UTF-8" ) );
                 String jsonLine = br.readLine();
                 jelement = new JsonParser().parse(jsonLine);
             } catch( IOException e ) {

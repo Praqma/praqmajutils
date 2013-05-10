@@ -25,8 +25,8 @@ public class CommandLine implements CommandLineInterface {
 
 	private static Recorder recorder;
 	
-	public void setRecorder( Recorder recorder ) {
-		this.recorder = recorder;
+	public static void setRecorder( Recorder recorder ) {
+		recorder = recorder;
 	}
 
 	private CommandLine() {

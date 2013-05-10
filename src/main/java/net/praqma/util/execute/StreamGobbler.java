@@ -13,7 +13,7 @@ import net.praqma.util.debug.PraqmaLogger.Logger;
 public class StreamGobbler extends Thread
 {
 	protected static Logger logger = PraqmaLogger.getLogger();
-	public static String linesep = System.getProperty( "line.separator" );
+	public static final String linesep = System.getProperty( "line.separator" );
 	
     InputStream is;
     public StringBuffer sres;
@@ -40,7 +40,7 @@ public class StreamGobbler extends Thread
     {
 		try
 		{
-			InputStreamReader isr = new InputStreamReader( is /*, "utf-8" */ );
+			InputStreamReader isr = new InputStreamReader( is, "UTF-8" );
 			BufferedReader br = new BufferedReader( isr );
 			String line = null;
 			

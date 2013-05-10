@@ -18,7 +18,7 @@ public abstract class FileUtilities {
      * Convert {@link InputStream} to {@link String}
      */
     public static String toString( InputStream is ) {
-        java.util.Scanner s = new java.util.Scanner( is ).useDelimiter( "\\A" );
+        java.util.Scanner s = new java.util.Scanner( is, "UTF-8" ).useDelimiter( "\\A" );
         return s.hasNext() ? s.next() : "";
     }
 }

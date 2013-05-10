@@ -1,10 +1,6 @@
 package net.praqma.util.debug.appenders;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -151,18 +147,23 @@ public class Appender {
 	 */
 	public void write( InputStream input ) {
 		if( enabled ) {
-			BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
-			String line = "";
-			try {
-				while( ( line = in.readLine() ) != null ) {
-					synchronized( getOut() ) {
-						getOut().write( line + Logger.linesep );
-						getOut().flush();
-					}
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader( new InputStreamReader( input, "UTF-8" ) );
+                String line = "";
+                try {
+                    while( ( line = in.readLine() ) != null ) {
+                        synchronized( getOut() ) {
+                            getOut().write( line + Logger.linesep );
+                            getOut().flush();
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch( UnsupportedEncodingException e ) {
+                e.printStackTrace();
+            }
 		}
 	}
 }
