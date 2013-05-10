@@ -20,36 +20,9 @@
 	  </repository>
 	</distributionManagement>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-                    <xmlOutput>true</xmlOutput>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </reporting>
-
 	<profiles>
 		<profile>
-			<id>coverage</id>
+			<id>jenkins</id>
 			<activation>
 				<property>
 					<name>BUILD_NUMBER</name>
@@ -57,36 +30,9 @@
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>cobertura-maven-plugin</artifactId>
-						<version>2.4</version>
-						<configuration>
-							<formats>
-								<format>html</format><!-- May not be necccesesary??? -->
-								<format>xml</format>
-							</formats>
-						</configuration>
-						<executions>
-							<execution>
-								<id>do-coverage</id>
-								<phase>install</phase>
-								<goals>
-									<goal>cobertura</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>2.3.2</version>
-						<configuration>
-							<source>1.6</source>
-							<target>1.6</target>
-						</configuration>
-					</plugin>
-                                        <plugin>
+
+                    <!-- For PMD -->
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>
                         <version>2.3</version>
@@ -126,6 +72,28 @@
                         </executions>
                     </plugin>
 
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>2.5.2</version>
+                        <configuration>
+                            <findbugsXmlOutput>true</findbugsXmlOutput>
+                            <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                            <xmlOutput>true</xmlOutput>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <configuration>
+                            <formats>
+                                <format>html</format>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+
 				</plugins>
 			</build>
 		</profile>
@@ -134,16 +102,7 @@
 
 
 	<build>
-		<directory>${project.basedir}/build</directory>
-		<finalName>${project.artifactId}-${project.version}</finalName>
 		<plugins>
-			<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.3.1</version>
-				<configuration>
-					<createChecksum>true</createChecksum>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -151,14 +110,6 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
 				</configuration>
 			</plugin>
 
@@ -226,24 +177,12 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>net.praqma.cli.Main</mainClass>
-                        </manifest>
-                    </archive>
                 </configuration>
             </plugin>
+
 
 		</plugins>
 
