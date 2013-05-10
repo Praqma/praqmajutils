@@ -2,6 +2,7 @@ package net.praqma.util.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class XMLTest {
 	
 	@Test
 	public void includeAware() throws IOException {
-		File include = new File( XMLTest.class.getClassLoader().getResource( "include.xml" ).getFile() );
+		File include = new File( URLDecoder.decode( XMLTest.class.getClassLoader().getResource( "include.xml" ).getFile(), "UTF-8" ) );
 		XML xml = new XML( include, true );
 		
 		assertThat( xml.getXML(), is( expected ) );

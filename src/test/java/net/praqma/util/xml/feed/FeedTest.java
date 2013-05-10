@@ -2,6 +2,7 @@ package net.praqma.util.xml.feed;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +40,7 @@ public class FeedTest extends TestCase {
 	
 	@Test
 	public void testToFeed() throws FeedException, IOException {
-		File xml = new File( FeedTest.class.getClassLoader().getResource( "feed.xml" ).getFile() );
+		File xml = new File( URLDecoder.decode( FeedTest.class.getClassLoader().getResource( "feed.xml" ).getFile(), "UTF-8" ) );
 		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
 		
 		System.out.println( "XML2way: " + feed.getXML( new AtomPublisher() ) );
@@ -47,7 +48,7 @@ public class FeedTest extends TestCase {
 	
 	@Test
 	public void testToFeedAdd() throws FeedException, IOException, ParseException {
-		File xml = new File( FeedTest.class.getClassLoader().getResource( "feed.xml" ).getFile() );
+		File xml = new File( URLDecoder.decode( FeedTest.class.getClassLoader().getResource( "feed.xml" ).getFile(), "UTF-8" ) );
 		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
 		
 		Entry e3 = new Entry( "Title E3", "My-id-003", format.parse( "2012-01-04" ) );
@@ -61,7 +62,7 @@ public class FeedTest extends TestCase {
 	
 	@Test
 	public void testLimit() throws FeedException, IOException {
-		File xml = new File( FeedTest.class.getClassLoader().getResource( "5feeds.xml" ).getFile() );
+		File xml = new File( URLDecoder.decode( FeedTest.class.getClassLoader().getResource( "5feeds.xml" ).getFile(), "UTF-8" ) );
 		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
 		
 		System.out.println( "LIMIT TO 3: " + feed.getXML( new AtomPublisher(), 3 ) );
@@ -69,7 +70,7 @@ public class FeedTest extends TestCase {
 	
 	@Test
 	public void testBackwardsCompToOldFormat() throws FeedException, IOException, ParseException {
-		File xml = new File( FeedTest.class.getClassLoader().getResource( "feedOldFormat.xml" ).getFile() );
+		File xml = new File( URLDecoder.decode( FeedTest.class.getClassLoader().getResource( "feedOldFormat.xml" ).getFile(), "UTF-8" ) );
 		Feed feed = Feed.getFeed( new AtomPublisher(), xml );
 		
 		System.out.println( "FEED: " + feed );
