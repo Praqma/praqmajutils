@@ -1,10 +1,12 @@
 package net.praqma.util;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import org.junit.Test;
 import org.omg.CORBA.UserException;
 
@@ -84,13 +86,36 @@ public class ExceptionUtilsTest {
 	}
 	
 	@Test
-	public void unpackFromEnds() {
-		Exception inner = new IOException( "Inner", null );
-		Exception middle = new IOException( "Middle", inner );
-		Exception outer = new IOException( "Outer", middle );
-		
-		Throwable t = ExceptionUtils.unpackFrom( IOException.class, outer );
-		
-		assertEquals( middle, t );
-	}
+    public void unpackFromEnds() {
+        Exception inner = new IOException( "Inner", null );
+        Exception middle = new IOException( "Middle", inner );
+        Exception outer = new IOException( "Outer", middle );
+
+        Throwable t = ExceptionUtils.unpackFrom( IOException.class, outer );
+
+        assertEquals( middle, t );
+    }
+
+    @Test
+    public void getCause() {
+        Exception inner = new AbnormalProcessTerminationException( "Inner", "ls -la" );
+        Exception middle = new IOException( "Middle", inner );
+        Exception outer = new IOException( "Outer", middle );
+
+        Throwable t = ExceptionUtils.getCause( AbnormalProcessTerminationException.class, outer );
+
+        assertEquals( inner, t );
+        assertThat( t, is( AbnormalProcessTerminationException.class ) );
+    }
+
+    @Test
+    public void getCauseNone() {
+        Exception inner = new IOException( "Inner", null );
+        Exception middle = new IOException( "Middle", inner );
+        Exception outer = new IOException( "Outer", middle );
+
+        Throwable t = ExceptionUtils.getCause( AbnormalProcessTerminationException.class, outer );
+
+        assertEquals( null, t );
+    }
 }

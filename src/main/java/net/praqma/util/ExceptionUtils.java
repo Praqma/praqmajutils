@@ -52,7 +52,8 @@ public abstract class ExceptionUtils {
 	}
 	
 	/**
-	 * Unpack an exception from a given throwable. Returning the cause of the first matched end throwable. 
+	 * Unpack an exception from a given throwable. Returning the cause of the first matched end throwable. <br>
+     * That is, t0<-t1<-t2<-t3, where from is t2, t0<-t1 is returned.
 	 * @param from - Stopping condition
 	 * @param throwable - The throwable
 	 * @return Cause of the first matched throwable
@@ -93,5 +94,23 @@ public abstract class ExceptionUtils {
 			}
 		}
 	}
+
+    /**
+     * Get the first cause of a given(target) class.
+     * @param target
+     * @param throwable
+     * @return
+     */
+    public static Throwable getCause( Class<? extends Throwable> target, Throwable throwable ) {
+        while( throwable != null ) {
+            if( throwable.getClass().isAssignableFrom( target ) ) {
+                return throwable;
+            }
+
+            throwable = throwable.getCause();
+        }
+
+        return null;
+    }
 	
 }
