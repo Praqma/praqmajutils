@@ -67,7 +67,7 @@ public class Options {
 	}
 	
 	private void initialize() {
-        LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter() );
+        LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter().setFormat( PraqmaticLogFormatter.TINY_FORMAT ) );
         
         registerShutdownHook();
 	}
@@ -192,6 +192,9 @@ public class Options {
         
         if( odebug.isUsed() ) {
             LoggingUtil.changeLoggerLevel( Level.ALL );
+            if( !otemplate.isUsed() ) {
+                LoggingUtil.changeLoggerFormat( new PraqmaticLogFormatter().setFormat( PraqmaticLogFormatter.NORMAL_FORMAT ) );
+            }
             used = Level.ALL;
         }
 	}

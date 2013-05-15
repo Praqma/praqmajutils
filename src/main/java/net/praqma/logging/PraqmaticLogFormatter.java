@@ -27,8 +27,10 @@ public class PraqmaticLogFormatter extends Formatter {
         this.format = format;
     }
 
-    public void setFormat( String format ) {
+    public PraqmaticLogFormatter setFormat( String format ) {
         this.messageFormat = new MessageFormat( format );
+
+        return this;
     }
 
     @Override
