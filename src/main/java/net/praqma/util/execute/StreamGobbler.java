@@ -40,7 +40,7 @@ public class StreamGobbler extends Thread
     {
 		try
 		{
-			InputStreamReader isr = new InputStreamReader( is, "UTF-8" );
+			InputStreamReader isr = new InputStreamReader( is/* , "UTF-8" */ );
 			BufferedReader br = new BufferedReader( isr );
 			String line = null;
 			
