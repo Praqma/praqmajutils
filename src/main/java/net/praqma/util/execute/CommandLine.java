@@ -174,10 +174,11 @@ public class CommandLine implements CommandLineInterface {
 				 * default
 				 */
 				if( !ignore ) {
+                    StringBuilder error = new StringBuilder().append( output.sres.toString() ).append( System.getProperty( "line.separator" ) ).append( "Command: " ).append( cmd );
 					if( merge ) {
-						throw new AbnormalProcessTerminationException( output.sres.toString(), cmd, exitValue );
+						throw new AbnormalProcessTerminationException( error.toString(), cmd, exitValue );
 					} else {
-						throw new AbnormalProcessTerminationException( errors.sres.toString(), cmd, exitValue );
+						throw new AbnormalProcessTerminationException( error.toString(), cmd, exitValue );
 					}
 				}
 			}
