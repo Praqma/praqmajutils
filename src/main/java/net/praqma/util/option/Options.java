@@ -2,6 +2,7 @@ package net.praqma.util.option;
 
 import net.praqma.logging.LoggingUtil;
 import net.praqma.logging.PraqmaticLogFormatter;
+import net.praqma.util.time.TimeUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -86,7 +87,7 @@ public class Options {
             if( used ) {
                 long now = System.currentTimeMillis();
                 double t = ( Math.floor( (double)( now - millis ) ) ) / 1000;
-                System.out.println( "Time taken: " + t + "s" );
+                System.out.println( "Time taken: " + TimeUtils.getTimeString( now - millis ) );
             }
 
         } catch( Throwable e ) {
