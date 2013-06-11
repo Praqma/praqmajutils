@@ -273,6 +273,14 @@ public class Options {
 		return this.verbose;
 	}
 
+    public boolean isDebug() {
+        if( odebug != null && odebug.isUsed() ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 	public void print() {
 		System.out.println( "Printing " + options.size() + " option" + ( options.size() == 1 ? "" : "s" ) );
 
