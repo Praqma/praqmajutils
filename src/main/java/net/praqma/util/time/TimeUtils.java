@@ -57,7 +57,7 @@ public class TimeUtils {
         if( t.minutes > 0 ) {
             b.append( t.minutes ).append( "m " );
         }
-        
+
         b.append( t.seconds ).append( "s " ).append( t.millis ).append( "ms" );
 
         return b.toString();
