@@ -1,7 +1,10 @@
 package net.praqma.util.net.url;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * User: cwolfgang
@@ -18,7 +21,7 @@ public class UrlBuilder {
     public UrlBuilder() {}
 
     public UrlBuilder( String domain ) {
-        this.setDomain( domain );
+        this.domain = domain;
     }
 
     public UrlBuilder setDomain( String domain ) {
@@ -110,6 +113,7 @@ public class UrlBuilder {
         return this;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append( protocol );
@@ -128,5 +132,24 @@ public class UrlBuilder {
             sb.setLength( sb.length() - 1 );
         }
         return sb.toString();
+    }
+    
+    /**
+     * Cross platform method to resolve the hostname.
+     * @return the hostname. Can be null if not succesful
+     */
+    public static String getLocalComputerName() {
+        
+        String compName = null;
+        
+        if(SystemUtils.IS_OS_UNIX) {
+            try {
+                compName = InetAddress.getLocalHost().getHostName();
+            } catch (UnknownHostException ex) { }
+        } else {
+            compName = System.getenv("COMPUTERNAME");
+        }
+        
+        return compName;
     }
 }
