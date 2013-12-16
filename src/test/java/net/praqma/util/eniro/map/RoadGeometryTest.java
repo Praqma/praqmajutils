@@ -27,6 +27,6 @@ public class RoadGeometryTest {
 
     @Test( expected = EniroMapException.class )
     public void test2() throws IOException, EniroMapException, URISyntaxException {
-        JsonArray points = RoadGeometry.get( "Ingenvej, 2610" );
+        JsonArray points = RoadGeometry.get( "æøspngenvej, 2610" );
     }
 }
