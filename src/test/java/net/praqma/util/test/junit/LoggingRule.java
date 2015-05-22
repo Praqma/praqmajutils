@@ -8,13 +8,11 @@ import org.junit.runners.model.Statement;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 
 public class LoggingRule implements TestRule {
 
     private Level level;
-    private List<Handler> handlers;
     private List<String> loggerNames = new LinkedList<String>();
     private String format = PraqmaticLogFormatter.NORMAL_FORMAT;
 
@@ -44,9 +42,9 @@ public class LoggingRule implements TestRule {
         return this;
     }
 
-    public void checkLoggingOption() {
-        String level = System.getProperty( "loggingLevel", "INFO" ).toUpperCase();
-        this.level = Level.parse( level );
+    public final void checkLoggingOption() {
+        String cur_level = System.getProperty( "loggingLevel", "INFO" ).toUpperCase();
+        this.level = Level.parse( cur_level );
     }
 
     private void before() {

@@ -9,6 +9,7 @@ import org.junit.runners.model.Statement;
  */
 public class DescriptionRule implements TestRule {
 
+    @Override
     public Statement apply( Statement base, Description description ) {
 
         if( description.getAnnotation( TestDescription.class ) != null ) {
