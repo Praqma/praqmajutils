@@ -61,7 +61,7 @@ public class LoggingRule implements TestRule {
 
             @Override
             public void evaluate() throws Throwable {
-                System.out.println( " ===== Setting up logger =====" );
+                System.out.println( "[LoggingRule] ===== Setting up logger =====" );
                 before();
                 try {
                     base.evaluate();
