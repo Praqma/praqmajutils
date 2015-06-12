@@ -15,8 +15,8 @@ public class DescriptionRule implements TestRule {
         if( description.getAnnotation( TestDescription.class ) != null ) {
             TestDescription d = description.getAnnotation( TestDescription.class );
 
-            System.out.println( "=============================================" );
-
+            System.out.println( "===============DESCRIPTION=================" );
+            
             /* Print the title */
             System.out.println( d.title() );
 
@@ -27,7 +27,7 @@ public class DescriptionRule implements TestRule {
             }
 
             /* Print the outcome */
-            if( d.outcome() != null ) {
+            if( d.outcome() != null && d.outcome().length >= 1 ) {
                 int i = 1;
                 System.out.println( "== Test outcome ==" );
                 for( String o : d.outcome() ) {
@@ -37,7 +37,7 @@ public class DescriptionRule implements TestRule {
             }
 
             /* Print the configurations */
-            if( d.configurations() != null ) {
+            if( d.configurations() != null && d.configurations().length >= 1 ) {
                 int i = 1;
                 System.out.println( "== Test configurations ==" );
                 for( String o : d.configurations() ) {
@@ -46,7 +46,7 @@ public class DescriptionRule implements TestRule {
                 }
             }
 
-            System.out.println( "=============================================" );
+            System.out.println( "===========================================" );
         }
 
         return base;
