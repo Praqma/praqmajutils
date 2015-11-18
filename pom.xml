@@ -4,7 +4,7 @@
     <groupId>net.praqma</groupId>
     <artifactId>praqmajutils</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.36</version>
+    <version>0.1.37-SNAPSHOT</version>
     <name>Praqma Java Utils</name>
     <url>http://www.praqma.net</url>
 
