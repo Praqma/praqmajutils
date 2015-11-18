@@ -3,8 +3,8 @@ package net.praqma.util.execute;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * CLI class
@@ -13,60 +13,42 @@ import java.util.logging.Logger;
  * 
  */
 public class CommandLine implements CommandLineInterface {
-	protected Logger logger = Logger.getLogger( CommandLine.class.getName() );
+	protected static final Logger logger = Logger.getLogger( CommandLine.class.getName() );
 	protected static final String linesep = System.getProperty( "line.separator" );
-
 	private static CommandLine instance = new CommandLine();
-
-	private String os = null;
-	private OperatingSystem thisos = OperatingSystem.WINDOWS;
 	private String[] cmd = null;
-	private int last = 0;
+    
+	private CommandLine() { }
 
-	private static Recorder recorder;
-	
-	public static void setRecorder( Recorder recorder ) {
-		recorder = recorder;
-	}
-
-	private CommandLine() {
-		os = System.getProperty( "os.name" );
-		logger.finer( "Running on " + os );
-		if( os.matches( "^.*(?i)windows.*$" ) ) {
-			logger.finer( "Using special windows environment" );
-			cmd = new String[3];
-			cmd[0] = "cmd.exe";
-			cmd[1] = "/C";
-			last = 2;
-		} else {
-			thisos = OperatingSystem.UNIX;
-			cmd = new String[3];
-			cmd[0] = "bash";
-			cmd[1] = "-c";
-			last = 2;
-		}
-	}
-
+    @Override
 	public OperatingSystem getOS() {
-		return thisos;
+		if(SystemUtils.IS_OS_WINDOWS) {
+            return OperatingSystem.WINDOWS;
+        } else {
+            return OperatingSystem.UNIX;
+        }
 	}
 
 	public static CommandLine getInstance() {
 		return instance;
 	}
 
+    @Override
 	public CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, null, true, false, null );
 	}
 
+    @Override
 	public CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, dir, true, false, null );
 	}
 
+    @Override
 	public CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, dir, merge, false, null );
 	}
 
+    @Override
 	public CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
 		return run( cmd, dir, merge, ignore, null );
 	}
@@ -74,7 +56,7 @@ public class CommandLine implements CommandLineInterface {
 	/**
 	 * Execute a command line operation.
 	 * 
-	 * @param cmd
+	 * @param c
 	 *            The command itself
 	 * @param dir
 	 *            The working directory
@@ -88,38 +70,21 @@ public class CommandLine implements CommandLineInterface {
 	 * @throws AbnormalProcessTerminationException
 	 */
     @Override
-	public synchronized CmdResult run( String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
-		/*
-		 * String[] cmds = new String[3]; cmds[0] = "cmd.exe"; cmds[1] = "/C";
-		 * cmds[2] = cmd;
-		 */
+	public CmdResult run( String c, File dir, boolean merge, boolean ignore, Map<String, String> variables ) throws CommandLineException, AbnormalProcessTerminationException {
+		logger.config(String.format("$ %s" ,c));
 
-		// cmd = this.cmd + cmd;
-		this.cmd[last] = cmd;
-		
-		logger.config( "$ " + cmd );
-
-		try {
-			ProcessBuilder pb = new ProcessBuilder( this.cmd );
+		try {            
+			ProcessBuilder pb = new ProcessBuilder( new String[] { 
+                SystemUtils.IS_OS_WINDOWS ? "cmd.exe" : "bash", 
+                SystemUtils.IS_OS_WINDOWS ? "/C" : "-c",
+                c                    
+            } );
 			pb.redirectErrorStream( merge );
-			// pb.environment().put( key, value )
-
 			if( dir != null ) {
 				logger.config( "Executing command in " + dir );
 				pb.directory( dir );
 			}
-
-			/* If any variables, put them in the environment */
-			if( variables != null && variables.size() > 0 ) {
-				logger.fine( "CommandLine: " + variables );
-				Map<String, String> env = pb.environment();
-				Set<String> keys = variables.keySet();
-				for( String key : keys ) {
-					env.put( key, variables.get( key ) );
-				}
-			}
-
-			CmdResult result = new CmdResult();
+			
 			Process p = pb.start();
 
 			/* Starting Gobbler threads */
@@ -154,17 +119,6 @@ public class CommandLine implements CommandLineInterface {
 			/* Closing streams */
 			p.getErrorStream().close();
 			p.getInputStream().close();
-
-			
-			/* If enabled, record the command */
-			if( recorder != null ) {
-				if( merge ) {
-					recorder.addCommand( cmd, exitValue, dir, output.sres.toString() );
-				} else {
-					recorder.addCommand( cmd, exitValue, dir, errors.sres.toString() );
-				}
-			}
-
 			/* Abnormal process termination, with error out as message */
 			if( exitValue != 0 ) {
 				logger.fine( "Abnormal process termination(" + exitValue + "): " + errors.sres.toString() );
@@ -176,19 +130,20 @@ public class CommandLine implements CommandLineInterface {
 				if( !ignore ) {
                     StringBuilder error = new StringBuilder().append( output.sres.toString() ).
                             append( System.getProperty( "line.separator" ) ).
-                            append( "Command: " ).append( cmd ).
+                            append( "Command: " ).append( c ).
                             append( System.getProperty( "line.separator" ) ).
                             append( "Path: " ).append( dir );
 
 					if( merge ) {
-						throw new AbnormalProcessTerminationException( error.toString(), cmd, exitValue );
+						throw new AbnormalProcessTerminationException( error.toString(), c, exitValue );
 					} else {
-						throw new AbnormalProcessTerminationException( error.toString(), cmd, exitValue );
+						throw new AbnormalProcessTerminationException( error.toString(), c, exitValue );
 					}
 				}
 			}
 
 			/* Setting command result */
+            CmdResult result = new CmdResult();
 			result.stdoutBuffer = output.sres;
 			result.stdoutList = output.lres;
 
@@ -198,7 +153,7 @@ public class CommandLine implements CommandLineInterface {
 			return result;
 		} catch( IOException e ) {
 			logger.warning( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
-			throw new CommandLineException( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
+			throw new CommandLineException( "Could not execute the command \"" + c + "\" correctly: " + e.getMessage() );
 		}
 	}
 

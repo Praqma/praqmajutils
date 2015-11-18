@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.praqma</groupId>
-	<artifactId>praqmajutils</artifactId>
-	<packaging>jar</packaging>
-	<version>0.1.35-SNAPSHOT</version>
-	<name>Praqma Java Utils</name>
-	<url>http://www.praqma.net</url>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.praqma</groupId>
+    <artifactId>praqmajutils</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1.35-SNAPSHOT</version>
+    <name>Praqma Java Utils</name>
+    <url>http://www.praqma.net</url>
 
     <parent>
         <groupId>net.praqma</groupId>
@@ -13,21 +13,21 @@
         <version>0.1.1</version>
     </parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<profiles>
+    <profiles>
 
-		<profile>
-			<id>jenkins</id>
-			<activation>
-				<property>
-					<name>env.BUILD_NUMBER</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
 
                     <!-- For PMD -->
                     <plugin>
@@ -58,26 +58,26 @@
                         </executions>
                     </plugin>
 
-				</plugins>
-			</build>
-		</profile>
+                </plugins>
+            </build>
+        </profile>
 
-	</profiles>
+    </profiles>
 
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
 
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
 
-					<finalName>${project.artifactId}</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
+                    <finalName>${project.artifactId}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -85,27 +85,27 @@
                         </manifest>
                     </archive>
 
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- append to the packaging phase. -->
-						<goals>
-							<goal>single</goal> <!-- goals == mojos -->
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- append to the packaging phase. -->
+                        <goals>
+                            <goal>single</goal> <!-- goals == mojos -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+            </plugin>
 
-		</plugins>
+        </plugins>
 
-	</build>
+    </build>
     
     <repositories>
         <repository>
@@ -114,13 +114,13 @@
         </repository>
     </repositories>
 	
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -141,11 +141,11 @@
             <version>2.4</version>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
-	<scm>
-		<connection>scm:git:http://github.com/Praqma/praqmajutils.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
-		<url>https://github.com/Praqma/praqmajutils.git</url>
-	</scm>
+    <scm>
+        <connection>scm:git:http://github.com/Praqma/praqmajutils.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
+        <url>https://github.com/Praqma/praqmajutils.git</url>
+    </scm>
 </project>
