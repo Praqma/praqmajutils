@@ -1,5 +1,7 @@
 package net.praqma.logging;
 
+import edu.umd.cs.findbugs.annotations.*;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
@@ -13,6 +15,7 @@ public class PraqmaticLogFormatter extends Formatter {
     public static final String SMALL_FORMAT = "{3,date,HH:mm:ss} [{1}]{5}: {4} \n{8}";
     public static final String TINY_FORMAT = "[{1}]{5} {4} \n{8}";
 
+    @SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
     public String format = "";
 
     private static final int width = 8;

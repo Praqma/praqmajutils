@@ -6,13 +6,10 @@ import java.util.logging.LogRecord;
 import java.util.logging.StreamHandler;
 
 public class ThreadLockedStreamHandler extends StreamHandler {
-
-	protected OutputStream stream;
 	protected long threadId;
 	
 	public ThreadLockedStreamHandler( OutputStream stream, Formatter formatter ) {
 		super( stream, formatter );
-		
 		this.threadId = Thread.currentThread().getId();
 	}
 	

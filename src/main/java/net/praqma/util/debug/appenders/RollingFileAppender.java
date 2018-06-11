@@ -1,5 +1,7 @@
 package net.praqma.util.debug.appenders;
 
+import edu.umd.cs.findbugs.annotations.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+@SuppressFBWarnings(value = "DM_DEFAULT_ENCODING", justification = "It's ok for us to rely on def. encoding here")
 public class RollingFileAppender extends Appender {
 	public FileWriter fw;
 	private File file;

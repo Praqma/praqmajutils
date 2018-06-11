@@ -5,9 +5,12 @@ import java.nio.channels.FileChannel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.debug.PraqmaLogger;
 import net.praqma.util.debug.PraqmaLogger.Logger;
 
+
+@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public class BuildNumberStamper {
 	private File src = null;
 	private File dst = null;
@@ -48,38 +51,43 @@ public class BuildNumberStamper {
 	 * @throws IOException
 	 */
 	public int stampIntoCode( String flvl ) throws IOException {
-		BufferedReader reader = new BufferedReader( new InputStreamReader( new FileInputStream( src ), "UTF8" ) );
-		FileWriter writer = new FileWriter( this.dst );
-
-		String s = "";
-
 		int number = 0;
+		BufferedReader reader = null;
+		FileWriter writer = null;
 
-		while( ( s = reader.readLine() ) != null ) {
+		try {
+			reader = new BufferedReader( new InputStreamReader( new FileInputStream( src ), "UTF8" ) );
+			writer = new FileWriter( this.dst );
+			String s = "";
+
+
+
+			while ((s = reader.readLine()) != null) {
 			/* Stamp 4level */
-			if( flvl != null ) {
-				Matcher m = rx_sequence_4lvl.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
-					number++;
-					logger.debug( "flvl used" );
-				}
+				if (flvl != null) {
+					Matcher m = rx_sequence_4lvl.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + flvl + "\"$2");
+						number++;
+						logger.debug("flvl used");
+					}
 
 				/* Maven */
-				Matcher mm = rx_maven_sequence_4lvl.matcher( s );
-				if( mm.find() ) {
-					s = mm.replaceFirst( "$1<version>" + flvl + "</version>$2" );
-					number++;
-					logger.debug( "Maven flvl used" );
+					Matcher mm = rx_maven_sequence_4lvl.matcher(s);
+					if (mm.find()) {
+						s = mm.replaceFirst("$1<version>" + flvl + "</version>$2");
+						number++;
+						logger.debug("Maven flvl used");
+					}
 				}
-			}
 
 			/* Write back */
-			writer.write( s + linesep );
+				writer.write(s + linesep);
+			}
+		} finally {
+			if(writer != null) { writer.close(); }
+			if(reader != null) { reader.close(); }
 		}
-
-		writer.close();
-		reader.close();
 
 		copyFile( this.dst, this.src );
 
@@ -113,115 +121,128 @@ public class BuildNumberStamper {
 	 * @throws IOException
 	 */
 	public int stampIntoCode( String major, String minor, String patch, String sequence, String delimiter ) throws IOException {
-		BufferedReader reader = new BufferedReader( new FileReader( src ) );
-		FileWriter writer = new FileWriter( this.dst );
-
-		String s = "";
-
-		String flvl = null;
-		if( major != null && minor != null && patch != null && sequence != null ) {
-			flvl = major + delimiter + minor + delimiter + patch + delimiter + sequence;
-			logger.debug( "flvl=" + flvl );
-		} else {
-			logger.debug( "flvl not set" );
-		}
-
 		int number = 0;
 
-		while( ( s = reader.readLine() ) != null ) {
-			/* Stamp major */
-			if( major != null ) {
-				Matcher m = rx_major_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + major + "\"$2" );
-					number++;
-				}
+		BufferedReader reader = null;
+		FileWriter writer = null;
 
-				m = rx_alt_major_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1" + major + "$2" );
-					number++;
-				}
+		try {
+			reader = new BufferedReader( new FileReader( src ) );
+			writer = new FileWriter( this.dst );
+			String s = "";
+
+			String flvl = null;
+			if (major != null && minor != null && patch != null && sequence != null) {
+				flvl = major + delimiter + minor + delimiter + patch + delimiter + sequence;
+				logger.debug("flvl=" + flvl);
+			} else {
+				logger.debug("flvl not set");
 			}
+
+
+			while ((s = reader.readLine()) != null) {
+			/* Stamp major */
+				if (major != null) {
+					Matcher m = rx_major_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + major + "\"$2");
+						number++;
+					}
+
+					m = rx_alt_major_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1" + major + "$2");
+						number++;
+					}
+				}
 
 			/* Stamp minor */
-			if( minor != null ) {
-				Matcher m = rx_minor_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + minor + "\"$2" );
-					number++;
-				}
+				if (minor != null) {
+					Matcher m = rx_minor_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + minor + "\"$2");
+						number++;
+					}
 
-				m = rx_alt_minor_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1" + minor + "$2" );
-					number++;
+					m = rx_alt_minor_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1" + minor + "$2");
+						number++;
+					}
 				}
-			}
 
 			/* Stamp patch */
-			if( patch != null ) {
-				Matcher m = rx_patch_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + patch + "\"$2" );
-					number++;
-				}
+				if (patch != null) {
+					Matcher m = rx_patch_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + patch + "\"$2");
+						number++;
+					}
 
-				m = rx_alt_patch_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1" + patch + "$2" );
-					number++;
+					m = rx_alt_patch_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1" + patch + "$2");
+						number++;
+					}
 				}
-			}
 
 			/* Stamp sequence */
-			if( sequence != null ) {
-				Matcher m = rx_sequence_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + sequence + "\"$2" );
-					number++;
-				}
+				if (sequence != null) {
+					Matcher m = rx_sequence_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + sequence + "\"$2");
+						number++;
+					}
 
-				m = rx_alt_sequence_pattern.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1" + sequence + "$2" );
-					number++;
+					m = rx_alt_sequence_pattern.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1" + sequence + "$2");
+						number++;
+					}
 				}
-			}
 
 			/* Stamp 4level */
-			if( flvl != null ) {
-				Matcher m = rx_sequence_4lvl.matcher( s );
-				if( m.find() ) {
-					s = m.replaceFirst( "$1\"" + flvl + "\"$2" );
-					number++;
-					logger.debug( "flvl used" );
-				}
+				if (flvl != null) {
+					Matcher m = rx_sequence_4lvl.matcher(s);
+					if (m.find()) {
+						s = m.replaceFirst("$1\"" + flvl + "\"$2");
+						number++;
+						logger.debug("flvl used");
+					}
 
 				/* Maven */
-				Matcher mm = rx_maven_sequence_4lvl.matcher( s );
-				if( mm.find() ) {
-					s = mm.replaceFirst( "$1<version>" + flvl + "</version>$2" );
-					number++;
-					logger.debug( "Maven flvl used" );
+					Matcher mm = rx_maven_sequence_4lvl.matcher(s);
+					if (mm.find()) {
+						s = mm.replaceFirst("$1<version>" + flvl + "</version>$2");
+						number++;
+						logger.debug("Maven flvl used");
+					}
 				}
-			}
 
 			/* Write back */
-			writer.write( s + linesep );
+				writer.write(s + linesep);
+			}
+
+
+
+		} finally {
+			if(writer != null) {
+				writer.close();
+			}
+			if(reader != null) {
+				reader.close();
+			}
 		}
-
-		writer.close();
-		reader.close();
-
 		copyFile( this.dst, this.src );
-
 		return ( number == 0 ? 0 : 1 );
 	}
 
 	public static void copyFile( File sourceFile, File destFile ) throws IOException {
+
 		if( !destFile.exists() ) {
-			destFile.createNewFile();
+			if(destFile.createNewFile()) {
+				logger.debug("Created file "+destFile);
+			}
 		}
 
 		FileChannel source = null;

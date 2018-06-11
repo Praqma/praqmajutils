@@ -1,17 +1,20 @@
 package net.praqma.util.time;
 
+import edu.umd.cs.findbugs.annotations.*;
+
 /**
  * @author cwolfgang
  */
+
 public class TimeUtils {
 
     private TimeUtils() {}
 
-    public static int SECONDS = 1000;
-    public static int MINUTES = SECONDS * 60;
-    public static int HOURS = MINUTES * 60;
-    public static int DAYS = HOURS * 24;
-    public static int WEEKS = DAYS * 7;
+    public static final int SECONDS = 1000;
+    public static final int MINUTES = SECONDS * 60;
+    public static final int HOURS = MINUTES * 60;
+    public static final int DAYS = HOURS * 24;
+    public static final int WEEKS = DAYS * 7;
 
     public static class Time {
         public int millis = 0;
@@ -19,6 +22,7 @@ public class TimeUtils {
         public int minutes = 0;
         public int hours = 0;
         public int days = 0;
+        @SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
         public int weeks = 0;
     }
 

@@ -27,11 +27,8 @@ public class RoadGeometry {
     public static final String url = "http://map.krak.dk/api/geocode";
 
     public static JsonArray get( String roadName ) throws EniroMapException {
-
         HttpClient client = new DefaultHttpClient();
-
         HttpGet get = null;
-
         try {
             URIBuilder builder = new URIBuilder( url );
             builder.setParameter( "country", "dk" );
@@ -55,12 +52,19 @@ public class RoadGeometry {
         if( entity != null ) {
 
             JsonElement jelement = null;
+            BufferedReader br = null;
             try {
-                BufferedReader br = new BufferedReader( new InputStreamReader( entity.getContent(), "UTF-8" ) );
+                br  = new BufferedReader( new InputStreamReader( entity.getContent(), "UTF-8" ) );
                 String jsonLine = br.readLine();
                 jelement = new JsonParser().parse(jsonLine);
             } catch( IOException e ) {
                 throw new EniroMapException( e );
+            } finally {
+                if(br!=null) try {
+                    br.close();
+                } catch (IOException e) {
+                    throw new EniroMapException("Unable to close stream", e );
+                }
             }
 
             if( jelement.getAsJsonObject().getAsJsonObject( "search" ).getAsJsonObject( "geocodingResponse" ).getAsJsonArray( "locations" ) == null ) {

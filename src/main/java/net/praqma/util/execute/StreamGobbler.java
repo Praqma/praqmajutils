@@ -7,11 +7,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.debug.PraqmaLogger;
 import net.praqma.util.debug.PraqmaLogger.Logger;
 
-public class StreamGobbler extends Thread
-{
+public class StreamGobbler extends Thread {
 	protected static Logger logger = PraqmaLogger.getLogger();
 	public static final String linesep = System.getProperty( "line.separator" );
 	
@@ -19,8 +19,7 @@ public class StreamGobbler extends Thread
     public StringBuffer sres;
     public List<String> lres;
     
-    StreamGobbler( InputStream is )
-    {
+    StreamGobbler( InputStream is ) {
         this.is = is;
         lres = new ArrayList<String>();
         sres = new StringBuffer();
@@ -35,11 +34,11 @@ public class StreamGobbler extends Thread
     {
     	return lres;
     }
-    
-    public void run( )
-    {
-		try
-		{
+
+    @SuppressFBWarnings({"DM_DEFAULT_ENCODING","NN_NAKED_NOTIFY"})
+    public void run( ) {
+		try  {
+
 			InputStreamReader isr = new InputStreamReader( is/* , "UTF-8" */ );
 			BufferedReader br = new BufferedReader( isr );
 			String line = null;

@@ -1,13 +1,13 @@
 package net.praqma.util.xml.feed;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.xml.XML;
 
 public class Feed {
@@ -19,7 +19,8 @@ public class Feed {
 	public Person author;
 	
 	private List<Entry> entries = new ArrayList<Entry>();
-	
+
+	@SuppressFBWarnings("EI_EXPOSE_REP2")
 	public Feed( String title, String id, Date updated ) {
 		this.title = title;
 		this.id = id;
@@ -57,7 +58,7 @@ public class Feed {
 		return feed;
 	}
 	
-	public static class AscendingDateSort implements Comparator<Entry> {
+	public static class AscendingDateSort implements Comparator<Entry>, Serializable {
 
 		@Override
 		public int compare( Entry e1, Entry e2 ) {

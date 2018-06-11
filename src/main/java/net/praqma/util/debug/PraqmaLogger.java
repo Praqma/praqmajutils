@@ -1,5 +1,7 @@
 package net.praqma.util.debug;
 
+import edu.umd.cs.findbugs.annotations.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +21,11 @@ import java.util.List;
  * 
  * @deprecated
  */
+@SuppressFBWarnings(value = {"DM_DEFAULT_ENCODING",
+		"STCAL_INVOKE_ON_STATIC_DATE_FORMAT_INSTANCE",
+		"ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"
+},
+		justification = "It's ok for us to rely on def. encoding here")
 public class PraqmaLogger {
 	private static PraqmaLogger plogger = null;
 	private static FileWriter fw = null;
@@ -134,7 +141,7 @@ public class PraqmaLogger {
 
 		public void setLocalLog( File log ) {
 			try {
-				fw = new FileWriter( log, true );
+				fw = new FileWriter( log, true);
 			} catch (Exception e1) {
 				return;
 			}
@@ -303,11 +310,13 @@ public class PraqmaLogger {
 		}
 	}
 
+	@SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public void setPath( String path ) {
 		PraqmaLogger.path = path;
 		newDate( nowDate );
 	}
 
+	@SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public boolean setPathHomeLogs() {
 		String path = System.getProperty( "user.home" ) + filesep + "logs" + filesep;
 		File file = new File( path );

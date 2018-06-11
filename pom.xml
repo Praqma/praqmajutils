@@ -2,141 +2,45 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.praqma</groupId>
-    <artifactId>praqmajutils</artifactId>
-    <packaging>jar</packaging>
-    <version>0.1.37-SNAPSHOT</version>
-    <name>Praqma Java Utils</name>
+    <artifactId>java-support</artifactId>
+    <packaging>hpi</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>Java Support Plugin for Jenkins</name>
     <url>http://www.praqma.net</url>
 
     <parent>
-        <groupId>net.praqma</groupId>
-        <artifactId>praqma-parent</artifactId>
-        <version>0.1.1</version>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>plugin</artifactId>
+        <version>3.14</version>
+        <relativePath />
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.level>8</java.level>
+        <jenkins.version>2.60.3</jenkins.version>
     </properties>
 
-    <profiles>
-
-        <profile>
-            <id>jenkins</id>
-            <activation>
-                <property>
-                    <name>env.BUILD_NUMBER</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-
-                    <!-- For PMD -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jxr-plugin</artifactId>
-                        <version>2.3</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jxr</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>2.9.1</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>checkstyle</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                </plugins>
-            </build>
-        </profile>
-
-    </profiles>
-
-
-    <build>
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-
-                    <finalName>${project.artifactId}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>net.praqma.cli.Main</mainClass>
-                        </manifest>
-                    </archive>
-
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- append to the packaging phase. -->
-                        <goals>
-                            <goal>single</goal> <!-- goals == mojos -->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-            </plugin>
-			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<failOnError>false</failOnError>
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</execution>
-				 </executions>
-			</plugin>
-        </plugins>
-
-    </build>
-    
     <repositories>
         <repository>
-            <id>praqma-repo</id>
-            <url>http://code.praqma.net/repo/maven/</url>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 	
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
 
@@ -152,12 +56,6 @@
             <version>2.2.2</version>
             <scope>compile</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.4</version>
-        </dependency>
 
     </dependencies>
 
@@ -166,4 +64,5 @@
         <developerConnection>scm:git:ssh://git@github.com/Praqma/praqmajutils.git</developerConnection>
         <url>https://github.com/Praqma/praqmajutils.git</url>
     </scm>
+
 </project>

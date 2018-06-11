@@ -5,8 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.debug.Logger.LogLevel;
 
+@SuppressFBWarnings(value = {"DM_DEFAULT_ENCODING","URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"},
+		justification = "It's ok for us to rely on def. encoding here")
 public class FileAppender extends Appender {
 	public FileWriter fw;
 	public File file;

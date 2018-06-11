@@ -13,14 +13,18 @@ import java.util.List;
 
 public class IO {
 	public static boolean deleteDirectory( File directory ) {
-		if( directory.isDirectory() ) {
+		if( directory != null && directory.isDirectory() ) {
 			String[] elements = directory.list();
-			for( int i = 0; i < elements.length; i++ ) {
-				boolean success = deleteDirectory( new File( directory, elements[i] ) );
-				if( !success ) return false;
+			if(elements != null) {
+				for (int i = 0; i < elements.length; i++) {
+					boolean success = deleteDirectory(new File(directory, elements[i]));
+					if (!success) return false;
+				}
 			}
 		}
-
+		if(directory == null) {
+			return false;
+		}
 		return directory.delete();
 	}
 

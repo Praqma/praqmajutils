@@ -26,6 +26,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.debug.Logger;
 
 import org.w3c.dom.DOMError;
@@ -94,23 +95,27 @@ public class XML {
         if( XIncludeAware ) {
         	factory.setXIncludeAware( true );
         }
-        
-        InputStream is = new FileInputStream( xmlfile );
-        DocumentBuilder builder;
+        InputStream is = null;
         try {
-            builder = factory.newDocumentBuilder();
-            doc = builder.parse( is );
-        } catch( Exception e ) {
-            e.printStackTrace();
+            is = new FileInputStream(xmlfile);
+            DocumentBuilder builder;
+            try {
+                builder = factory.newDocumentBuilder();
+                doc = builder.parse(is);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } finally {
+            if(is != null) is.close();
         }
-
         root = doc.getDocumentElement();
     }
 
     public XML( File xmlfile, String roottag ) throws IOException {
     	this( xmlfile, roottag, false );
     }
-    
+
+    @SuppressFBWarnings("REC_CATCH_EXCEPTION")
     public XML( File xmlfile, String roottag, boolean XIncludeAware ) throws IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware( true );
@@ -118,9 +123,10 @@ public class XML {
         	factory.setXIncludeAware( true );
         }
         
-        InputStream is = new FileInputStream( xmlfile );
+        InputStream is = null;
         DocumentBuilder builder;
         try {
+            is = new FileInputStream( xmlfile );
             builder = factory.newDocumentBuilder();
             doc = builder.parse( is );
             root = doc.getDocumentElement();
@@ -137,10 +143,9 @@ public class XML {
 					logger.error( "Could not create document" );
 				}
         	}            
+        } finally {
+            if(is != null) is.close();
         }
-
-        
-        
     }
 
     public XML( InputStream is ) {
@@ -369,7 +374,7 @@ public class XML {
 
         return null;
     }
-
+    @SuppressFBWarnings("UI_INHERITANCE_UNSAFE_GETRESOURCE")
     public String transform( File xml, String xsl, File output ) {
         StreamSource xmlSource = new StreamSource( xml );
         StreamSource xsltSource = new StreamSource( getClass().getResourceAsStream( xsl ) );
@@ -377,6 +382,7 @@ public class XML {
         return transform( xmlSource, xsltSource, output );
     }
 
+    @SuppressFBWarnings("UI_INHERITANCE_UNSAFE_GETRESOURCE")
     public String transform( String xsl, File output ) {
         StreamSource xsltSource = null;
 
@@ -418,6 +424,7 @@ public class XML {
         return "";
     }
 
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public void saveState( File filename ) {
         String xml = getXML();
         try {

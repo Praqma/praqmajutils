@@ -88,7 +88,7 @@ public class Option {
     }
     
     public Integer getInteger() {
-        return new Integer( getString( false ) );
+        return Integer.valueOf(getString( false )) ;
     }
 
     public String getString( boolean doSpaces ) {

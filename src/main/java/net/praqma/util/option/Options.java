@@ -1,5 +1,6 @@
 package net.praqma.util.option;
 
+import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.logging.LoggingUtil;
 import net.praqma.logging.PraqmaticLogFormatter;
 import net.praqma.util.time.TimeUtils;
@@ -30,6 +31,7 @@ import java.util.logging.Logger;
  * @author wolfgang
  * 
  */
+@SuppressFBWarnings(value = "DM_EXIT", justification = "CLI tools. Ok to terminate VM")
 public class Options {
 	private static Logger logger = Logger.getLogger( Options.class.getName() );
 	
@@ -86,7 +88,6 @@ public class Options {
         try {
             if( used ) {
                 long now = System.currentTimeMillis();
-                double t = ( Math.floor( (double)( now - millis ) ) ) / 1000;
                 System.out.println( "Time taken: " + TimeUtils.getTimeString( now - millis ) );
             }
 
@@ -244,20 +245,21 @@ public class Options {
 		this.versionUsed();
 		this.logfileUsed();
 
-		String errors = "";
+		//String errors = "";
+		StringBuffer errors = new StringBuffer();
 
 		for( Option o : options ) {
 			if( o.required && !o.used ) {
-				errors += o.longName + " is not used and is not optional." + linesep;
+				errors.append(o.longName + " is not used and is not optional.").append(linesep);
 			}
 
 			if( o.arguments != o.values.size() && o.arguments > -1 && o.used ) {
-				errors += "Incorrect arguments for option " + o.longName + ". " + o.arguments + " required." + linesep;
+				errors.append("Incorrect arguments for option " + o.longName + ". " + o.arguments + " required.").append(linesep);
 			}
 		}
 
 		if( errors.length() > 0 ) {
-			throw new Exception( errors );
+			throw new Exception( errors.toString() );
 		}
 	}
 
