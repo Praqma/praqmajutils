@@ -1,11 +1,8 @@
 package net.praqma.util.xml.feed;
 
-import edu.umd.cs.findbugs.annotations.*;
-
 import java.util.Date;
 import java.util.UUID;
 
-@SuppressFBWarnings("EI_EXPOSE_REP2")
 public class Entry {
 	public String id;
 	public String title;

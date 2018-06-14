@@ -2,10 +2,9 @@ package net.praqma.util.execute;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
 import java.util.logging.Logger;
-
-import org.apache.commons.lang.*;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * CLI class
@@ -153,7 +152,7 @@ public class CommandLine implements CommandLineInterface {
 
 			return result;
 		} catch( IOException e ) {
-			logger.warning( "Could not execute the command \"" + Arrays.toString(cmd) + "\" correctly: " + e.getMessage() );
+			logger.warning( "Could not execute the command \"" + cmd + "\" correctly: " + e.getMessage() );
 			throw new CommandLineException( "Could not execute the command \"" + c + "\" correctly: " + e.getMessage() );
 		}
 	}

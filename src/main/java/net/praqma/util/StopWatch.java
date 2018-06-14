@@ -1,11 +1,8 @@
 package net.praqma.util;
 
-import edu.umd.cs.findbugs.annotations.*;
-
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressFBWarnings("SIC_INNER_SHOULD_BE_STATIC")
 public class StopWatch {
 
 	private static final String SEP = System.getProperty( "line.separator" );

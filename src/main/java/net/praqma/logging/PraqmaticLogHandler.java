@@ -1,7 +1,8 @@
 package net.praqma.logging;
 
 
-import java.io.*;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,11 +19,7 @@ public class PraqmaticLogHandler extends StreamHandler {
         this.out = fos;
 
         this.threadId = (int) Thread.currentThread().getId();
-        try {
-            out = new PrintStream( fos, true, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        out = new PrintStream( fos, true );
     }
 
     public OutputStream getOut() {

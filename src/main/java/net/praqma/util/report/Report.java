@@ -1,7 +1,5 @@
 package net.praqma.util.report;
 
-import edu.umd.cs.findbugs.annotations.*;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +8,6 @@ import java.util.logging.Logger;
 /**
  * @author cwolfgang
  */
-@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public abstract class Report {
 
     private static Logger logger = Logger.getLogger( Report.class.getName() );

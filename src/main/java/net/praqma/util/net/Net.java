@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.StopWatch;
 import net.praqma.util.debug.Logger;
 import net.praqma.util.debug.Logger.LogLevel;
@@ -70,7 +69,6 @@ public class Net {
 	}
 	
 
-	@SuppressFBWarnings("NP_NULL_ON_SOME_PATH_EXCEPTION")
 	public static double ping( String host, int timeout ) throws IOException {
 		try {
 			StopWatch sw = new StopWatch();
@@ -78,37 +76,35 @@ public class Net {
 			sw.start();
 			String out = "";
 			Matcher m = null;
+			switch( CommandLine.getInstance().getOS() ) {
+			case WINDOWS:
+				out = CommandLine.getInstance().run( "ping -n 1 -w " + timeout + " " + host ).stdoutBuffer.toString();
 
-			if(CommandLine.getInstance() != null) {
-				switch (CommandLine.getInstance().getOS()) {
-					case WINDOWS:
-						out = CommandLine.getInstance().run("ping -n 1 -w " + timeout + " " + host).stdoutBuffer.toString();
-
-						m = rx_ms_ping.matcher(out);
-						if (m.find()) {
-							return Double.parseDouble(m.group(1));
-						}
-						break;
-
-					case UNIX:
-						out = CommandLine.getInstance().run("ping -c 1 -w " + timeout + " " + host).stdoutBuffer.toString();
-						m = rx_nix_ping.matcher(out);
-						break;
-
-					default:
-						break;
+				m = rx_ms_ping.matcher( out );
+				if( m.find() ) {
+					return Double.parseDouble( m.group( 1 ) );
 				}
+				break;
+				
+			case UNIX:
+				out = CommandLine.getInstance().run( "ping -c 1 -w " + timeout + " " + host ).stdoutBuffer.toString();
 
-				if (m.find()) {
-					return Double.parseDouble(m.group(1));
-				}
+				m = rx_nix_ping.matcher( out );
 
-				throw new IOException("End of loop");
+				break;
+				
+			default:
+				break;
 			}
+			
+			if( m.find() ) {
+				return Double.parseDouble( m.group( 1 ) );
+			}
+			
+			throw new IOException( "End of loop" );
 		} catch( Exception e ) {
 			throw new IOException( "Unable to ping " + host + ": " + e.getMessage() );
 		}
-		throw new IOException( "Unable to ping " + host );
 	}
 	
 	public static double getPing( String host ) {

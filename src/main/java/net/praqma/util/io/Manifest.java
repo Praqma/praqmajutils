@@ -1,7 +1,5 @@
 package net.praqma.util.io;
 
-import edu.umd.cs.findbugs.annotations.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,28 +8,22 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 public class Manifest {
 	Map<String, String> properties = new HashMap<String, String>();
 
 	public Manifest( File f ) throws IOException {
 		FileReader fr = new FileReader( f );
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(fr);
+		BufferedReader br = new BufferedReader( fr );
 
-			String line = "";
+		String line = "";
 
-			while ((line = br.readLine()) != null) {
-				String[] vs = line.split(":");
-				try {
-					properties.put(vs[0].trim(), vs[1].trim());
-				} catch (Exception e) {
+		while( ( line = br.readLine() ) != null ) {
+			String[] vs = line.split( ":" );
+			try {
+				properties.put( vs[0].trim(), vs[1].trim() );
+			} catch( Exception e ) {
 				/* Skipping field */
-				}
 			}
-		} finally {
-			if(br != null) br.close();
 		}
 	}
 

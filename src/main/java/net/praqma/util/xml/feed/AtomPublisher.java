@@ -4,12 +4,10 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-import edu.umd.cs.findbugs.annotations.*;
 import org.w3c.dom.Element;
 
 import net.praqma.util.xml.XML;
 
-@SuppressFBWarnings("UWF_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD")
 public class AtomPublisher extends FeedPublisher {
 	
 	@Override
@@ -93,8 +91,7 @@ public class AtomPublisher extends FeedPublisher {
 		
 		return xml.getXML();
 	}
-
-	@SuppressFBWarnings("STCAL_INVOKE_ON_STATIC_DATE_FORMAT_INSTANCE")
+	
 	@Override
 	public Feed fromFeed( XML xml ) throws FeedException {
 		Element root = xml.getRoot();

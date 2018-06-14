@@ -57,7 +57,9 @@ public class PackageUtils {
 	/**
 	 * Recursive method used to find all classes in a given directory and
 	 * subdirs.
-	 *
+	 * 
+	 * @param directory
+	 *            The base directory
 	 * @param packageName
 	 *            The package name for classes found inside the base directory
 	 * @return The classes
@@ -66,35 +68,32 @@ public class PackageUtils {
 	 */
 	public static TreeSet<String> findClasses( String path, String packageName, Pattern regex ) throws Exception {
 		TreeSet<String> classes = new TreeSet<String>();
-		if (path.startsWith("file:") && path.contains("!")) {
-			String[] split = path.split("!");
-			URL jar = new URL(split[0]);
+		if( path.startsWith( "file:" ) && path.contains( "!" ) ) {
+			String[] split = path.split( "!" );
+			URL jar = new URL( split[0] );
+			ZipInputStream zip = new ZipInputStream( jar.openStream() );
 			ZipEntry entry;
-			try (ZipInputStream zip = new ZipInputStream(jar.openStream())) {
-				while ((entry = zip.getNextEntry()) != null) {
-					if (entry.getName().endsWith(".class")) {
-						String className = entry.getName().replaceAll("[$].*", "").replaceAll("[.]class", "").replace('/', '.');
-						if (className.startsWith(packageName) && (regex == null || regex.matcher(className).matches())) {
-							classes.add(className);
-						}
+			while( ( entry = zip.getNextEntry() ) != null ) {
+				if( entry.getName().endsWith( ".class" ) ) {
+					String className = entry.getName().replaceAll( "[$].*", "" ).replaceAll( "[.]class", "" ).replace( '/', '.' );
+					if( className.startsWith( packageName ) && ( regex == null || regex.matcher( className ).matches() ) ) {
+						classes.add( className );
 					}
 				}
 			}
 		}
-		File dir = new File(path);
-		if (!dir.exists()) {
+		File dir = new File( path );
+		if( !dir.exists() ) {
 			return classes;
 		}
 		File[] files = dir.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				if (file.isDirectory()) {
-					assert !file.getName().contains(".");
-					classes.addAll(findClasses(file.getAbsolutePath(), packageName + "." + file.getName(), regex));
-				} else if (file.getName().endsWith(".class")) {
-					String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
-					if (regex == null || regex.matcher(className).matches()) classes.add(className);
-				}
+		for( File file : files ) {
+			if( file.isDirectory() ) {
+				assert !file.getName().contains( "." );
+				classes.addAll( findClasses( file.getAbsolutePath(), packageName + "." + file.getName(), regex ) );
+			} else if( file.getName().endsWith( ".class" ) ) {
+				String className = packageName + '.' + file.getName().substring( 0, file.getName().length() - 6 );
+				if( regex == null || regex.matcher( className ).matches() ) classes.add( className );
 			}
 		}
 		return classes;

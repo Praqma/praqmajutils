@@ -1,8 +1,8 @@
 package net.praqma.cli;
 
 import java.io.File;
+import java.io.IOException;
 
-import edu.umd.cs.findbugs.annotations.*;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
@@ -18,7 +18,6 @@ public class Run extends CLI {
     }
 
     @Override
-    @SuppressFBWarnings(value = "DM_EXIT", justification = "This is OK for the .jar file we produce")
     public void perform( String[] args ) throws Exception {
         Options o = new Options( "1.0" );
 

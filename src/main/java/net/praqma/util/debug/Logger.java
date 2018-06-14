@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.charset.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class Logger {
 	private static final String filesep = System.getProperty( "file.separator" );
 	public static final String linesep = System.getProperty( "line.separator" );
 
-	private static Logger instance = new Logger();
+	private static Logger instance = null;
 	
 	private static SimpleDateFormat datetimeformat  = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 	private static SimpleDateFormat timeformat = new SimpleDateFormat( "HH:mm:ss" );
@@ -55,6 +54,10 @@ public class Logger {
 	}
 	
 	public static Logger getLogger() {
+		if( instance == null ) {
+			instance = new Logger();
+		}
+		
 		return instance;
 	}
 		
@@ -176,16 +179,18 @@ public class Logger {
 	public void log( Object message, LogLevel level, String tag ) {
 		log( message, level, tag, 3 );
 	}
-
+	
 	private String parseTemplate( Map<String, String> keywords, String template ) {
-		Set<Map.Entry<String, String>> entries = keywords.entrySet();
-		for( Map.Entry<String,String> entry : entries ) {
+		Set<String> keys = keywords.keySet();
+		for( String key : keys ) {
+			//System.out.println( key + "=" + keywords.get( key ) );
 			try {
-				template = template.replaceAll( entry.getKey(), entry.getValue() );
+				template = template.replaceAll( key, keywords.get( key ) );
 			} catch( Exception e ) {
 				e.printStackTrace();
 			}
 		}
+		
 		return template;
 	}
 	
@@ -195,7 +200,7 @@ public class Logger {
 	 * @deprecated as of 0.1.17, use {@link Appender#write}
 	 */
 	public void redirect( InputStream input ) {
-		BufferedReader in = new BufferedReader( new InputStreamReader( input, Charset.forName("utf-8") ) );
+		BufferedReader in = new BufferedReader( new InputStreamReader( input ) );
 		String line = "";
 		try {
 			while( ( line = in.readLine() ) != null ) {
@@ -264,10 +269,12 @@ public class Logger {
 			keywords.put( "%datetime", datetimeformat.format( now ) );
 			keywords.put( "%date", dateformat.format( now ) );
 			keywords.put( "%time", timeformat.format( now ) );
-			keywords.put( "%level", level.toString() );
-			keywords.put( "%space", new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) );
-
+			if( level != null ) {
+				keywords.put( "%level", level.toString() );
+				keywords.put( "%space", new String( new char[Logger.levelMaxlength - level.toString().length()] ).replace( "\0", " " ) );
+			}
 			keywords.put( "%message", Matcher.quoteReplacement( objectToString( message ) ) );
+			//keywords.put( "%newline", linesep );
 			keywords.put( "%newline", "\n" );
 			
 			if( tag != null ) {
