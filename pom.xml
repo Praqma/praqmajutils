@@ -7,6 +7,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>Praqma Java Utils</name>
     <url>http://www.praqma.net</url>
+
     <licenses>
         <license>
             <name>MIT License</name>
@@ -96,18 +97,8 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
-
-
     </build>
-    
-    <repositories>
-        <repository>
-            <id>praqma-repo</id>
-            <url>http://code.praqma.net/repo/maven/</url>
-        </repository>
-    </repositories>
 	
     <dependencies>
         <dependency>
